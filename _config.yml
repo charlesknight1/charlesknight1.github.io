@@ -3,13 +3,13 @@
 #
 
 # Name of your site (displayed in the header)
-name: Reverie
+name: Charlie Knight
 
 # Name of the author
-author: Amit Merchant
+author: Charlie Knight
 
 # Short bio or description (displayed in the header)
-description: An elegant Jekyll theme
+description: African Climate Research
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/reverie.png
@@ -21,27 +21,27 @@ avatar: /images/reverie.png
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email: amit.d.merchant@gmail.com
-  facebook:
+  email: charles.knight@ouce.ox.ac.uk
+  facebook: https://www.facebook.com/profile.php?id=100009195169480
   flickr:
-  github: amitmerchant1990/reverie
+  github: https://github.com/charlesknight1
   instagram:
-  linkedin: 
+  linkedin: https://www.linkedin.com/in/charlie-knight-38a1861a5/
   pinterest:
   rss: rss
-  twitter: amit_merchant
+  twitter: 
   stackoverflow: 
-  youtube: # channel/<your_long_string> or user/<user-name>
-  googleplus: # anything in your profile username that comes after plus.google.com/
+  youtube: 
+  googleplus: 
   playconsole:
-  mastodon: # <your-mastodon-instance>/@<your-user-name> eg. fosstodon.org/@username
+  mastodon: 
 
 # Enter your Disqus shortname (not your username) to enable commenting on posts
 # You can find your shortname on the Settings page of your Disqus account
 disqus: 
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics: UA-43339302-11
+google_analytics: 
 
 # For newer "GA4" analytics, use the following instead of the "UA" entry above
 #google_analytics_ga4: G-GABC1DEFG
@@ -55,7 +55,7 @@ enforce_ssl: https://www.amitmerchant.com/reverie
 # (http://yourusername.github.io/repository-name)
 # and NOT your User repository (http://yourusername.github.io)
 # then add in the baseurl here, like this: "/repository-name"
-baseurl: "/reverie"
+baseurl: 
 
 #
 # !! You don't need to change any of the configuration flags below !!
