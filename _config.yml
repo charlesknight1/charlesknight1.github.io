@@ -9,7 +9,7 @@ name: Charles Knight
 author: Charlie Knight
 
 # Short bio or description (displayed in the header)
-description: African Climate Research
+description: PhD Candidate in African Climate Research
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/reverie.png
@@ -41,7 +41,7 @@ footer-links:
 disqus: 
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics: 
+google_analytics: G-Y4SGTXNDFY
 
 # For newer "GA4" analytics, use the following instead of the "UA" entry above
 #google_analytics_ga4: G-GABC1DEFG
