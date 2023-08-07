@@ -3,7 +3,7 @@
 #
 
 # Name of your site (displayed in the header)
-name: Charlie Knight
+name: Charles Knight
 
 # Name of the author
 author: Charlie Knight
@@ -22,11 +22,11 @@ avatar: /images/reverie.png
 footer-links:
   dribbble:
   email: charles.knight@ouce.ox.ac.uk
-  facebook: https://www.facebook.com/profile.php?id=100009195169480
+  facebook:
   flickr:
-  github: https://github.com/charlesknight1
+  github: charlesknight1
   instagram:
-  linkedin: https://www.linkedin.com/in/charlie-knight-38a1861a5/
+  linkedin: charlie-knight-38a1861a5/
   pinterest:
   rss: rss
   twitter: 
