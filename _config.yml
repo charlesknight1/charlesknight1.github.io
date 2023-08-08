@@ -57,6 +57,17 @@ enforce_ssl: https://charlesknight1.github.io
 # then add in the baseurl here, like this: "/repository-name"
 baseurl: 
 
+
+# If you want to link only specific pages in your header, uncomment
+# this and add the path to the pages in order as they should show up
+header_pages:
+#   - index.html
+#   - archives.html
+#   - categories.html
+#   - tags.html
+   - about.md
+
+
 #
 # !! You don't need to change any of the configuration flags below !!
 #
