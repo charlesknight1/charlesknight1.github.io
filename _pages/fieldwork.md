@@ -1,7 +1,9 @@
-layout: page
-title: Fieldwork
-permalink: /fieldwork/
 ---
+layout: page
+title: About
+permalink: /about/
+---
+
 ### Fieldwork
 
 This page is dedicated to fieldwork
