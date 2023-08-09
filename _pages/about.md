@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About
+title: Abot
 permalink: /about/
 ---
 
