@@ -1,10 +1,8 @@
 ---
 layout: page
-title: fieldwork
+title: Fieldwork
 permalink: /fieldwork/
 ---
-
-### Fieldwork
 
 This page is dedicated to fieldwork
 
