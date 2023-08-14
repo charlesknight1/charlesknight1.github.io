@@ -6,7 +6,7 @@ permalink: /fieldwork/
 
 This page is dedicated to fieldwork
 
-- DRYCAB
-- WesCON-WOEST
+- [DRYCAB](https://charlesknight1.github.io/drycab)
+- [WesCON-WOEST](https://charlesknight1.github.io/wescon)
 - KAPEX
 - Reach (Kenya)
