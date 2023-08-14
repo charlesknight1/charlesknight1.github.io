@@ -11,7 +11,7 @@ REACH (Kenya)
 
 ### 2023
 [WesCON-WOEST](https://charlesknight1.github.io/wescon)
-- KAPEX
+KAPEX
 
 ### 2022
 [DRYCAB](https://charlesknight1.github.io/drycab)
