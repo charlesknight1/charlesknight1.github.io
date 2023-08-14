@@ -4,9 +4,14 @@ title: Fieldwork
 permalink: /fieldwork/
 ---
 
-This page is dedicated to fieldwork
+Recent fieldwork projects:
 
-- [DRYCAB](https://charlesknight1.github.io/drycab)
-- [WesCON-WOEST](https://charlesknight1.github.io/wescon)
+### 2024
+REACH (Kenya)
+
+### 2023
+[WesCON-WOEST](https://charlesknight1.github.io/wescon)
 - KAPEX
-- Reach (Kenya)
+
+### 2022
+[DRYCAB](https://charlesknight1.github.io/drycab)
