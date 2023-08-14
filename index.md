@@ -8,4 +8,6 @@ I'm a DPhil candidate in the University of Oxford's School of Geography and the 
 
 Here you can find my [publications](https://charlesknight1.github.io/publications/), [projects](https://charlesknight1.github.io/projects/) and [fieldwork](https://charlesknight1.github.io/fieldwork/) blogs.
 
+___
+
 ![Road in NW Zambia](/assets/20220924_174005-01.jpeg)
