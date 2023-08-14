@@ -1,15 +1,13 @@
 ---
 layout: page
-title: fieldwork
+title: Projects
 permalink: /projects/
 ---
 
-### Fieldwork
 
-This page is dedicated to fieldwork
+This page documents my personal projects.
 
-- DRYCAB
-- WesCON-WOEST
-- KAPEX
-- Reach (Kenya)
+- Project1
+- Project2
+- Project3
 
