@@ -22,14 +22,14 @@ avatar: /images/1200px-C_black_white.svg.png
 footer-links:
   dribbble:
   email: charles.knight@ouce.ox.ac.uk
-  facebook:
+  facebook: profile.php?id=100009195169480
   flickr:
   github: charlesknight1
-  instagram:
+  Instagram: no_im_charlie_knight/
   linkedin: charlie-knight-38a1861a5
   pinterest:
   rss: rss
-  twitter: 
+  twitter: cknight23
   stackoverflow: 
   youtube: 
   googleplus: 
@@ -60,11 +60,11 @@ baseurl:
 
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
-header_pages:
-  - about.html
-  - archive.html
-  - catagories.html
-  - fieldwork.html
+#header_pages:
+#  - about.html
+#  - archive.html
+#  - catagories.html
+#  - fieldwork.html
 
 
 #
