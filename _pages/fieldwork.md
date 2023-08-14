@@ -6,12 +6,12 @@ permalink: /fieldwork/
 
 Recent fieldwork projects:
 
-### 2024
+**2024**
 - Kenya
 
-### 2023
+**2023**
 - [WesCON-WOEST](https://charlesknight1.github.io/wescon)
 - KAPEX
 
-### 2022
+**2022**
 - [DRYCAB](https://charlesknight1.github.io/drycab)
