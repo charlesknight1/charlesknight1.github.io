@@ -2,7 +2,7 @@
 layout: page
 ---
 
-Hi. Welcome to my personal website.
+Welcome to my personal website.
 
 I'm a DPhil candidate in the University of Oxford's School of Geography and the Environment. My research focuses on the dynamics and variability of the Southern African summer monsoon.
 
