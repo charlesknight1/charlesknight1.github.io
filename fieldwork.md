@@ -1,7 +1,7 @@
 ---
 layout: page
 title: fieldwork
-permalink: /test1/
+permalink: /fieldwork/
 ---
 
 ### Fieldwork
