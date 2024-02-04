@@ -6,7 +6,7 @@ permalink: /fieldwork/
 
 Recent fieldwork projects:
 
-**2024**
+**Upcoming**
 - [Massika](https://charlesknight1.github.io/massika)
 
 **2023**
