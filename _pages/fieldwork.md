@@ -7,11 +7,11 @@ permalink: /fieldwork/
 Recent fieldwork projects:
 
 **2024**
-- Kenya
+- [Massika](https://charlesknight1.github.io/massika)
 
 **2023**
 - [WesCON-WOEST](https://charlesknight1.github.io/wescon)
-- KAPEX
+- [Kalahari Atmospheric Processes Experiment (KAPEx)](https://charlesknight1.github.io/kapex)
 
 **2022**
-- [DRYCAB](https://charlesknight1.github.io/drycab)
+- [Decreasing Rainfall to Year 2100 - Role of the Congo Air Boundary (DRY-CAB)](https://charlesknight1.github.io/drycab)
