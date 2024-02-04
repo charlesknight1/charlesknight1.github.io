@@ -11,7 +11,7 @@ Recent fieldwork projects:
 
 **2023**
 - [WesCON-WOEST](https://charlesknight1.github.io/wescon)
-- [Kalahari Atmospheric Processes Experiment (KAPEx)](https://charlesknight1.github.io/kapex)
+- [KAPEX - Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)
 
 **2022**
-- [Decreasing Rainfall to Year 2100 - Role of the Congo Air Boundary (DRY-CAB)](https://charlesknight1.github.io/drycab)
+- [DRYCAB - Decreasing Rainfall to Year 2100 Role of the Congo Air Boundary](https://charlesknight1.github.io/drycab)
