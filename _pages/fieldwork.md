@@ -7,10 +7,10 @@ permalink: /fieldwork/
 Recent fieldwork projects:
 
 **Upcoming**
-- [Massika](https://charlesknight1.github.io/massika)
+- [Massika - East African Long Rains](https://charlesknight1.github.io/massika)
 
 **2023**
-- [WesCON-WOEST](https://charlesknight1.github.io/wescon)
+- [WesCON-WOEST - Atmospheric sensing with UAS](https://charlesknight1.github.io/wescon)
 - [KAPEX - Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)
 
 **2022**
