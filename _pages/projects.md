@@ -5,5 +5,4 @@ permalink: /projects/
 ---
 
 
-The Radcliffe Meteorological Station
-https://charlesknight1.github.io/rms
+The (Radcliffe Meteorological Station)[https://charlesknight1.github.io/rms]
