@@ -21,7 +21,7 @@ ___
 <button id="nextButton">Next</button>
 
 <script>
-var images = ["/assets/20220924_174005-01.jpeg", "/assets/20220924_174005-01.jpeg", "/assets/20220924_174005-01.jpeg"];
+var images = ["/assets/20220924_174005-01.jpeg", "/assets/20221008_174707.jpg", "/assets/20221028_181128.jpg", "/assets/kapex/20240105_193617.jpg", "/assets/kapex/20240108_191139.jpg"];
 var currentIndex = 0;
 
 function showNextImage() {
