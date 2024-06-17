@@ -12,3 +12,30 @@ ___
 
 
 *Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.*
+
+<div id="carousel">
+  <img id="carouselImage" src="/assets/20220924_174005-01.jpeg" alt="Image 1">
+</div>
+
+<button id="prevButton">Previous</button>
+<button id="nextButton">Next</button>
+
+<script>
+var images = ["/assets/20220924_174005-01.jpeg", "/assets/20220924_174005-01.jpeg", "/assets/20220924_174005-01.jpeg"];
+var currentIndex = 0;
+
+function showNextImage() {
+  currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+  document.getElementById("carouselImage").src = images[currentIndex];
+}
+
+document.getElementById("prevButton").addEventListener("click", function() {
+  currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+  document.getElementById("carouselImage").src = images[currentIndex];
+});
+
+document.getElementById("nextButton").addEventListener("click", showNextImage);
+
+// Automatically advance to the next image every 3 seconds
+setInterval(showNextImage, 3000);
+</script>
