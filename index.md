@@ -49,7 +49,7 @@ document.getElementById("prevButton").addEventListener("click", function() {
 document.getElementById("nextButton").addEventListener("click", showNextImage);
 
 // Automatically advance to the next image every 3 seconds
-setInterval(showNextImage, 3000);
+setInterval(showNextImage, 10000);
 
 // Show a random image when the page loads
 showImage();
