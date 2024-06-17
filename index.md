@@ -8,11 +8,6 @@ Here you can find my [publications](https://charlesknight1.github.io/publication
 
 ___
 
-![Road in NW Zambia](/assets/20220924_174005-01.jpeg)
-
-
-*Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.*
-
 <div id="carousel">
   <img id="carouselImage" src="/assets/20220924_174005-01.jpeg" alt="Image 1">
   <p id="carouselCaption">Caption 1</p>
@@ -23,17 +18,17 @@ ___
 
 <script>
 var images = [
-  {src: "/assets/20220924_174005-01.jpeg", caption: "Caption 1"},
-  {src: "/assets/20221008_174707.jpg", caption: "Caption 2"},
-  {src: "/assets/20221028_181128.jpg", caption: "Caption 3"},
-  {src: "/assets/kapex/20240105_193617.jpg", caption: "Caption 4"},
-  {src: "/assets/kapex/20240108_191139.jpg", caption: "Caption 5"}
+  {src: "/assets/20220924_174005-01.jpeg", caption: "<em>Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.</em>"},
+  {src: "/assets/20221008_174707.jpg", caption: "<em>Caption 2.<em>"},
+  {src: "/assets/20221028_181128.jpg", caption: "<em>Caption 3.<em>"},
+  {src: "/assets/kapex/20240105_193617.jpg", caption: "<em>Caption 4.<em>"},
+  {src: "/assets/kapex/20240108_191139.jpg", caption: "<em>Caption 5.<em>"}
 ];
 var currentIndex = Math.floor(Math.random() * images.length);
 
 function showImage() {
   document.getElementById("carouselImage").src = images[currentIndex].src;
-  document.getElementById("carouselCaption").textContent = images[currentIndex].caption;
+  document.getElementById("carouselCaption").innerHTML = images[currentIndex].caption;
 }
 
 function showNextImage() {
