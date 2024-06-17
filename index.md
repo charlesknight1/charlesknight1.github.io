@@ -21,8 +21,7 @@ var images = [
   {src: "/assets/20220924_174005-01.jpeg", caption: "<em>Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.</em>"},
   {src: "/assets/20221008_174707.jpg", caption: "<em>Caption 2.<em>"},
   {src: "/assets/20221028_181128.jpg", caption: "<em>Caption 3.<em>"},
-  {src: "/assets/kapex/20240105_193617.jpg", caption: "<em>Caption 4.<em>"},
-  {src: "/assets/kapex/20240108_191139.jpg", caption: "<em>Caption 5.<em>"}
+  {src: "/assets/kapex/20240105_193617.jpg", caption: "<em>Caption 4.<em>"}
 ];
 var currentIndex = Math.floor(Math.random() * images.length);
 
