@@ -14,7 +14,7 @@ ___
 *Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.*
 
 <div id="carousel">
-  <img id="carouselImage" src="image1.jpg" alt="Image 1">
+  <img id="carouselImage" src="/assets/20220924_174005-01.jpeg" alt="Image 1">
   <p id="carouselCaption">Caption 1</p>
 </div>
 
