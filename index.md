@@ -14,28 +14,43 @@ ___
 *Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.*
 
 <div id="carousel">
-  <img id="carouselImage" src="/assets/20220924_174005-01.jpeg" alt="Image 1">
+  <img id="carouselImage" src="image1.jpg" alt="Image 1">
+  <p id="carouselCaption">Caption 1</p>
 </div>
 
 <button id="prevButton">Previous</button>
 <button id="nextButton">Next</button>
 
 <script>
-var images = ["/assets/20220924_174005-01.jpeg", "/assets/20221008_174707.jpg", "/assets/20221028_181128.jpg", "/assets/kapex/20240105_193617.jpg", "/assets/kapex/20240108_191139.jpg"];
-var currentIndex = 0;
+var images = [
+  {src: "/assets/20220924_174005-01.jpeg", caption: "Caption 1"},
+  {src: "/assets/20221008_174707.jpg", caption: "Caption 2"},
+  {src: "/assets/20221028_181128.jpg", caption: "Caption 3"},
+  {src: "/assets/kapex/20240105_193617.jpg", caption: "Caption 4"},
+  {src: "/assets/kapex/20240108_191139.jpg", caption: "Caption 5"}
+];
+var currentIndex = Math.floor(Math.random() * images.length);
+
+function showImage() {
+  document.getElementById("carouselImage").src = images[currentIndex].src;
+  document.getElementById("carouselCaption").textContent = images[currentIndex].caption;
+}
 
 function showNextImage() {
   currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-  document.getElementById("carouselImage").src = images[currentIndex];
+  showImage();
 }
 
 document.getElementById("prevButton").addEventListener("click", function() {
   currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-  document.getElementById("carouselImage").src = images[currentIndex];
+  showImage();
 });
 
 document.getElementById("nextButton").addEventListener("click", showNextImage);
 
 // Automatically advance to the next image every 3 seconds
 setInterval(showNextImage, 3000);
+
+// Show a random image when the page loads
+showImage();
 </script>
