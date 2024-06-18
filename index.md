@@ -13,9 +13,6 @@ ___
   <p id="carouselCaption">Caption 1</p>
 </div>
 
-<button id="prevButton">Previous</button>
-<button id="nextButton">Next</button>
-
 <script>
 var images = [
   {src: "/assets/20220924_174005-01.jpeg", caption: "<em>Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.</em>"},
@@ -29,21 +26,6 @@ function showImage() {
   document.getElementById("carouselImage").src = images[currentIndex].src;
   document.getElementById("carouselCaption").innerHTML = images[currentIndex].caption;
 }
-
-function showNextImage() {
-  currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-  showImage();
-}
-
-document.getElementById("prevButton").addEventListener("click", function() {
-  currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-  showImage();
-});
-
-document.getElementById("nextButton").addEventListener("click", showNextImage);
-
-// Automatically advance to the next image every 3 seconds
-setInterval(showNextImage, 20000);
 
 // Show a random image when the page loads
 showImage();
