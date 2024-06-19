@@ -1,1 +1,9 @@
+---
+layout: page
+title: Rossby Wave Breaking over Southern Africa
+permalink: /rossbywaves/
+---
 
+The midlatitudes influence the subtropics and tropics through baroclinic Rossby waves. These are long horizontal wavelength (.2000 km) oscillations in the midlatitude westerlies that predominantly occur in the upper troposphere and lower stratosphere. The propagation of these Rossby waves creates perturbations in the climatologically meridional stratification of potential vorticity (PV); upper-level ridges create poleward intrusions of high-PV air, while upper-level troughs create equatorward intrusions of low-PV air (in the Southern Hemisphere PV is generally negative and decreases toward the poles). Troughs may be involved in Rossby wave breaking (RWB) where Rossby waves amplify and overturn such that the typical meridional gradient of PV becomes reversed (McIntyre and Palmer 1983). Southern Africa is a particular Rossby wave breaking hotspot; wave breaking typically initiates in the South Atlantic, consolidates over the continent and dissipates in the Indian Ocean (Postel and Hitchman 1999).
+
+Numerous studies document the link between Rossby waves, Rossby wave breaking and variability in subtropical precipitation (Knippertz 2007). Over southern Africa, Hart et al. (2010) link PV troughs with tropical–extratropical cloud bands (regionally known as TTTs) while Ndarana and Waugh (2010) show that Rossby wave breaking is associated with 89% of Southern Hemisphere cutoff lows (COLs), both of which are linked to extreme spring and summer precipitation events over southern Africa (Hart et al. 2010; Favre et al. 2013). Ridging highs, important in advecting moisture from the Indian Ocean to the continental interior, also have a well-established relationship with RWB (Ivanciu et al. 2022).
