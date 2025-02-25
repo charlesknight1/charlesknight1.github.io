@@ -6,6 +6,9 @@ permalink: /fieldwork/
 
 Recent fieldwork projects:
 
+**2025**
+- [Kalahari Drylines](https://charlesknight1.github.io/drylines)
+
 **2024**
 - [Masika: East African Long Rains](https://charlesknight1.github.io/masika)
 
