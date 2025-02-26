@@ -17,7 +17,7 @@ ___
 var images = [
   {src: "/assets/drycab/20220924_174005-01.jpeg", caption: "<em>Driving north on the Mwinilunga - Ikelenge highway (T5), North-West Province, Zambia.</em>"},
   {src: "/assets/drycab/20221008_174707.jpg", caption: "<em>The team enjoy a deep red sunset over Angola from our camp at the Nchila Wildlife Reserve, North-West Zambia.<em>"},
-  {src: "/assets/drycab/20221103182154_IMG_9506-01.jpeg", caption: "<em>Deep convective clouds over the Democratic Republic of the Congo are lit up by the setting sun.<em>"},
+  {src: "/assets/drycab/20221103182154_IMG_9506-01.jpeg", caption: "<em>Deep convective clouds over the Democratic Republic of the Congo are lit by the setting sun.<em>"},
   {src: "/assets/kapex/20240105_193617.jpg", caption: "<em>Camp for the night on a roving radiosonde mission in the Kalahari Desert.<em>"}
 ];
 var currentIndex = Math.floor(Math.random() * images.length);
