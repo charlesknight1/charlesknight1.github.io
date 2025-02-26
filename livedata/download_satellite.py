@@ -137,11 +137,11 @@ print(f'Done! {download_start}')
 
 ir_data = xr.open_dataset('downloaded_data.nc').WV_062
 time = ir_data.time.values[0]
-time = pd.to_datetime(time).strftime('%Y-%m-%d 00:00')
+timestr = pd.to_datetime(time).strftime('%Y-%m-%d 00:00')
 ir_data = ir_data.mean('time')
 
 fig, ax = plt.subplots(figsize=(6, 5), subplot_kw={'projection': ccrs.PlateCarree()}, dpi=200)
-ax.set_title(f'{time}', fontsize=12)
+ax.set_title(f'{timestr}', fontsize=12)
 plot = ax.pcolormesh(ir_data.lon, ir_data.lat, ir_data, transform=ccrs.PlateCarree(), cmap='terrain', vmin=230, vmax=250)
 ax.set_extent([0, 45, 0, -35], crs=ccrs.PlateCarree())
 ax.coastlines()
@@ -162,7 +162,7 @@ cbar.ax.xaxis.set_tick_params(labelsize=9)
 cbar.set_ticks(np.arange(230, 251, 5))
 
 plt.tight_layout()
-datestr = ir_data.time.values[0]
-datestr = pd.to_datetime(datestr).strftime('%Y-%m-%d')
+datestr = pd.to_datetime(time).strftime('%Y-%m-%d')
+# plt.savefig(f'WV6.2_{datestr}.png')
+plt.savefig(f'plot1.png')
 
-plt.savefig(f'WV6.2_{datestr}.png')

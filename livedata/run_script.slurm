@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=daily_job
 #SBATCH --time=00:30:00  # Maximum runtime
-#SBATCH --partition="Short"
+#SBATCH --partition="Medium"
 #SBATCH --cpus-per-task=1
 
 # Activate your Conda environment (if applicable)
