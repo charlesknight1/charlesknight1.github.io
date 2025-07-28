@@ -9,11 +9,11 @@ Recent fieldwork projects:
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-<div id="map" style="height: 600px; width: 100%; margin-top: 1em;"></div>
+<div id="map" style="height: 400px; width: 100%; margin-top: 1em;"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var map = L.map('map').setView([0, 26], 4);
+  var map = L.map('map').setView([0, 0], 2);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map); 
@@ -60,10 +60,30 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Apply colored markers
-  var marker1 = L.marker([-11.2495, 24.3273], { icon: redIcon }).addTo(map);
-  marker1.bindPopup("DRYCAB (click to open)");
+  var marker1 = L.marker([-11.2495, 24.3273], { icon: greenIcon }).addTo(map);
+  marker1.bindPopup("DRYCAB");
   marker1.on("click", function () {
     window.location.href = "https://charlesknight1.github.io/drycab";
+  });
+  var marker2 = L.marker([-26.487986564461373, 20.620468145255035], { icon: redIcon }).addTo(map);
+  marker2.bindPopup("KAPEX");
+  marker2.on("click", function () {
+    window.location.href = "https://charlesknight1.github.io/kapex";
+  });
+  var marker3 = L.marker([-1.2999084757066404, 36.76135399427769], { icon: blueIcon }).addTo(map);
+  marker3.bindPopup("MASIKA");
+  marker3.on("click", function () {
+    window.location.href = "https://charlesknight1.github.io/masika";
+  });
+  var marker4 = L.marker([51.21838396221102, -1.9872330547672488], { icon: violetIcon }).addTo(map);
+  marker4.bindPopup("WESCON");
+  marker4.on("click", function () {
+    window.location.href = "https://charlesknight1.github.io/wescon";
+  });
+  var marker5 = L.marker([-27.071911071755437, 20.79988678343085], { icon: orangeIcon }).addTo(map);
+  marker5.bindPopup("Drylines");
+  marker5.on("click", function () {
+    window.location.href = "https://charlesknight1.github.io/drylines";
   });
   
 });
