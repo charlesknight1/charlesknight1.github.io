@@ -9,11 +9,11 @@ Recent fieldwork projects:
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-<div id="map" style="height: 400px; width: 100%; margin-top: 1em;"></div>
+<div id="map" style="height: 350px; width: 100%; margin-top: 1em;"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var map = L.map('map').setView([0, 0], 2);
+  var map = L.map('map').setView([10, 0], 2);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map); 
