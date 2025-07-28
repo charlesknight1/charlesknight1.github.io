@@ -1,0 +1,33 @@
+---
+layout: default
+title: "Leaflet Map Example"
+permalink: /map/
+---
+
+<h1>Leaflet Map Demo</h1>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-pgf+ZtSGYzAqpNXfsGUZ5UUnh19Q8zsa1ZWG9yyM0w8="
+  crossorigin="" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-o9N1j0gLv2a/ORbDRhdf0r0V8vUUUwUBnTMOxE2v0uU="
+  crossorigin=""></script>
+
+<!-- Map container -->
+<div id="map" style="height: 500px; width: 100%; margin-top: 1em;"></div>
+
+<!-- Map script -->
+<script>
+  var map = L.map('map').setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  L.marker([51.5, -0.09]).addTo(map)
+    .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+    .openPopup();
+</script>
