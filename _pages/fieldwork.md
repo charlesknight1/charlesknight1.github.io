@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
   marker1.on("click", function () {
     window.location.href = "https://charlesknight1.github.io/drycab";
   });
-  var marker2 = L.marker([-26.487986564461373, 20.620468145255035], { icon: redIcon }).addTo(map);
+  var marker2 = L.marker([-25.487986564461373, 20.620468145255035], { icon: redIcon }).addTo(map);
   marker2.bindPopup("KAPEX");
   marker2.on("click", function () {
     window.location.href = "https://charlesknight1.github.io/kapex";
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
   marker4.on("click", function () {
     window.location.href = "https://charlesknight1.github.io/wescon";
   });
-  var marker5 = L.marker([-27.071911071755437, 20.79988678343085], { icon: orangeIcon }).addTo(map);
+  var marker5 = L.marker([-28.071911071755437, 20.79988678343085], { icon: orangeIcon }).addTo(map);
   marker5.bindPopup("Drylines");
   marker5.on("click", function () {
     window.location.href = "https://charlesknight1.github.io/drylines";
