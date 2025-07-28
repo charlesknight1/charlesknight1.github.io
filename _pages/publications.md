@@ -7,7 +7,7 @@ permalink: /publications/
 **2025**
 
 
-Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. In preparation.
+Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *In preparation*.
 
 **2024**
 
