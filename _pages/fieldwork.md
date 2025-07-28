@@ -4,7 +4,7 @@ title: Fieldwork
 permalink: /fieldwork/
 ---
 
-Recent fieldwork projects:
+Recent projects:
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -93,6 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 2024: [Masika: East African Long Rains](https://charlesknight1.github.io/masika)
 
-2023: [KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex), [WesCON-WOEST: Atmospheric observations with UAS](https://charlesknight1.github.io/wescon)
+2023: [KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex) and [WesCON-WOEST: Atmospheric observations with UAS](https://charlesknight1.github.io/wescon)
 
 2022: [DRYCAB: Decreasing Rainfall to Year 2100 Role of the Congo Air Boundary](https://charlesknight1.github.io/drycab)
