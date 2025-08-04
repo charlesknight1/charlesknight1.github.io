@@ -61,10 +61,10 @@
   <div id="nyt-list">Loading articles...</div>
 
   <script>
-    const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
+    const RSS_nyt_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
     const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
 
-    async function fetchRSS(url) {
+    async function fetchnytRSS(url) {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
       const data = await res.json();
       return data.items;
@@ -113,7 +113,7 @@
       });
     }
 
-    fetchRSS(RSS_URL)
+    fetchnytRSS(RSS_nyt_URL)
       .then(renderFeed)
       .catch(err => {
         document.getElementById('nyt-list').innerText = 'Failed to load feed.';
@@ -125,10 +125,10 @@
   <div id="bbc-list">Loading articles...</div>
 
   <script>
-    const RSS_URL = 'http://feeds.bbci.co.uk/news/world/rss.xml';
+    const RSS_bbc_URL = 'http://feeds.bbci.co.uk/news/world/rss.xml';
     const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
 
-    async function fetchRSS(url) {
+    async function fetchbbcRSS(url) {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
       const data = await res.json();
       return data.items;
@@ -177,7 +177,7 @@
       });
     }
 
-    fetchRSS(RSS_URL)
+    fetchbbcRSS(RSS_bbc_URL)
       .then(renderFeed)
       .catch(err => {
         document.getElementById('bbc-list').innerText = 'Failed to load feed.';
