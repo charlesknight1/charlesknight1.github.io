@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Archived Newsstand</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
+      background: #f8f9fa;
+      color: #212529;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2em;
+    }
+    .article {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .article img {
+      max-width: 150px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .content {
+      flex: 1;
+    }
+    .content h2 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+    .content p {
+      margin: 0.5rem 0;
+    }
+    .content .date {
+      color: #666;
+      font-size: 0.85em;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>📰 My Archived Newsstand</h1>
+  <div id="news-list">Loading articles...</div>
+
+  <script>
+    const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
+    const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
+
+    async function fetchRSS(url) {
+      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      return data.items;
+    }
+
+    function renderFeed(items) {
+      const container = document.getElementById('news-list');
+      container.innerHTML = '';
+      items.forEach(item => {
+        const article = document.createElement('div');
+        article.className = 'article';
+
+        const image = document.createElement('img');
+        image.src = item.thumbnail || 'https://via.placeholder.com/150?text=No+Image';
+        image.alt = 'Thumbnail';
+
+        const content = document.createElement('div');
+        content.className = 'content';
+
+        const title = document.createElement('h2');
+        const link = document.createElement('a');
+        link.href = ARCHIVE_PREFIX + item.link;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = item.title;
+        title.appendChild(link);
+
+        const desc = document.createElement('p');
+        desc.innerHTML = item.description || '';
+
+        const pubDate = document.createElement('div');
+        pubDate.className = 'date';
+        pubDate.textContent = new Date(item.pubDate).toLocaleString();
+
+        content.appendChild(title);
+        content.appendChild(desc);
+        content.appendChild(pubDate);
+
+        article.appendChild(image);
+        article.appendChild(content);
+        container.appendChild(article);
+      });
+    }
+
+    fetchRSS(RSS_URL)
+      .then(renderFeed)
+      .catch(err => {
+        document.getElementById('news-list').innerText = 'Failed to load feed.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
