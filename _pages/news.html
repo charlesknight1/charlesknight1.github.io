@@ -58,7 +58,7 @@
 </head>
 <body>
   <h1>📰 The New York Times</h1>
-  <div id="news-list">Loading articles...</div>
+  <div id="nyt-list">Loading articles...</div>
 
   <script>
     const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
@@ -71,7 +71,7 @@
     }
 
     function renderFeed(items) {
-      const container = document.getElementById('news-list');
+      const container = document.getElementById('nyt-list');
       container.innerHTML = '';
       items.forEach(item => {
         const article = document.createElement('div');
@@ -116,16 +116,16 @@
     fetchRSS(RSS_URL)
       .then(renderFeed)
       .catch(err => {
-        document.getElementById('news-list').innerText = 'Failed to load feed.';
+        document.getElementById('nyt-list').innerText = 'Failed to load feed.';
         console.error(err);
       });
   </script>
 
   <h1>📰 BBC World</h1>
-  <div id="news-list">Loading articles...</div>
+  <div id="bbc-list">Loading articles...</div>
 
   <script>
-    const RSS_URL = 'http://feeds.bbci.co.uk/news/video_and_audio/world/rss.xml'; // Change this
+    const RSS_URL = 'http://feeds.bbci.co.uk/news/world/rss.xml';
     const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
 
     async function fetchRSS(url) {
@@ -135,7 +135,7 @@
     }
 
     function renderFeed(items) {
-      const container = document.getElementById('news-list');
+      const container = document.getElementById('bbc-list');
       container.innerHTML = '';
       items.forEach(item => {
         const article = document.createElement('div');
@@ -180,7 +180,7 @@
     fetchRSS(RSS_URL)
       .then(renderFeed)
       .catch(err => {
-        document.getElementById('news-list').innerText = 'Failed to load feed.';
+        document.getElementById('bbc-list').innerText = 'Failed to load feed.';
         console.error(err);
       });
   </script>
