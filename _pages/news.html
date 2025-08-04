@@ -62,7 +62,7 @@
 
   <script>
     const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
-    const ARCHIVE_PREFIX = 'http://archive.is/nearest/'; // Or 'https://outline.com/'
+    const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
 
     async function fetchRSS(url) {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -81,7 +81,7 @@
         const imageUrl =
           item.thumbnail && item.thumbnail.trim()
             ? item.thumbnail
-            : item.enclosure?.link || 'https://via.placeholder.com/150?text=No+Image';
+            : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
         image.src = imageUrl;
         image.alt = 'Thumbnail';
 
