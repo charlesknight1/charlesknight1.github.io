@@ -62,7 +62,7 @@
 
   <script>
     const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
-    const ARCHIVE_PREFIX = 'http://archive.is/'; // Or 'https://outline.com/'
+    const ARCHIVE_PREFIX = 'http://archive.is/nearest/'; // Or 'https://outline.com/'
 
     async function fetchRSS(url) {
       const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
