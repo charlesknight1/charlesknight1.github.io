@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Archived Newsstand</title>
+</head>
+<body>
+  <h1>📰 My Archived Newsstand</h1>
+  <ul id="news-list">Loading...</ul>
+
+  <script>
+    const RSS_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // change this
+    const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // or use 'https://outline.com/'
+
+    async function fetchRSS(url) {
+      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+      return data.items;
+    }
+
+    function renderFeed(items) {
+      const list = document.getElementById('news-list');
+      list.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = ARCHIVE_PREFIX + item.link;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = item.title;
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+    }
+
+    fetchRSS(RSS_URL)
+      .then(renderFeed)
+      .catch(err => {
+        document.getElementById('news-list').innerText = 'Failed to load feed.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
