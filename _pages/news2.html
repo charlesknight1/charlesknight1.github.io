@@ -74,7 +74,11 @@
         article.className = 'article';
 
         const image = document.createElement('img');
-        image.src = item.thumbnail || 'https://via.placeholder.com/150?text=No+Image';
+        const imageUrl =
+          item.thumbnail && item.thumbnail.trim()
+            ? item.thumbnail
+            : item.enclosure?.link || 'https://via.placeholder.com/150?text=No+Image';
+        image.src = imageUrl;
         image.alt = 'Thumbnail';
 
         const content = document.createElement('div');
