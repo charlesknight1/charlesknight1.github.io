@@ -9,35 +9,19 @@
   .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 100%; /* initially */
-  }
-
-  .carousel-buttons {
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .carousel-buttons button {
-    padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
+    width: 100%;
   }
 
   .article {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 1rem;
-    /* Remove margin to avoid extra space */
-    /* margin: 1rem auto; */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex: 0 0 100%; /* Each slide takes 100% of container width */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* stack image and text vertically */
     align-items: center;
-    
-    /* Set width to exactly the container width */
-    flex: 0 0 100%;
+    padding: 1rem;
     box-sizing: border-box;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
   .article img {
@@ -46,8 +30,8 @@
     max-height: 300px;
     object-fit: contain;
     border-radius: 6px;
-    display: block;
     margin-bottom: 1rem;
+    display: block;
   }
 
   .content {
@@ -56,12 +40,12 @@
   }
 
   .content h2 {
-    margin: 0;
+    margin: 0 0 0.5rem;
     font-size: 1.2em;
   }
 
   .content p {
-    margin: 0.5rem 0;
+    margin: 0 0 0.5rem;
   }
 
   .date {
@@ -77,6 +61,18 @@
   a:hover {
     text-decoration: underline;
   }
+
+  .carousel-buttons {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .carousel-buttons button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
 </style>
 
 <h1>📰 The New York Times</h1>
@@ -84,12 +80,13 @@
   <div id="nyt-carousel" class="carousel-track"></div>
 </div>
 <div class="carousel-buttons">
-  <button onclick="moveSlide(-1, 'nyt-carousel')">⏪ Prev</button>
-  <button onclick="moveSlide(1, 'nyt-carousel')">Next ⏩</button>
+  <button onclick="moveSlide(-1)">⏪ Prev</button>
+  <button onclick="moveSlide(1)">Next ⏩</button>
 </div>
 
 <script>
   let currentIndex = 0;
+  let totalSlides = 0;
 
   async function fetchnytRSS(url) {
     const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -97,10 +94,9 @@
     return data.items;
   }
 
-  function renderCarousel(items, containerId) {
-    const container = document.getElementById(containerId);
+  function renderCarousel(items) {
+    const container = document.getElementById('nyt-carousel');
     container.innerHTML = '';
-
     items.forEach(item => {
       const article = document.createElement('div');
       article.className = 'article';
@@ -137,30 +133,24 @@
 
       article.appendChild(image);
       article.appendChild(content);
-
       container.appendChild(article);
     });
-
-    // Set the carousel track width to fit all articles side-by-side exactly
-    container.style.width = `${items.length * 100}%`;
+    totalSlides = items.length;
   }
 
-  function moveSlide(direction, containerId) {
-    const container = document.getElementById(containerId);
-    const articles = container.children;
-    if (articles.length === 0) return;
+  function moveSlide(direction) {
+    const container = document.getElementById('nyt-carousel');
+    if (totalSlides === 0) return;
 
     currentIndex += direction;
+    if (currentIndex < 0) currentIndex = totalSlides - 1;
+    if (currentIndex >= totalSlides) currentIndex = 0;
 
-    if (currentIndex < 0) currentIndex = articles.length - 1;
-    if (currentIndex >= articles.length) currentIndex = 0;
-
-    const offset = -currentIndex * 100;
-    container.style.transform = `translateX(${offset}%)`;
+    container.style.transform = `translateX(-${currentIndex * 100}%)`;
   }
 
   fetchnytRSS('https://rss.nytimes.com/services/xml/rss/nyt/World.xml')
-    .then(items => renderCarousel(items, 'nyt-carousel'))
+    .then(renderCarousel)
     .catch(err => {
       document.getElementById('nyt-carousel').innerText = 'Failed to load feed.';
       console.error(err);
