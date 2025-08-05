@@ -1,0 +1,109 @@
+<style>
+  .carousel-container {
+    position: relative;
+    max-width: 800px;
+    margin: 1rem auto;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .carousel-buttons {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .carousel-buttons button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<h1>📰 The New York Times</h1>
+<div class="carousel-container">
+  <div id="nyt-carousel" class="carousel-track"></div>
+</div>
+<div class="carousel-buttons">
+  <button onclick="moveSlide(-1, 'nyt-carousel')">⏪ Prev</button>
+  <button onclick="moveSlide(1, 'nyt-carousel')">Next ⏩</button>
+</div>
+
+<script>
+  let currentIndex = 0;
+
+  async function fetchnytRSS(url) {
+    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    return data.items;
+  }
+
+  function renderCarousel(items, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    items.forEach(item => {
+      const article = document.createElement('div');
+      article.className = 'article';
+      article.style.minWidth = '100%'; // full width per slide
+
+      const image = document.createElement('img');
+      const imageUrl =
+        item.thumbnail && item.thumbnail.trim()
+          ? item.thumbnail
+          : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
+      image.src = imageUrl;
+      image.alt = 'Thumbnail';
+
+      const content = document.createElement('div');
+      content.className = 'content';
+
+      const title = document.createElement('h2');
+      const link = document.createElement('a');
+      link.href = 'http://archive.is/newest/' + item.link;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = item.title;
+      title.appendChild(link);
+
+      const desc = document.createElement('p');
+      desc.innerHTML = item.description || '';
+
+      const pubDate = document.createElement('div');
+      pubDate.className = 'date';
+      pubDate.textContent = new Date(item.pubDate).toLocaleString();
+
+      content.appendChild(title);
+      content.appendChild(desc);
+      content.appendChild(pubDate);
+
+      article.appendChild(image);
+      article.appendChild(content);
+      container.appendChild(article);
+    });
+  }
+
+  function moveSlide(direction, containerId) {
+    const container = document.getElementById(containerId);
+    const articles = container.children;
+    if (articles.length === 0) return;
+
+    currentIndex += direction;
+
+    if (currentIndex < 0) currentIndex = articles.length - 1;
+    if (currentIndex >= articles.length) currentIndex = 0;
+
+    const offset = -currentIndex * 100;
+    container.style.transform = `translateX(${offset}%)`;
+  }
+
+  fetchnytRSS('https://rss.nytimes.com/services/xml/rss/nyt/World.xml')
+    .then(items => renderCarousel(items, 'nyt-carousel'))
+    .catch(err => {
+      document.getElementById('nyt-carousel').innerText = 'Failed to load feed.';
+      console.error(err);
+    });
+</script>
