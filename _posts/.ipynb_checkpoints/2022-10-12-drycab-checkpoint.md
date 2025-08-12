@@ -1,0 +1,31 @@
+---
+layout: post
+title: DRYCAB
+permalink: /drycab
+categories: Fieldwork
+---
+
+Southern Africa is one of two land-based areas of the planet where large-scale drying is projected to occur in future decades. The projections tell us that this is expected to result from the late onset of the rains. However, much of what we know about the climate dynamics of this remote region depends on numerical models, and is not grounded in observations.
+
+The DRYCAB project aimed to address this observational deficit. A collaboration between the University of Oxford and the Zambian Meteorological Department, the project set out to compile a comprehensive observational dataset on the onset of the rainy season from August to November 2022.
+
+![img1](/assets/drycab/map.png)
+*Location of the DRYCAB project field sites. Red cross: Automatic weather station (AWS) only sites; green triangles: radiosonde sites, AWS and LiDAR,. Surface pressure is shaded in purple. Blue triangles show active (as of 2022) radiosonde stations reporting to the IGRA radiosonde network.*
+
+The fieldwork involved setting up two Lidar systems, one at Solwezi and one at Sakeji Mission School near Ikelenge in far NW Zambia. A total of 784 radiosondes were released on a 3-hourly timetable, 373 at Nchila (3 km from Sakeji) and 411 from Solwezi. A string of AWSs was also established in an arc between the two radiosonde sites of Nchila and Solwezi. The Oxford field team was based at Nchila, while the Zambian Meteorological Department ran the radiosonde station and Lidar system at Solwezi under the leadership of Wallace Kasongo.
+
+![img1](/assets/drycab/20221008_174707.jpg)
+*Deep African sunsets such as the one pictured were a common feature of fieldwork life at Nchila camp.*
+
+![img2](/assets/drycab/20221103182154_IMG_9506-01.jpeg)
+*The onset of the rains provided for some spectacular storm systems, both near and far.*
+
+![img3](/assets/drycab/20221028232956_IMG_9406.JPG)
+*Lightning overhead Nchila as the 02:00 radiosonde is prepared.*
+
+![img6](/assets/drycab/20221106_165904.jpg)
+*The radiosonde release station at Nchila camp. An off-grid fieldsite with no electricity posed challenges for running the science kit, particularly later in the campaign when clouds limited solar generation.*
+
+![img7](/assets/drycab/received_865233207813466.jpeg)
+*A severe storm to the east of camp (over the Southern Congo Basin) lights up the night sky. In the foreground, I use a headtorch to light-paint the project name.*
+

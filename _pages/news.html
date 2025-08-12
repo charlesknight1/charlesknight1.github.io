@@ -1,188 +1,185 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Archived Newsstand</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      margin: 2rem;
-      background: #f8f9fa;
-      color: #212529;
-    }
-    h1 {
-      text-align: center;
-      font-size: 2em;
-    }
-    .article {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 1rem;
-      margin: 1rem auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 800px;
-      width: 100%;
-    }
+<style>
+  .carousel-container {
+    position: relative;
+    width: 100%;         /* fill width */
+    max-width: 600px;
+    aspect-ratio: 1 / 1; /* height = width */
+    margin: 1rem auto;
+    overflow: hidden;
+    box-sizing: border-box; /* ensure padding included in width */
+    padding: 0;  /* no left-right padding */
+  }
 
-    .article img {
-      max-width: 150px;
-      border-radius: 6px;
-      object-fit: contain;
-    }
-    .content {
-      flex: 1;
-    }
-    .content h2 {
-      margin: 0;
-      font-size: 1.2em;
-    }
-    .content p {
-      margin: 0.5rem 0;
-    }
-    .content .date {
-      color: #666;
-      font-size: 0.85em;
-    }
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <h1>📰 The New York Times</h1>
-  <div id="nyt-list">Loading articles...</div>
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+  }
 
-  <script>
-    const RSS_nyt_URL = 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'; // Change this
-    const ARCHIVE_PREFIX = 'http://archive.is/newest/'; // Or 'https://outline.com/'
+  .article {
+    flex: 0 0 100%; /* Each slide takes 100% of container width */
+    height: 100%;
+    position: relative; /* Enable positioning for overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Remove padding since we're overlaying */
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden; /* Ensure content doesn't spill out */
+  }
 
-    async function fetchnytRSS(url) {
-      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-      const data = await res.json();
-      return data.items;
-    }
+  .article img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Fill the entire container */
+    border-radius: 6px;
+    display: block;
+  }
 
-    function renderFeed(items) {
-      const container = document.getElementById('nyt-list');
-      container.innerHTML = '';
-      items.forEach(item => {
-        const article = document.createElement('div');
-        article.className = 'article';
-
-        const image = document.createElement('img');
-        const imageUrl =
-          item.thumbnail && item.thumbnail.trim()
-            ? item.thumbnail
-            : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
-        image.src = imageUrl;
-        image.alt = 'Thumbnail';
-
-        const content = document.createElement('div');
-        content.className = 'content';
-
-        const title = document.createElement('h2');
-        const link = document.createElement('a');
-        link.href = ARCHIVE_PREFIX + item.link;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = item.title;
-        title.appendChild(link);
-
-        const desc = document.createElement('p');
-        desc.innerHTML = item.description || '';
-
-        const pubDate = document.createElement('div');
-        pubDate.className = 'date';
-        pubDate.textContent = new Date(item.pubDate).toLocaleString();
-
-        content.appendChild(title);
-        content.appendChild(desc);
-        content.appendChild(pubDate);
-
-        article.appendChild(image);
-        article.appendChild(content);
-        container.appendChild(article);
-      });
-    }
-
-    fetchnytRSS(RSS_nyt_URL)
-      .then(renderFeed)
-      .catch(err => {
-        document.getElementById('nyt-list').innerText = 'Failed to load feed.';
-        console.error(err);
-      });
-  </script>
-
-  <h1>📰 BBC World</h1>
-  <div id="bbc-list">Loading articles...</div>
-
-  <script>
-    const RSS_bbc_URL = 'http://feeds.bbci.co.uk/news/world/rss.xml';
-
-    async function fetchbbcRSS(url) {
-      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-      const data = await res.json();
-      return data.items;
-    }
-
-    function renderFeed(items) {
-      const container = document.getElementById('bbc-list');
-      container.innerHTML = '';
-      items.forEach(item => {
-        const article = document.createElement('div');
-        article.className = 'article';
-
-        const image = document.createElement('img');
-        const imageUrl =
-          item.thumbnail && item.thumbnail.trim()
-            ? item.thumbnail
-            : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
-        image.src = imageUrl;
-        image.alt = 'Thumbnail';
-
-        const content = document.createElement('div');
-        content.className = 'content';
-
-        const title = document.createElement('h2');
-        const link = document.createElement('a');
-        link.href = item.link;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = item.title;
-        title.appendChild(link);
-
-        const desc = document.createElement('p');
-        desc.innerHTML = item.description || '';
-
-        const pubDate = document.createElement('div');
-        pubDate.className = 'date';
-        pubDate.textContent = new Date(item.pubDate).toLocaleString();
-
-        content.appendChild(title);
-        content.appendChild(desc);
-        content.appendChild(pubDate);
-
-        article.appendChild(image);
-        article.appendChild(content);
-        container.appendChild(article);
-      });
-    }
-
-    fetchbbcRSS(RSS_bbc_URL)
-      .then(renderFeed)
-      .catch(err => {
-        document.getElementById('bbc-list').innerText = 'Failed to load feed.';
-        console.error(err);
-      });
-  </script>
+  .content {
+    position: absolute; /* Position over the image */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.5); /* Semi-transparent overlay just behind text */
+    color: white; /* White text for contrast */
+    text-align: center;
+    border-radius: 20px; /* Rounded corners for the text overlay */
+    width: 80%; /* Prevent text area from being too wide */
+  }
   
-</body>
-</html>
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: rgb(0, 0, 0); /* Ensure h1 is also white */
+  }
+
+  .content h2 {
+    margin: 0 0 0.5rem;
+    font-size: 2.5rem;
+    color: rgb(0, 0, 0);
+  }
+
+  .content p {
+    margin: 0 0 0.5rem;
+    color: rgb(0, 0, 0);
+    font-size: 1.2rem;
+  }
+
+  .date {
+    color: #000000; /* Lighter color for date */
+    font-size: 1em;
+  }
+
+  a {
+    color: #000000; /* Lighter blue for better visibility on dark background */
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    color: #242424; /* Even lighter on hover */
+  }
+
+  .carousel-buttons {
+    text-align: center;
+    /*margin-top: 1rem;*/
+  }
+
+  .carousel-buttons button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<h1>📰 The New York Times</h1>
+<div class="carousel-container">
+  <div id="nyt-carousel" class="carousel-track"></div>
+</div>
+<div class="carousel-buttons">
+  <button onclick="moveSlide(-1)">⏪ Prev</button>
+  <button onclick="moveSlide(1)">Next ⏩</button>
+</div>
+
+<script>
+  let currentIndex = 0;
+  let totalSlides = 0;
+
+  async function fetchnytRSS(url) {
+    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    return data.items;
+  }
+
+  function renderCarousel(items) {
+    const container = document.getElementById('nyt-carousel');
+    container.innerHTML = '';
+    items.forEach(item => {
+      const article = document.createElement('div');
+      article.className = 'article';
+
+      const image = document.createElement('img');
+      const imageUrl =
+        item.thumbnail && item.thumbnail.trim()
+          ? item.thumbnail
+          : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
+      image.src = imageUrl;
+      image.alt = 'Thumbnail';
+
+      const content = document.createElement('div');
+      content.className = 'content';
+
+      const title = document.createElement('h2');
+      const link = document.createElement('a');
+      link.href = 'http://archive.is/newest/' + item.link;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = item.title;
+      title.appendChild(link);
+
+      const desc = document.createElement('p');
+      desc.innerHTML = item.description || '';
+
+      const pubDate = document.createElement('div');
+      pubDate.className = 'date';
+      pubDate.textContent = new Date(item.pubDate).toLocaleString();
+
+      content.appendChild(title);
+      content.appendChild(desc);
+      content.appendChild(pubDate);
+
+      article.appendChild(image);
+      article.appendChild(content);
+      container.appendChild(article);
+    });
+    totalSlides = items.length;
+  }
+
+  function moveSlide(direction) {
+    const container = document.getElementById('nyt-carousel');
+    if (totalSlides === 0) return;
+
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = totalSlides - 1;
+    if (currentIndex >= totalSlides) currentIndex = 0;
+
+    container.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
+
+  fetchnytRSS('https://rss.nytimes.com/services/xml/rss/nyt/World.xml')
+    .then(renderCarousel)
+    .catch(err => {
+      document.getElementById('nyt-carousel').innerText = 'Failed to load feed.';
+      console.error(err);
+    });
+</script>
