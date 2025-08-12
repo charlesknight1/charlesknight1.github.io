@@ -8,12 +8,21 @@
     overflow: hidden;
     box-sizing: border-box; /* ensure padding included in width */
     padding: 0;  /* no left-right padding */
+    cursor: grab; /* Show grab cursor for dragging */
+  }
+
+  .carousel-container:active {
+    cursor: grabbing; /* Show grabbing cursor when dragging */
   }
 
   .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
     width: 100%;
+  }
+
+  .carousel-track.no-transition {
+    transition: none; /* Disable transition during drag */
   }
 
   .article {
@@ -28,6 +37,7 @@
     background: #fff;
     border-radius: 10px;
     overflow: hidden; /* Ensure content doesn't spill out */
+    user-select: none; /* Prevent text selection during drag */
   }
 
   .article img {
@@ -36,6 +46,7 @@
     object-fit: cover; /* Fill the entire container */
     border-radius: 6px;
     display: block;
+    pointer-events: none; /* Prevent image drag */
   }
 
   .content {
@@ -91,7 +102,7 @@
 
   .carousel-buttons {
     text-align: center;
-    /*margin-top: 1rem;*/
+    margin-top: 1rem;
   }
 
   .carousel-buttons button {
@@ -99,11 +110,16 @@
     margin: 0 0.5rem;
     font-size: 1rem;
     cursor: pointer;
+    background: #9f9f9f;
+    color: white;
+    border: none;
+    border-radius: 5px;
   }
+
 </style>
 
 <h1>📰 The New York Times</h1>
-<div class="carousel-container">
+<div class="carousel-container" id="carousel-container">
   <div id="nyt-carousel" class="carousel-track"></div>
 </div>
 <div class="carousel-buttons">
@@ -114,6 +130,12 @@
 <script>
   let currentIndex = 0;
   let totalSlides = 0;
+  
+  // Swipe/drag functionality
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+  let startTransform = 0;
 
   async function fetchnytRSS(url) {
     const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
@@ -132,7 +154,7 @@
       const imageUrl =
         item.thumbnail && item.thumbnail.trim()
           ? item.thumbnail
-          : item.enclosure?.link || 'https://dummyimage.com/600x400/ffffff/27272b.png&text=No+Image';
+          : item.enclosure?.link || 'https://dummyimage.com/600x600/000/000000.png';
       image.src = imageUrl;
       image.alt = 'Thumbnail';
 
@@ -163,6 +185,7 @@
       container.appendChild(article);
     });
     totalSlides = items.length;
+    setupSwipeEvents();
   }
 
   function moveSlide(direction) {
@@ -173,8 +196,98 @@
     if (currentIndex < 0) currentIndex = totalSlides - 1;
     if (currentIndex >= totalSlides) currentIndex = 0;
 
+    updateCarouselPosition();
+  }
+
+  function updateCarouselPosition() {
+    const container = document.getElementById('nyt-carousel');
     container.style.transform = `translateX(-${currentIndex * 100}%)`;
   }
+
+  function setupSwipeEvents() {
+    const carousel = document.getElementById('carousel-container');
+    const track = document.getElementById('nyt-carousel');
+
+    // Touch events for mobile
+    carousel.addEventListener('touchstart', handleStart, { passive: false });
+    carousel.addEventListener('touchmove', handleMove, { passive: false });
+    carousel.addEventListener('touchend', handleEnd, { passive: false });
+
+    // Mouse events for desktop
+    carousel.addEventListener('mousedown', handleStart);
+    carousel.addEventListener('mousemove', handleMove);
+    carousel.addEventListener('mouseup', handleEnd);
+    carousel.addEventListener('mouseleave', handleEnd);
+
+    // Prevent context menu on right click during drag
+    carousel.addEventListener('contextmenu', e => {
+      if (isDragging) e.preventDefault();
+    });
+  }
+
+  function getX(e) {
+    return e.touches ? e.touches[0].clientX : e.clientX;
+  }
+
+  function handleStart(e) {
+    isDragging = true;
+    startX = getX(e);
+    currentX = startX;
+    startTransform = currentIndex * 100;
+    
+    const track = document.getElementById('nyt-carousel');
+    track.classList.add('no-transition');
+    
+    e.preventDefault();
+  }
+
+  function handleMove(e) {
+    if (!isDragging) return;
+    
+    currentX = getX(e);
+    const deltaX = currentX - startX;
+    const containerWidth = document.getElementById('carousel-container').offsetWidth;
+    const movePercent = (deltaX / containerWidth) * 100;
+    
+    const track = document.getElementById('nyt-carousel');
+    track.style.transform = `translateX(-${startTransform - movePercent}%)`;
+    
+    e.preventDefault();
+  }
+
+  function handleEnd(e) {
+    if (!isDragging) return;
+    
+    isDragging = false;
+    const deltaX = currentX - startX;
+    const containerWidth = document.getElementById('carousel-container').offsetWidth;
+    const threshold = containerWidth * 0.2; // 20% of container width
+    
+    const track = document.getElementById('nyt-carousel');
+    track.classList.remove('no-transition');
+    
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX > 0) {
+        // Swiped right - go to previous slide
+        moveSlide(-1);
+      } else {
+        // Swiped left - go to next slide
+        moveSlide(1);
+      }
+    } else {
+      // Snap back to current slide
+      updateCarouselPosition();
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      moveSlide(-1);
+    } else if (e.key === 'ArrowRight') {
+      moveSlide(1);
+    }
+  });
 
   fetchnytRSS('https://rss.nytimes.com/services/xml/rss/nyt/World.xml')
     .then(renderCarousel)
