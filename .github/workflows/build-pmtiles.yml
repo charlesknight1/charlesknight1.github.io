@@ -109,18 +109,18 @@ jobs:
       - name: Colorize (fixed ramp)
         run: |
           cat > work/ramp.txt << 'TXT'
-nv 0 0 0 0
-# value  R  G  B
-180  0  0  255
-200  0  64 255
-220  0 128 255
-240  0 191 191
-260  0 223 127
-280  64 223 64
-300  223 191 32
-320  255 128 0
-340  255 0   0
-TXT
+          nv 0 0 0 0
+          # value  R  G  B
+          180  0  0  255
+          200  0  64 255
+          220  0 128 255
+          240  0 191 191
+          260  0 223 127
+          280  64 223 64
+          300  223 191 32
+          320  255 128 0
+          340  255 0   0
+          TXT
           gdaldem color-relief work/merc_3857.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> MBTiles (+overviews)
