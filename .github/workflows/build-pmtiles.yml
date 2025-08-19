@@ -28,7 +28,7 @@ jobs:
           pip install rio-pmtiles
 
       - name: Prepare folders
-        run: mkdir -p work docs/tiles
+        run: mkdir -p work tiles
 
       # --- Configure your dataset ---
       - name: Build URL for today
@@ -80,10 +80,10 @@ jobs:
           gdaldem color-relief work/merc.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> PMTiles
-        run: rio pmtiles work/color.tif docs/tiles/raster.pmtiles --zoom-levels 0..6
+        run: rio pmtiles work/color.tif tiles/raster.pmtiles --zoom-levels 0..6
 
       - name: Commit & push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "build(pmtiles): MLST-AS daily refresh [skip ci]"
-          file_pattern: docs/tiles/raster.pmtiles
+          file_pattern: tiles/raster.pmtiles
