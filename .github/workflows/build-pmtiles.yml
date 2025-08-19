@@ -28,10 +28,7 @@ jobs:
           pip install rio-pmtiles
 
       - name: Prepare folders
-        run: |
-          mkdir -p work tiles
-          mkdir -p debug
-        
+        run: mkdir -p work tiles        
 
       # --- Configure your dataset ---
       - name: Build URL for today
@@ -65,7 +62,7 @@ jobs:
         run: |
           echo "=== raw_native.tif ==="
           gdalinfo -mm -stats work/raw_native.tif | sed -n '1,160p'
-          gdal_translate -of PNG -scale -ot Byte work/raw_native.tif debug/raw_native_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/raw_native.tif work/raw_native_quicklook.png
 
       - name: Reproject to EPSG:3857
         run: gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha work/raw_native.tif work/merc.tif
@@ -74,7 +71,7 @@ jobs:
         run: |
           echo "=== merc.tif ==="
           gdalinfo -mm -stats work/merc.tif | sed -n '1,200p'
-          gdal_translate -of PNG -scale -ot Byte work/merc.tif debug/merc_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/merc.tif work/merc_quicklook.png
 
       - name: Mask values outside 0–60 °C
         run: |
@@ -86,7 +83,7 @@ jobs:
         run: |
           echo "=== merc_masked.tif ==="
           gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
-          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif debug/merc_masked_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif work/merc_masked_quicklook.png
 
       - name: Colorize (0–60 °C ramp)
         run: |
@@ -109,9 +106,9 @@ jobs:
 
       - name: Ensure quicklooks exist
         run: |
-          test -s debug/raw_native_quicklook.png
-          test -s debug/merc_quicklook.png
-          test -s debug/merc_masked_quicklook.png
+          test -s work/raw_native_quicklook.png
+          test -s work/merc_quicklook.png
+          test -s work/merc_masked_quicklook.png
           test -s tiles/raster.pmtiles
 
       - name: Commit & push if changed
@@ -120,5 +117,6 @@ jobs:
           commit_message: "build(pmtiles): MLST-AS daily refresh [skip ci]"
           file_pattern: |
             tiles/raster.pmtiles
-            debug/*.png
-
+            work/raw_native_quicklook.png
+            work/merc_quicklook.png
+            work/merc_masked_quicklook.png
