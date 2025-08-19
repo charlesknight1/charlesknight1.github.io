@@ -61,23 +61,27 @@ jobs:
       - name: Reproject to EPSG:3857
         run: gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha work/raw_native.tif work/merc.tif
 
-      - name: Colorize (fixed ramp)
+      - name: Mask values outside 0–60 °C
+        run: |
+          # Anything <0 or >60 becomes NoData (NaN) → transparent later
+          gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
+            --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
+
+      - name: Colorize (0–60 °C ramp)
         run: |
           cat > work/ramp.txt << 'TXT'
           nv 0 0 0 0
-          # value  R  G  B
-          180  0   0 255
-          200  0  64 255
-          220  0 128 255
-          240  0 191 191
-          260  0 223 127
-          280 64 223  64
-          300 223 191 32
-          320 255 128  0
-          340 255   0  0
+          # value(°C)   R   G   B
+            0          0   0 255
+           10          0  64 255
+           20          0 128 255
+           30          0 191 191
+           40          0 223 127
+           50         64 223  64
+           60        255   0   0
           TXT
-
-          gdaldem color-relief work/merc.tif work/ramp.txt work/color.tif -alpha
+      
+          gdaldem color-relief work/merc_masked.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> PMTiles
         run: rio pmtiles work/color.tif tiles/raster.pmtiles --zoom-levels 0..6
