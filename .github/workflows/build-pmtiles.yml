@@ -57,15 +57,33 @@ jobs:
       - name: NetCDF -> GeoTIFF (native)
         run: |
           gdal_translate "NETCDF:\"work/input.nc\":MLST-AS" work/raw_native.tif -a_nodata 0 -unscale
+      
+      - name: Diagnose raw_native.tif
+        run: |
+          echo "=== raw_native.tif ==="
+          gdalinfo -mm -stats work/raw_native.tif | sed -n '1,160p'
+          gdal_translate -of PNG -scale -ot Byte work/raw_native.tif docs/debug/raw_native_quicklook.png
 
       - name: Reproject to EPSG:3857
         run: gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha work/raw_native.tif work/merc.tif
+
+      - name: Diagnose merc.tif (EPSG:3857)
+        run: |
+          echo "=== merc.tif ==="
+          gdalinfo -mm -stats work/merc.tif | sed -n '1,200p'
+          gdal_translate -of PNG -scale -ot Byte work/merc.tif docs/debug/merc_quicklook.png
 
       - name: Mask values outside 0–60 °C
         run: |
           # Anything <0 or >60 becomes NoData (NaN) → transparent later
           gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
             --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
+      
+      - name: Diagnose merc_masked.tif (after 0–60 °C mask)
+        run: |
+          echo "=== merc_masked.tif ==="
+          gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
+          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif docs/debug/merc_masked_quicklook.png
 
       - name: Colorize (0–60 °C ramp)
         run: |
