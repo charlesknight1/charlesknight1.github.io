@@ -107,6 +107,13 @@ jobs:
       - name: GeoTIFF -> PMTiles
         run: rio pmtiles work/color.tif tiles/raster.pmtiles --zoom-levels 0..6
 
+      - name: Ensure quicklooks exist
+        run: |
+          test -s debug/raw_native_quicklook.png
+          test -s debug/merc_quicklook.png
+          test -s debug/merc_masked_quicklook.png
+          test -s tiles/raster.pmtiles
+
       - name: Commit & push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
