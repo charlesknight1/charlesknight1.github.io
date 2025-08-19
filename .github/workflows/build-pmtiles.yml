@@ -1,1 +1,141 @@
+name: Build daily MLST-AS PMTiles
+
+on:
+  schedule:
+    - cron: "30 6 * * *"   # daily at 06:30 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install GDAL CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin
+
+      - name: Set up Node (for PMTiles CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install PMTiles CLI
+        run: npm install -g @protomaps/pmtiles
+
+      - name: Prep folders
+        run: mkdir -p work docs/tiles
+
+      # Compose the LSA SAF MLST-AS URL for *today* (UTC) and a target HHMM.
+      # If your product time differs, change TARGET_HHMM (e.g., 1115 for 11:15 UTC).
+      - name: Build URL for today
+        env:
+          TARGET_HHMM: "1100"   # <-- change if you want a different run timestamp
+        run: |
+          Y=$(date -u +%Y)
+          M=$(date -u +%m)
+          D=$(date -u +%d)
+          TS="${Y}${M}${D}${TARGET_HHMM}"
+          echo "YMD=${Y}/${M}/${D}" >> $GITHUB_ENV
+          echo "STAMP=${TS}" >> $GITHUB_ENV
+          echo "BASE=https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST-AS/NETCDF" >> $GITHUB_ENV
+          echo "FNAME=NETCDF4_LSASAF_MSG_MLST-AS_MSG-Disk_${TS}.nc" >> $GITHUB_ENV
+          echo "NETCDF_URL=${BASE}/${YMD}/${FNAME}" >> $GITHUB_ENV
+          echo "URL today: ${BASE}/${YMD}/${FNAME}"
+
+      - name: Download NetCDF (auth)
+        env:
+          LSA_USER: ${{ secrets.LSA_USER }}
+          LSA_PASS: ${{ secrets.LSA_PASS }}
+          NETCDF_URL: ${{ env.NETCDF_URL }}
+        run: |
+          echo "Fetching: $NETCDF_URL"
+          curl -fL -u "${LSA_USER}:${LSA_PASS}" "$NETCDF_URL" -o work/input.nc
+
+      - name: Inspect subdatasets (for logs)
+        run: |
+          gdalinfo work/input.nc | sed -n '1,180p' || true
+
+      # Extract a raster band to GeoTIFF in native geostationary SRS.
+      # We try MLST-AS first, then MLST_AS, else auto-pick the first subdataset containing MLST.
+      - name: NetCDF -> native GeoTIFF
+        run: |
+          set -e
+          pick_var() {
+            local CAND="$1"
+            if gdalinfo "NETCDF:\"work/input.nc\":\"$CAND\"" >/dev/null 2>&1; then
+              echo "$CAND"; return 0
+            fi
+            return 1
+          }
+
+          VAR=""
+          for C in "MLST-AS" "MLST_AS" "MLST"; do
+            if V=$(pick_var "$C"); then VAR="$V"; break; fi
+          done
+          if [ -z "$VAR" ]; then
+            # fallback: first subdataset that mentions MLST
+            VAR=$(gdalinfo work/input.nc | awk -F'"' '/SUBDATASET_[0-9]+_NAME=NETCDF:/ && /MLST/ {print $4; exit}')
+            # if VAR is full NETCDF string already, just use it
+            if [[ "$VAR" == NETCDF:* ]]; then
+              IN="$VAR"
+            fi
+          fi
+
+          if [ -z "${IN:-}" ]; then
+            if [ -z "$VAR" ]; then
+              echo "Could not find a MLST variable in netcdf." >&2
+              exit 1
+            fi
+            IN="NETCDF:\"work/input.nc\":\"$VAR\""
+          fi
+
+          echo "Using variable: $VAR"
+          # If the file lacks CF projection metadata, you can add +proj=geos here with -a_srs.
+          gdal_translate "$IN" work/raw_native.tif -a_nodata 0 -unscale
+
+      - name: Reproject to EPSG:3857
+        run: |
+          gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha \
+            -of GTiff work/raw_native.tif work/merc_3857.tif
+
+      # Build a fixed, nice-looking color ramp (stable across days).
+      # Adjust the stop values to your expected value domain if known.
+      - name: Colorize (fixed ramp)
+        run: |
+          cat > work/ramp.txt << 'TXT'
+nv 0 0 0 0
+# value  R  G  B
+180  0  0  255
+200  0  64 255
+220  0 128 255
+240  0 191 191
+260  0 223 127
+280  64 223 64
+300  223 191 32
+320  255 128 0
+340  255 0   0
+TXT
+          gdaldem color-relief work/merc_3857.tif work/ramp.txt work/color.tif -alpha
+
+      - name: GeoTIFF -> MBTiles (+overviews)
+        run: |
+          gdal_translate -of MBTILES -co TILE_FORMAT=PNG work/color.tif work/out.mbtiles
+          # Controls max zoom. Add/remove factors for more/less detail.
+          gdaladdo -r bilinear work/out.mbtiles 2 4 8 16 32 64
+
+      - name: MBTiles -> PMTiles
+        run: |
+          pmtiles convert work/out.mbtiles docs/tiles/raster.pmtiles
+
+      - name: Commit & push if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "build(pmtiles): MLST-AS daily refresh [skip ci]"
+          file_pattern: docs/tiles/raster.pmtiles
 
