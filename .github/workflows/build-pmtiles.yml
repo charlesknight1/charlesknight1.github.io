@@ -61,11 +61,11 @@ jobs:
       - name: Reproject to EPSG:3857
         run: gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha work/raw_native.tif work/merc.tif
 
-      - name: Mask values outside 0–60 °C
-        run: |
-          # Anything <0 or >60 becomes NoData (NaN) → transparent later
-          gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
-            --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
+#      - name: Mask values outside 0–60 °C
+#        run: |
+#          # Anything <0 or >60 becomes NoData (NaN) → transparent later
+#          gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
+#            --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
 
       - name: Colorize (0–60 °C ramp)
         run: |
