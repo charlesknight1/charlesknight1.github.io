@@ -106,9 +106,9 @@ jobs:
 
       - name: Ensure quicklooks exist
         run: |
-          test -s work/raw_native_quicklook.png
-          test -s work/merc_quicklook.png
-          test -s work/merc_masked_quicklook.png
+          test -s tiles/raw_native_quicklook.png
+          test -s tiles/merc_quicklook.png
+          test -s tiles/merc_masked_quicklook.png
           test -s tiles/raster.pmtiles
 
       - name: Commit & push if changed
