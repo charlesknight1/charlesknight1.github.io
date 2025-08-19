@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "=== raw_native.tif ==="
           gdalinfo -mm -stats work/raw_native.tif | sed -n '1,160p'
-          gdal_translate -of PNG -scale -ot Byte work/raw_native.tif work/raw_native_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/raw_native.tif tiles/raw_native_quicklook.png
 
       - name: Reproject to EPSG:3857
         run: gdalwarp -t_srs EPSG:3857 -r bilinear -dstalpha work/raw_native.tif work/merc.tif
@@ -71,7 +71,7 @@ jobs:
         run: |
           echo "=== merc.tif ==="
           gdalinfo -mm -stats work/merc.tif | sed -n '1,200p'
-          gdal_translate -of PNG -scale -ot Byte work/merc.tif work/merc_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/merc.tif tiles/merc_quicklook.png
 
       - name: Mask values outside 0–60 °C
         run: |
@@ -83,7 +83,7 @@ jobs:
         run: |
           echo "=== merc_masked.tif ==="
           gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
-          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif work/merc_masked_quicklook.png
+          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
 
       - name: Colorize (0–60 °C ramp)
         run: |
@@ -115,8 +115,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "build(pmtiles): MLST-AS daily refresh [skip ci]"
+          add_options: '--force'
           file_pattern: |
+            tiles/raw_native_quicklook.png
             tiles/raster.pmtiles
-            work/raw_native_quicklook.png
-            work/merc_quicklook.png
-            work/merc_masked_quicklook.png
+            tiles/merc_quicklook.png
+            tiles/merc_masked_quicklook.png
