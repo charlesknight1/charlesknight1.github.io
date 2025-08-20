@@ -33,7 +33,7 @@ jobs:
       # --- Configure your dataset ---
       - name: Build URL for today
         env:
-          TARGET_HHMM: "0000"   # adjust if product is published at a different time
+          TARGET_HHMM: "1100"   # adjust if product is published at a different time
         run: |
           Y=$(date -u +%Y)
           M=$(date -u +%m)
@@ -73,11 +73,11 @@ jobs:
           gdalinfo -mm -stats work/merc.tif | sed -n '1,200p'
           gdal_translate -of PNG -scale -ot Byte work/merc.tif tiles/merc_quicklook.png
 
-      - name: Mask values outside 0–60 °C
+      - name: Mask values outside -100 –100 °C
         run: |
           # Anything <0 or >60 becomes NoData (NaN) → transparent later
           gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif \
-            --calc="where((A>=0) & (A<=60), A, -9999)" \
+            --calc="where((A>=-100) & (A<=100), A, -9999)" \
             --NoDataValue=-9999 --type=Float32
       
       - name: Diagnose merc_masked.tif (after 0–60 °C mask)
@@ -86,7 +86,7 @@ jobs:
           gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
           gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
 
-      - name: Colorize (0–60 °C reverse greyscale)
+      - name: Colorize (0–50 °C reverse greyscale)
         run: |
           cat > work/ramp.txt << 'TXT'
           nv 0 0 0 0
@@ -96,10 +96,9 @@ jobs:
            20        170 170 170
            30        128 128 128
            40         85  85  85
-           50         42  42  42
-           60          0   0   0
+           50          0   0   0
           TXT
-      
+        
           gdaldem color-relief work/merc_masked.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> PMTiles
