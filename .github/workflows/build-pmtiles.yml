@@ -111,9 +111,11 @@ jobs:
           test -s tiles/merc_masked_quicklook.png
           test -s tiles/raster.pmtiles
 
-      - name: Touch and commit all tiles
-        run: |
-          touch tiles/*
-          git add tiles/*
-          git commit -m "build(pmtiles): MLST-AS daily refresh [skip ci]" || echo "Nothing to commit"
-          git push
+      - name: Touch files to ensure they appear changed
+        run: touch tiles/raw_native_quicklook.png tiles/raster.pmtiles tiles/merc_quicklook.png tiles/merc_masked_quicklook.png
+      
+      - name: Commit & push if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "build(pmtiles): MLST-AS daily refresh [skip ci]"
+          file_pattern: "tiles/*.png tiles/*.pmtiles"
