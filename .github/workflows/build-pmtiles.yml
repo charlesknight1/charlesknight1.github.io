@@ -33,7 +33,7 @@ jobs:
       # --- Configure your dataset ---
       - name: Build URL for today
         env:
-          TARGET_HHMM: "1100"   # adjust if product is published at a different time
+          TARGET_HHMM: "0000"   # adjust if product is published at a different time
         run: |
           Y=$(date -u +%Y)
           M=$(date -u +%m)
