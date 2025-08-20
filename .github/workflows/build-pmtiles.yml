@@ -79,11 +79,11 @@ jobs:
       #    gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
       #      --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
       
-      - name: Diagnose merc_masked.tif (after 0–60 °C mask)
-        run: |
-          echo "=== merc_masked.tif ==="
-          gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
-          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
+      #- name: Diagnose merc_masked.tif (after 0–60 °C mask)
+      #  run: |
+      #    echo "=== merc_masked.tif ==="
+      #    gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
+      #    gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
 
       - name: Colorize (0–60 °C ramp)
         run: |
@@ -99,7 +99,7 @@ jobs:
            60        255   0   0
           TXT
       
-          gdaldem color-relief work/merc_masked.tif work/ramp.txt work/color.tif -alpha
+          gdaldem color-relief work/merc.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> PMTiles
         run: rio pmtiles work/color.tif tiles/raster.pmtiles --zoom-levels 0..6
