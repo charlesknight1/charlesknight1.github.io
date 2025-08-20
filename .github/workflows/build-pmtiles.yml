@@ -73,33 +73,34 @@ jobs:
           gdalinfo -mm -stats work/merc.tif | sed -n '1,200p'
           gdal_translate -of PNG -scale -ot Byte work/merc.tif tiles/merc_quicklook.png
 
-      #- name: Mask values outside 0–60 °C
-      #  run: |
-      #    # Anything <0 or >60 becomes NoData (NaN) → transparent later
-      #    gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif --NoDataValue=nan \
-      #      --calc="(A>=0)*(A<=60)*A + (A<0)*nan + (A>60)*nan" --type=Float32
+      - name: Mask values outside 0–60 °C
+        run: |
+          # Anything <0 or >60 becomes NoData (NaN) → transparent later
+          gdal_calc.py -A work/merc.tif --outfile=work/merc_masked.tif \
+            --calc="where((A>=0) & (A<=60), A, -9999)" \
+            --NoDataValue=-9999 --type=Float32
       
-      #- name: Diagnose merc_masked.tif (after 0–60 °C mask)
-      #  run: |
-      #    echo "=== merc_masked.tif ==="
-      #    gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
-      #    gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
+      - name: Diagnose merc_masked.tif (after 0–60 °C mask)
+        run: |
+          echo "=== merc_masked.tif ==="
+          gdalinfo -mm -stats work/merc_masked.tif | sed -n '1,200p'
+          gdal_translate -of PNG -scale -ot Byte work/merc_masked.tif tiles/merc_masked_quicklook.png
 
-      - name: Colorize (0–60 °C ramp)
+      - name: Colorize (0–60 °C reverse greyscale)
         run: |
           cat > work/ramp.txt << 'TXT'
           nv 0 0 0 0
-          # value(°C)   R   G   B
-            0          0   0 255
-           10          0  64 255
-           20          0 128 255
-           30          0 191 191
-           40          0 223 127
-           50         64 223  64
-           60        255   0   0
+          # value(°C)   R   G   B (reverse greyscale)
+            0        255 255 255
+           10        213 213 213
+           20        170 170 170
+           30        128 128 128
+           40         85  85  85
+           50         42  42  42
+           60          0   0   0
           TXT
       
-          gdaldem color-relief work/merc.tif work/ramp.txt work/color.tif -alpha
+          gdaldem color-relief work/merc_masked.tif work/ramp.txt work/color.tif -alpha
 
       - name: GeoTIFF -> PMTiles
         run: rio pmtiles work/color.tif tiles/raster.pmtiles --zoom-levels 0..6
