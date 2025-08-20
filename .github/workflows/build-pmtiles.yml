@@ -92,11 +92,7 @@ jobs:
           nv 0 0 0 0
           # value(°C)   R   G   B (reverse greyscale)
             0        255 255 255
-           10        213 213 213
-           20        170 170 170
-           30        128 128 128
-           40         85  85  85
-           50          0   0   0
+           60          0   0   0
           TXT
         
           gdaldem color-relief work/merc_masked.tif work/ramp.txt work/color.tif -alpha
