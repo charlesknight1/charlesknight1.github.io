@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Congo Air Boundary tracker
+title: Congo Air Boundary Tracker
 permalink: /cabtracker
 categories: projects
 ---
+Live Congo Air Boundary tracker.
 
-
-<span id="pageTopDate">Loading…</span> land surface temperature.
+Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
@@ -73,14 +73,13 @@ categories: projects
 </div>
 
 <div class="legend">
-  <strong>Temperature Scale (°C)</strong>
+  <strong>Land Surface Temperature (°C)</strong>
   <div class="legend-gradient"></div>
   <div class="legend-labels">
-    <span>0°C (Cold)</span>
+    <span>0°C</span>
     <span>25°C</span>
-    <span>50°C (Hot)</span>
+    <span>50°C</span>
   </div>
-  <small>White = Cold, Black = Hot. Transparent areas are outside 0–50°C range.</small>
 </div>
 
 <script>
@@ -232,3 +231,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 });
 </script>
+
+**Data Sources**
+
+1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday (<span id="pageTopDate">Loading…</span>). Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
+2. GSF atmospheric reanalysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
+
+**Feedback**
+
+This tracker is in development. Please get in touch with any suggestions.
+
+**Supporting publications**
+
+Howard, E. and Washington, R. (2019) ‘Drylines in Southern Africa: Rediscovering the Congo Air Boundary’, _Journal of Climate_, 32(23), pp. 8223–8242. Available at: [https://doi.org/10.1175/JCLI-D-19-0437.1.](https://doi.org/10.1175/JCLI-D-19-0437.1.)
+
+Howard, E. and Washington, R. (2020) ‘Tracing Future Spring and Summer Drying in Southern Africa to Tropical Lows and the Congo Air Boundary’, _Journal of Climate_, 33(14), pp. 6205–6228. Available at: [https://doi.org/10.1175/JCLI-D-19-0755.1.](https://doi.org/10.1175/JCLI-D-19-0755.1.)
+
+Knight, C., & Washington, R. (2024). 'Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge'. _Journal of Climate_, 37(8), 2519-2539. Available at: [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1)
+
