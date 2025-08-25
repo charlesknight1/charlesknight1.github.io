@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // (optional) put overlay above the base map but below the info box
   map.createPane('overlayPane');
   map.getPane('overlayPane').style.zIndex = 420; // OSM default tiles are ~200
-  
+    
   async function addOverlay() {
     try {
       const res = await fetch(overlayUrl, { cache: 'no-store' });
@@ -162,11 +162,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           opacity: 0.9,
           fillColor: '#1d4ed8',   // fill = same blue
           fillOpacity: 0.3        // semi-transparent
-        });
-        // Show "tropical rainbelt" text on click
-        layer.bindPopup("tropical rainbelt");
-          }
-        }
+        }),  // <-- Changed semicolon to comma
+        onEachFeature: (feature, layer) => {  // <-- Added missing onEachFeature function
+          // Show "tropical rainbelt" text on click
+          layer.bindPopup("tropical rainbelt");
+        }  // <-- Removed extra closing brace
       }).addTo(map);
     } catch (err) {
       console.error('Failed to load overlay.geojson:', err);
