@@ -1,4 +1,4 @@
-name: Build daily CAB shapefile
+name: Build daily CAB pixel shapefile
 
 on:
   schedule:
