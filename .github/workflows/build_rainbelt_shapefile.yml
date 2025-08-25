@@ -35,8 +35,9 @@ jobs:
       - name: Touch files to ensure they appear changed
         run: touch belt.geojson
       
-      - name: Commit & push if changed
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "build(rainbelt): daily refresh [skip ci]"
-          file_pattern: "tiles/belt.geojson"
+          file_pattern: tiles/belt.geojson
+          commit_message: "Update tiles/belt.geojson (${{ github.run_id }})"
+          skip_dirty_check: true
+          commit_options: '--allow-empty'
