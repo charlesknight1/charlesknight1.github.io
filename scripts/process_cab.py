@@ -95,9 +95,9 @@ geojson_data = {
     "type": "FeatureCollection",
     "features": geojson_features
 }
-
+print(geojson_data)
 # Save the GeoJSON to a file
 with open("cab.geojson", "w") as f:
     json.dump(geojson_data, f)
 
-print("CAB points saved as cab_points.geojson")
+print("CAB points saved as cab.geojson")
