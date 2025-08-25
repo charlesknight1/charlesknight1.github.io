@@ -147,6 +147,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }).addTo(map);
     } catch (err) {
       console.error('Failed to load overlay.geojson:', err);
+    }
   }
   addOverlay();
 
