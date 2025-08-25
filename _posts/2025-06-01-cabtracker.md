@@ -84,7 +84,7 @@ Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
-  const map = L.map('map').setView([0, 20], 3);
+  const map = L.map('map').setView([-23, 25], 4);
 
   // Base layer
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -93,6 +93,35 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let temperatureLayer = null;
   const pmtilesUrl = '{{ "/tiles/raster.pmtiles" | relative_url }}';
+
+  async function setPmtilesLastModified() {
+    try {
+      const headResp = await fetch(pmtilesUrl, { method: 'HEAD' });
+      const lastMod = headResp.headers.get('Last-Modified');
+      const infoEl = document.getElementById('dateInfo');
+      const pageTopEl = document.getElementById('pageTopDate');
+      if (lastMod) {
+        const d = new Date(lastMod);
+        const nice = d.toLocaleString('en-GB', {
+          timeZone: 'UTC',
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        });
+        const txt = `Date (from .pmtiles): ${nice}`;
+        infoEl.textContent = txt;
+        pageTopEl.textContent = `${nice}`;
+      } else {
+        infoEl.textContent = 'Date: Unavailable';
+        pageTopEl.textContent = 'Unavailable';
+      }
+    } catch (e) {
+      console.error('HEAD request failed:', e);
+      document.getElementById('dateInfo').textContent = 'Date: Error fetching';
+      document.getElementById('pageTopDate').textContent = 'Error fetching';
+    }
+  }
+  setPmtilesLastModified();
 
   try {
     const p = new pmtiles.PMTiles(pmtilesUrl);
@@ -133,19 +162,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           opacity: 0.9,
           fillColor: '#1d4ed8',   // fill = same blue
           fillOpacity: 0.3        // semi-transparent
-        }),
-        overlayLayer = L.geoJSON(geojson, {
-          pane: 'overlayPane',
-          style: feature => ({ /* ... */ }),
-          onEachFeature: (feature, layer) => {
-            layer.on({
-              mouseover: () => layer.setStyle({ weight: 2.5, fillOpacity: 0.4 }),
-              mouseout:  () => layer.setStyle({ weight: 1.5, fillOpacity: 0.3 })
-            });
-            layer.bindPopup("tropical rainbelt");
-            }   // <- closes onEachFeature (correct)
-          }     // <- EXTRA closing brace (remove this)
-        }).addTo(map);
+        });
+        // Show "tropical rainbelt" text on click
+        layer.bindPopup("tropical rainbelt");
+          }
+        }
+      }).addTo(map);
     } catch (err) {
       console.error('Failed to load overlay.geojson:', err);
     }
@@ -215,4 +237,3 @@ Howard, E. and Washington, R. (2019) ‘Drylines in Southern Africa: Rediscoveri
 Howard, E. and Washington, R. (2020) ‘Tracing Future Spring and Summer Drying in Southern Africa to Tropical Lows and the Congo Air Boundary’, _Journal of Climate_, 33(14), pp. 6205–6228. Available at: [https://doi.org/10.1175/JCLI-D-19-0755.1.](https://doi.org/10.1175/JCLI-D-19-0755.1.)
 
 Knight, C., & Washington, R. (2024). 'Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge'. _Journal of Climate_, 37(8), 2519-2539. Available at: [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1)
-
