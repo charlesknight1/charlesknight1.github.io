@@ -90,7 +90,7 @@ da_clip = da.rio.clip([mapping(africa_union)], crs=afr.crs, drop=False)
 # ------------------------
 # Threshold -> largest contour polygon
 # ------------------------
-belt = da_clip
+belt = da_clip > 0.01
 for dim in ["time", "step", "valid_time"]:
     if dim in belt.dims:
         belt2d = belt.isel({dim: 0})
@@ -101,7 +101,7 @@ else:
     da2d = da_clip
 
 arr = belt2d.values.astype(np.uint8)
-contours = measure.find_contours(arr, level=0.01)
+contours = measure.find_contours(arr, level=0.5)
 
 largest_polygon = None
 max_area = 0.0
