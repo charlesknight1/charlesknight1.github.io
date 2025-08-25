@@ -84,7 +84,7 @@ Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
-  const map = L.map('map').setView([-23, 25], 4);
+  const map = L.map('map').setView([0, 20], 3);
 
   // Base layer
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
