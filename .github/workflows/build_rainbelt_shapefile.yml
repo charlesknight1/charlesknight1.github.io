@@ -42,4 +42,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "build(rainbelt): daily refresh [skip ci]"
-          file_pattern: "tiles/*.geojson"
+          file_pattern: "tiles/belt.geojson"
