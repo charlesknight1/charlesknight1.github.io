@@ -115,9 +115,13 @@ for contour in contours:
         max_area = poly.area
         largest_polygon = poly
 
+# fail if no polygon found
 if largest_polygon is None:
-    print("No valid polygon found; exiting.")
+    print("No valid polygon found; exiting without changes.")
     sys.exit(0)
+# after (FAIL the job)
+if largest_polygon is None:
+    raise SystemExit("No valid polygon found — aborting job.")
 
 print(f"Largest polygon area (deg^2): {max_area:.4f}")
 
@@ -137,6 +141,9 @@ feature = {
         "run_cycle": CYCLE,
     },
 }
+import datetime as dt
+feature["properties"]["generated_at"] = dt.datetime.utcnow().isoformat(timespec="seconds") + "Z"
+
 with open(out_path, "w") as f:
     json.dump({"type": "FeatureCollection", "features": [feature]}, f)
 print(f"Wrote {out_path}")
