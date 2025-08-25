@@ -67,11 +67,20 @@ ds = xr.open_dataset(
 var_name = "q" if "q" in ds.data_vars else list(ds.data_vars)[0]
 da = ds[var_name]
 
+
 # Normalize longitude & set spatial dims/CRS
 if float(da.longitude.max()) > 180:
     lon = (((da.longitude + 180) % 360) - 180).values
     da = da.assign_coords(longitude=("longitude", lon)).sortby("longitude")
 da = da.rio.write_crs(4326).rio.set_spatial_dims(x_dim="longitude", y_dim="latitude")
+
+# smooth data
+da_smooth = da.rolling(
+    longitude=8,
+    latitude=8,
+    center=True,
+    min_periods=1
+).mean()
 
 # ------------------------
 # Clip to Africa
