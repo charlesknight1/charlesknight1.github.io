@@ -55,7 +55,6 @@ ds = xr.open_dataset(
     engine="cfgrib",
     backend_kwargs={"filter_by_keys": {"typeOfLevel": "isobaricInhPa", "level": 850}},
 )
-#var_name = "sh2" if "sh2" in ds.data_vars else list(ds.data_vars)[0]
 da = ds["sh2"]
 
 # Create masks for acceptable CAB and KD locations
