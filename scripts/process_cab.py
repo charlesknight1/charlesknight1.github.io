@@ -91,13 +91,14 @@ geojson_features = [
     for point in cab_geometries
 ]
 
+out_path = TILES_DIR / "cab.geojson"
 geojson_data = {
     "type": "FeatureCollection",
     "features": geojson_features
 }
 print(geojson_data)
 # Save the GeoJSON to a file
-with open("cab.geojson", "w") as f:
+with open(out_path, "w") as f:
     json.dump(geojson_data, f)
 
-print("CAB points saved as cab.geojson")
+print(f"Wrote {out_path}")
