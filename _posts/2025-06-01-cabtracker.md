@@ -134,17 +134,18 @@ document.addEventListener("DOMContentLoaded", async function () {
           fillColor: '#1d4ed8',   // fill = same blue
           fillOpacity: 0.3        // semi-transparent
         }),
-        onEachFeature: (feature, layer) => {
-          // simple hover highlight
-          layer.on({
-            mouseover: () => layer.setStyle({ weight: 2.5, fillOpacity: 0.4 }),
-            mouseout:  () => layer.setStyle({ weight: 1.5, fillOpacity: 0.3 })
-          });
-          // Show "tropical rainbelt" text on click
-          layer.bindPopup("tropical rainbelt");
-          }
-        }
-      }).addTo(map);
+        overlayLayer = L.geoJSON(geojson, {
+          pane: 'overlayPane',
+          style: feature => ({ /* ... */ }),
+          onEachFeature: (feature, layer) => {
+            layer.on({
+              mouseover: () => layer.setStyle({ weight: 2.5, fillOpacity: 0.4 }),
+              mouseout:  () => layer.setStyle({ weight: 1.5, fillOpacity: 0.3 })
+            });
+            layer.bindPopup("tropical rainbelt");
+            }   // <- closes onEachFeature (correct)
+          }     // <- EXTRA closing brace (remove this)
+        }).addTo(map);
     } catch (err) {
       console.error('Failed to load overlay.geojson:', err);
     }
