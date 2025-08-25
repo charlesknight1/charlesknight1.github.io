@@ -1,0 +1,9 @@
+xarray
+rioxarray
+cfgrib
+eccodes
+geopandas
+shapely
+scikit-image
+matplotlib
+requests
