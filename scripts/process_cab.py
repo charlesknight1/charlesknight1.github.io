@@ -52,9 +52,7 @@ print(f"Saved {grib_path}")
 # ------------------------
 ds = xr.open_dataset(
     grib_path,
-    engine="cfgrib",
-    backend_kwargs={"filter_by_keys": {"typeOfLevel": "isobaricInhPa", "level": 850}},
-)
+    engine="cfgrib")
 da = ds["sh2"]
 
 # Create masks for acceptable CAB and KD locations
