@@ -84,7 +84,7 @@ Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
-  const map = L.map('map').setView([-23, 25], 4);
+  const map = L.map('map').setView([0, 20], 3);
 
   // Base layer
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -93,35 +93,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let temperatureLayer = null;
   const pmtilesUrl = '{{ "/tiles/raster.pmtiles" | relative_url }}';
-
-  async function setPmtilesLastModified() {
-    try {
-      const headResp = await fetch(pmtilesUrl, { method: 'HEAD' });
-      const lastMod = headResp.headers.get('Last-Modified');
-      const infoEl = document.getElementById('dateInfo');
-      const pageTopEl = document.getElementById('pageTopDate');
-      if (lastMod) {
-        const d = new Date(lastMod);
-        const nice = d.toLocaleString('en-GB', {
-          timeZone: 'UTC',
-          year: 'numeric',
-          month: 'short',
-          day: '2-digit',
-        });
-        const txt = `Date (from .pmtiles): ${nice}`;
-        infoEl.textContent = txt;
-        pageTopEl.textContent = `${nice}`;
-      } else {
-        infoEl.textContent = 'Date: Unavailable';
-        pageTopEl.textContent = 'Unavailable';
-      }
-    } catch (e) {
-      console.error('HEAD request failed:', e);
-      document.getElementById('dateInfo').textContent = 'Date: Error fetching';
-      document.getElementById('pageTopDate').textContent = 'Error fetching';
-    }
-  }
-  setPmtilesLastModified();
 
   try {
     const p = new pmtiles.PMTiles(pmtilesUrl);
@@ -169,19 +140,13 @@ document.addEventListener("DOMContentLoaded", async function () {
             mouseover: () => layer.setStyle({ weight: 2.5, fillOpacity: 0.4 }),
             mouseout:  () => layer.setStyle({ weight: 1.5, fillOpacity: 0.3 })
           });
-          // optional popup with properties
-          const props = feature && feature.properties ? feature.properties : null;
-          if (props) {
-            const rows = Object.entries(props)
-              .map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`)
-              .join('');
-            layer.bindPopup(`<table>${rows}</table>`, { maxWidth: 260 });
+          // Show "tropical rainbelt" text on click
+          layer.bindPopup("tropical rainbelt");
           }
         }
       }).addTo(map);
     } catch (err) {
       console.error('Failed to load overlay.geojson:', err);
-    }
   }
   addOverlay();
 
