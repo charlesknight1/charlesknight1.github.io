@@ -52,24 +52,36 @@ Data is up to date as of <span id="pageTopDate">Loading…</span>.
   max-width: 220px;
   font-size: 12px;
 }
+.cab-legend-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  font-size: 12px;
+}
+.cab-legend-symbol {
+  width: 12px;
+  height: 8px;
+  margin-right: 8px;
+  border: 1px solid #16a34a;
+  background-color: #16a34a;
+}
+.rainbelt-legend-symbol {
+  width: 16px;
+  height: 12px;
+  margin-right: 8px;
+  border: 1px solid #1d4ed8;
+  background-color: rgba(29, 78, 216, 0.3);
+}
 </style>
 
 <div class="map-controls">
-  <label>
-    Opacity: 
-    <input type="range" id="opacitySlider" min="0" max="100" value="90" />
-    <span id="opacityValue">90%</span>
-  </label>
-  <button id="toggleLayer">Hide Temperature Layer</button>
+  <button id="toggleLayer">Hide LST Layer</button>
+  <button id="toggleRainbelt">Hide Rainbelt</button>
+  <button id="toggleCAB">Hide CAB Points</button>
   <button id="resetView">Reset View</button>
 </div>
 
 <div id="map" style="height: 500px; width: 100%; position: relative;">
-  <div class="info-box" id="infoBox">
-    <strong>Land Surface Temperature</strong><br>
-    Data: MLST-AS (MSG satellite)<br>
-    <span id="dateInfo">Date: Loading…</span>
-  </div>
 </div>
 
 <div class="legend">
@@ -79,6 +91,17 @@ Data is up to date as of <span id="pageTopDate">Loading…</span>.
     <span>0°C</span>
     <span>25°C</span>
     <span>50°C</span>
+  </div>
+  <div style="margin-top: 10px; border-top: 1px solid #ccc; padding-top: 10px;">
+    <strong>Map Features</strong>
+    <div class="cab-legend-item">
+      <div class="cab-legend-symbol"></div>
+      <span>Congo Air Boundary Points</span>
+    </div>
+    <div class="cab-legend-item">
+      <div class="rainbelt-legend-symbol"></div>
+      <span>Tropical Rainbelt</span>
+    </div>
   </div>
 </div>
 
@@ -140,11 +163,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Rainbelt overlay
-    // --- Blue semitransparent overlay from tiles/overlay.geojson ---
   let overlayLayer = null;
   const overlayUrl = '{{ "/tiles/belt.geojson" | relative_url }}';
   
-  // (optional) put overlay above the base map but below the info box
+  // Put overlay above the base map but below the info box
   map.createPane('overlayPane');
   map.getPane('overlayPane').style.zIndex = 420; // OSM default tiles are ~200
     
@@ -162,41 +184,116 @@ document.addEventListener("DOMContentLoaded", async function () {
           opacity: 0.9,
           fillColor: '#1d4ed8',   // fill = same blue
           fillOpacity: 0.3        // semi-transparent
-        }),  // <-- Changed semicolon to comma
-        onEachFeature: (feature, layer) => {  // <-- Added missing onEachFeature function
+        }),
+        onEachFeature: (feature, layer) => {
           // Show "tropical rainbelt" text on click
-          layer.bindPopup("tropical rainbelt");
-        }  // <-- Removed extra closing brace
+          layer.bindPopup("Tropical Rainbelt");
+        }
       }).addTo(map);
     } catch (err) {
-      console.error('Failed to load overlay.geojson:', err);
+      console.error('Failed to load belt.geojson:', err);
     }
   }
   addOverlay();
 
-  // Controls
-  const opacitySlider = document.getElementById('opacitySlider');
-  const opacityValue = document.getElementById('opacityValue');
-  const toggleButton = document.getElementById('toggleLayer');
-  const resetButton = document.getElementById('resetView');
+  // Congo Air Boundary points
+  let cabLayer = null;
+  const cabUrl = '{{ "/tiles/cab.geojson" | relative_url }}';
+  
+  // Create a pane for CAB points to ensure proper layering
+  map.createPane('cabPane');
+  map.getPane('cabPane').style.zIndex = 430; // Above overlay but below info box
+    
+  async function addCABPoints() {
+    try {
+      const res = await fetch(cabUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const geojson = await res.json();
+  
+      cabLayer = L.geoJSON(geojson, {
+        pane: 'cabPane',
+        pointToLayer: function(feature, latlng) {
+          // Create small green rectangles for each point
+          return L.rectangle([
+            [latlng.lat - 0.05, latlng.lng - 0.08], // Southwest corner
+            [latlng.lat + 0.05, latlng.lng + 0.08]  // Northeast corner
+          ], {
+            color: '#16a34a',        // Green border
+            weight: 1,
+            opacity: 1,
+            fillColor: '#16a34a',    // Green fill
+            fillOpacity: 0.8
+          });
+        },
+        onEachFeature: (feature, layer) => {
+          // Add popup with CAB information
+          const props = feature.properties || {};
+          let popupContent = "<strong>Congo Air Boundary Point</strong>";
+          
+          // Add any available properties to popup
+          if (Object.keys(props).length > 0) {
+            popupContent += "<br><br>";
+            for (const [key, value] of Object.entries(props)) {
+              if (value !== null && value !== undefined) {
+                popupContent += `<strong>${key}:</strong> ${value}<br>`;
+              }
+            }
+          }
+          
+          layer.bindPopup(popupContent);
+        }
+      }).addTo(map);
+      
+      console.log(`Loaded ${geojson.features?.length || 0} CAB points`);
+    } catch (err) {
+      console.error('Failed to load cab.geojson:', err);
+    }
+  }
+  addCABPoints();
 
-  opacitySlider.addEventListener('input', function() {
-    const opacity = this.value / 100;
-    opacityValue.textContent = this.value + '%';
-    if (temperatureLayer) temperatureLayer.setOpacity(opacity);
-  });
+  // Controls
+  const toggleButton = document.getElementById('toggleLayer');
+  const toggleCABButton = document.getElementById('toggleCAB');
+  const toggleRainbeltButton = document.getElementById('toggleRainbelt');
+  const resetButton = document.getElementById('resetView');
 
   let layerVisible = true;
   toggleButton.addEventListener('click', function() {
     if (!temperatureLayer) return;
     if (layerVisible) {
       map.removeLayer(temperatureLayer);
-      this.textContent = 'Show Temperature Layer';
+      this.textContent = 'Show LST Layer';
     } else {
       map.addLayer(temperatureLayer);
-      this.textContent = 'Hide Temperature Layer';
+      this.textContent = 'Hide LST Layer';
     }
     layerVisible = !layerVisible;
+  });
+
+  let cabVisible = true;
+  toggleCABButton.addEventListener('click', function() {
+    if (!cabLayer) return;
+    if (cabVisible) {
+      map.removeLayer(cabLayer);
+      this.textContent = 'Show CAB Points';
+    } else {
+      map.addLayer(cabLayer);
+      this.textContent = 'Hide CAB Points';
+    }
+    cabVisible = !cabVisible;
+  });
+
+  let rainbeltVisible = true;
+  toggleRainbeltButton.addEventListener('click', function() {
+    if (!overlayLayer) return;
+    if (rainbeltVisible) {
+      map.removeLayer(overlayLayer);
+      this.textContent = 'Show Rainbelt';
+    } else {
+      map.addLayer(overlayLayer);
+      this.textContent = 'Hide Rainbelt';
+    }
+    rainbeltVisible = !rainbeltVisible;
   });
 
   resetButton.addEventListener('click', function() {
@@ -225,6 +322,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday (<span id="pageTopDate">Loading…</span>). Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
 2. GSF atmospheric reanalysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
+3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) availible on [GitHub](https://github.com/EmmaHoward/drylines)
 
 **Feedback**
 
@@ -232,8 +330,8 @@ This tracker is in development. Please get in touch with any suggestions.
 
 **Supporting publications**
 
-Howard, E. and Washington, R. (2019) ‘Drylines in Southern Africa: Rediscovering the Congo Air Boundary’, _Journal of Climate_, 32(23), pp. 8223–8242. Available at: [https://doi.org/10.1175/JCLI-D-19-0437.1.](https://doi.org/10.1175/JCLI-D-19-0437.1.)
+Howard, E. and Washington, R. (2019) 'Drylines in Southern Africa: Rediscovering the Congo Air Boundary', _Journal of Climate_, 32(23), pp. 8223–8242. Available at: [https://doi.org/10.1175/JCLI-D-19-0437.1.](https://doi.org/10.1175/JCLI-D-19-0437.1.)
 
-Howard, E. and Washington, R. (2020) ‘Tracing Future Spring and Summer Drying in Southern Africa to Tropical Lows and the Congo Air Boundary’, _Journal of Climate_, 33(14), pp. 6205–6228. Available at: [https://doi.org/10.1175/JCLI-D-19-0755.1.](https://doi.org/10.1175/JCLI-D-19-0755.1.)
+Howard, E. and Washington, R. (2020) 'Tracing Future Spring and Summer Drying in Southern Africa to Tropical Lows and the Congo Air Boundary', _Journal of Climate_, 33(14), pp. 6205–6228. Available at: [https://doi.org/10.1175/JCLI-D-19-0755.1.](https://doi.org/10.1175/JCLI-D-19-0755.1.)
 
 Knight, C., & Washington, R. (2024). 'Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge'. _Journal of Climate_, 37(8), 2519-2539. Available at: [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1)
