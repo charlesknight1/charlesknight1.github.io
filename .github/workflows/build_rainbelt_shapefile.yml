@@ -36,7 +36,7 @@ jobs:
           GDAS_CYCLE: "00"
           AFRICA_GEOJSON_URL: "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
         run: |
-          python scripts/process.py
+          python scripts/process_rainbelt.py
 
       - name: Commit & push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
