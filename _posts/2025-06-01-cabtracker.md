@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Rainbelt overlay
     // --- Blue semitransparent overlay from tiles/overlay.geojson ---
   let overlayLayer = null;
-  const overlayUrl = '{{ "/tiles/largest_polygon_spatial.geojson" | relative_url }}';
+  const overlayUrl = '{{ "/tiles/belt.geojson" | relative_url }}';
   
   // (optional) put overlay above the base map but below the info box
   map.createPane('overlayPane');
