@@ -56,8 +56,8 @@ ds = xr.open_dataset(
 da = ds["sh2"]
 
 # Create masks for acceptable CAB and KD locations
-lat = data.latitude.values
-lon = data.longitude.values
+lat = da.latitude.values
+lon = da.longitude.values
 lon2,lat2=np.meshgrid(lon,lat)
 mask_cab = (lon2<=30)*(lon2>=15)*(lat2<=5)*(lat2>=-18)#*(1-landmask.mask)
 # mask_tkd = (lon2<=30)*(lat2<=-12)#*(1-landmask.mask)
