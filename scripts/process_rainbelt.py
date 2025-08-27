@@ -76,8 +76,8 @@ da = da.rio.write_crs(4326).rio.set_spatial_dims(x_dim="longitude", y_dim="latit
 
 # smooth data
 da_smooth = da.rolling(
-    longitude=8,
-    latitude=8,
+    longitude=16,
+    latitude=16,
     center=True,
     min_periods=1
 ).mean()
