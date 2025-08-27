@@ -2,7 +2,7 @@ name: Build daily CAB pixel shapefile
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # daily at 18:00 UTC
+    - cron: "0 17 * * *"   # daily at 17:00 UTC
   workflow_dispatch: {}
 
 permissions:
