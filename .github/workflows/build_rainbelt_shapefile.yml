@@ -2,7 +2,7 @@ name: Build daily rainbelt shapefile
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # daily at 18:00 UTC
+    - cron: "0 16 * * *"   # daily at 18:00 UTC
   workflow_dispatch: {}
 
 permissions:
