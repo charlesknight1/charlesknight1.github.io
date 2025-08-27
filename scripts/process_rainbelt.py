@@ -85,7 +85,7 @@ da_smooth = da.rolling(
 # ------------------------
 # Clip to Africa
 # ------------------------
-da_clip = da.rio.clip([mapping(africa_union)], crs=afr.crs, drop=False)
+da_clip = da_smooth.rio.clip([mapping(africa_union)], crs=afr.crs, drop=False)
 
 # ------------------------
 # Threshold -> largest contour polygon
