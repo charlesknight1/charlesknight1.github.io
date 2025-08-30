@@ -14,7 +14,7 @@ from shapely.geometry import Polygon, Point, mapping
 from shapely.ops import unary_union
 from skimage import measure
 import rioxarray  # needed for .rio accessors
-from shapely.vectorised import contains
+from shapely.vectorized import contains
 
 from drylines import find_edge,find_ridge,dxdy,ddx,ddy
 
