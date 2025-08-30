@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import datetime as dt
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -13,7 +14,7 @@ from shapely.geometry import Polygon, Point, mapping
 from shapely.ops import unary_union
 from skimage import measure
 import rioxarray  # needed for .rio accessors
-
+from shapely.vectorised import contains
 
 from drylines import find_edge,find_ridge,dxdy,ddx,ddy
 
@@ -55,11 +56,27 @@ ds = xr.open_dataset(
     engine="cfgrib")
 da = ds["sh2"]
 
+
+# get africa_union from your shapefile as before
+afr = gpd.read_file("https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json")
+if afr.crs is None:
+    afr = afr.set_crs(4326)
+africa_union = afr.unary_union
+
+# make the lon/lat grid
+lat = da.latitude.values
+lon = da.longitude.values
+lon2, lat2 = np.meshgrid(lon, lat)
+
+# build boolean mask: True inside Africa
+mask_africa = contains(africa_union, lon2, lat2)
+
 # Create masks for acceptable CAB and KD locations
 lat = da.latitude.values
 lon = da.longitude.values
 lon2,lat2=np.meshgrid(lon,lat)
-mask_cab = (lon2<=30)*(lon2>=15)*(lat2<=5)*(lat2>=-18)#*(1-landmask.mask)
+mask_cab = (lon2<=30)*(lon2>=15)*(lat2<=0)*(lat2>=-18)#*(1-landmask.mask)
+mask_tkd = (lon2<=30)*(lat2<=-12)#*(1-landmask.mask)
 # mask_tkd = (lon2<=30)*(lat2<=-12)#*(1-landmask.mask)
 q = da.values*1000
 # give q an arbitrary time dimension
@@ -68,37 +85,48 @@ q = q[np.newaxis,:,:]
 #Find dryline CABs. See drylines.py for a description of the inputs
 cab_q=find_edge(q,lon,lat,2,theta_min=-np.pi/4,theta_max=np.pi/6,mag_min=0.003,minlen=15,spatial_mask=mask_cab,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 #Find dryline KDs. See drylines.py for a description of the inputs
-# kd_q=find_edge(q,lon,lat,2,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=10,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None,makefig=q_fig)
+kd_q=find_edge(q,lon,lat,2,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=10,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None,makefig=q_fig)
+#Find drylines elsewhere. See drylines.py for a description of the inputs
+dryline_q=find_edge(q,lon,lat,2,theta_max=np.inf,theta_min=-np.inf,mag_min=0.003,minlen=15,spatial_mask=mask_africa,relative="Grid Cell",output='sparse',plotfreq=0,times=None,makefig=q_fig)
 
 # Create a DataArray from the cab_q array
 cab_q_da = xr.DataArray(cab_q.astype(int), dims=("time", "latitude", "longitude"), coords={"time": [0], "latitude": lat, "longitude": lon})
+kd_q_da = xr.DataArray(kd_q.astype(int), dims=("time", "latitude", "longitude"), coords={"time": [0], "latitude": lat, "longitude": lon})
+dryline_q_da = xr.DataArray(dryline_q.astype(int), dims=("time", "latitude", "longitude"), coords={"time": [0], "latitude": lat, "longitude": lon})
 
-# Extract the CAB points (latitude and longitude)
-cab_points = np.where(cab_q_da[0] == 1)
-cab_latitudes = lat[cab_points[0]]
-cab_longitudes = lon[cab_points[1]]
+def write_combined_geojson(named_das: dict, out_path, on_value=1, date_str=None):
+    """
+    named_das: dict like {"cab": cab_q_da, "kd": kd_q_da, "dryline": dryline_q_da}
+    out_path: path to the single output .geojson
+    on_value: cell value considered "on" (defaults to 1)
+    date_str: optional 'YYYY-MM-DD'; if None, uses today's local date
+    """
+    if date_str is None:
+        date_str = datetime.today().date().isoformat()
 
-# Create a list of Shapely Point geometries
-cab_geometries = [Point(lon, lat) for lon, lat in zip(cab_longitudes, cab_latitudes)]
+    features = []
+    for source, q_da in named_das.items():
+        arr = q_da.isel(time=0) if "time" in q_da.dims else q_da
+        lat = arr.latitude.values
+        lon = arr.longitude.values
+        ii, jj = np.where(arr.values == on_value)
 
-# Create a GeoJSON FeatureCollection
-geojson_features = [
-    {
-        "type": "Feature",
-        "geometry": mapping(point),
-        "properties": {}  # Add any additional properties here if needed
-    }
-    for point in cab_geometries
-]
+        for i, j in zip(ii, jj):
+            features.append({
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [float(lon[j]), float(lat[i])]},
+                "properties": {"source": source, "date": date_str},
+            })
 
-out_path = TILES_DIR / "cab.geojson"
-geojson_data = {
-    "type": "FeatureCollection",
-    "features": geojson_features
-}
-print(geojson_data)
-# Save the GeoJSON to a file
-with open(out_path, "w") as f:
-    json.dump(geojson_data, f)
+    geojson = {"type": "FeatureCollection", "features": features}
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w") as f:
+        json.dump(geojson, f)
+    return len(features)
 
-print(f"Wrote {out_path}")
+# --- Use it ---
+all_das = {"cab": cab_q_da, "kd": kd_q_da, "dryline": dryline_q_da}
+out_file = TILES_DIR / "drylines.geojson"
+n = write_combined_geojson(all_das, out_file)
+print(f"Wrote {out_file} with {n} points (date on each feature).")
