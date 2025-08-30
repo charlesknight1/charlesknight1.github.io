@@ -32,9 +32,9 @@ jobs:
           python scripts/process_cab.py
 
       - name: Touch files to ensure they appear changed
-        run: touch cab.geojson
+        run: touch drylines.geojson
       
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: tiles/cab.geojson
+          file_pattern: tiles/drylines.geojson
           commit_message: "Update tiles/drylines.geojson (${{ github.run_id }})"
