@@ -58,7 +58,17 @@ da = ds["sh2"]
 
 
 # get africa_union from your shapefile as before
-afr = gpd.read_file("https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json")
+AFRICA_GEOJSON_URL = "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
+local_path = Path("africa.geojson")
+
+# download
+if not local_path.exists():
+    r = requests.get(AFRICA_GEOJSON_URL, timeout=30)
+    r.raise_for_status()
+    local_path.write_bytes(r.content)
+
+# now read from disk
+afr = gpd.read_file(local_path)
 if afr.crs is None:
     afr = afr.set_crs(4326)
 africa_union = afr.unary_union
