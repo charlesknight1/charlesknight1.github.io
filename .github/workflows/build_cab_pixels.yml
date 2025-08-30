@@ -37,4 +37,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: tiles/cab.geojson
-          commit_message: "Update tiles/cab.geojson (${{ github.run_id }})"
+          commit_message: "Update tiles/drylines.geojson (${{ github.run_id }})"
