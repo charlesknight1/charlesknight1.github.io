@@ -95,9 +95,9 @@ q = q[np.newaxis,:,:]
 #Find dryline CABs. See drylines.py for a description of the inputs
 cab_q=find_edge(q,lon,lat,2,theta_min=-np.pi/4,theta_max=np.pi/6,mag_min=0.003,minlen=15,spatial_mask=mask_cab,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 #Find dryline KDs. See drylines.py for a description of the inputs
-kd_q=find_edge(q,lon,lat,2,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=10,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None,makefig=q_fig)
+kd_q=find_edge(q,lon,lat,2,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=10,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 #Find drylines elsewhere. See drylines.py for a description of the inputs
-dryline_q=find_edge(q,lon,lat,2,theta_max=np.inf,theta_min=-np.inf,mag_min=0.003,minlen=15,spatial_mask=mask_africa,relative="Grid Cell",output='sparse',plotfreq=0,times=None,makefig=q_fig)
+dryline_q=find_edge(q,lon,lat,2,theta_max=np.inf,theta_min=-np.inf,mag_min=0.003,minlen=15,spatial_mask=mask_africa,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 
 # Create a DataArray from the cab_q array
 cab_q_da = xr.DataArray(cab_q.astype(int), dims=("time", "latitude", "longitude"), coords={"time": [0], "latitude": lat, "longitude": lon})
