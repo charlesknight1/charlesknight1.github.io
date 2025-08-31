@@ -56,6 +56,9 @@ ds = xr.open_dataset(
     engine="cfgrib")
 da = ds["sh2"]
 
+# adjust coords
+da = da.assign_coords(longitude=((da.longitude + 180) % 360) - 180)
+da = da.sortby(da.longitude)
 
 # get africa_union from your shapefile as before
 AFRICA_GEOJSON_URL = "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
@@ -82,13 +85,10 @@ lon2, lat2 = np.meshgrid(lon, lat)
 mask_africa = contains(africa_union, lon2, lat2)
 
 # Create masks for acceptable CAB and KD locations
-lat = da.latitude.values
-lon = da.longitude.values
-lon2,lat2=np.meshgrid(lon,lat)
-mask_cab = (lon2<=30)*(lon2>=15)*(lat2<=0)*(lat2>=-18)#*(1-landmask.mask)
-mask_tkd = (lon2<=30)*(lat2<=-12)#*(1-landmask.mask)
+mask_cab = mask_africa*(lon2<=30)*(lon2>=15)*(lat2<=0)*(lat2>=-18)
+mask_tkd = mask_africa*(lon2<=30)*(lat2<=-12)
 # mask_tkd = (lon2<=30)*(lat2<=-12)#*(1-landmask.mask)
-q = da.values*1000
+q = da.values
 # give q an arbitrary time dimension
 q = q[np.newaxis,:,:]
 
@@ -97,7 +97,7 @@ cab_q=find_edge(q,lon,lat,2,theta_min=-np.pi/4,theta_max=np.pi/6,mag_min=0.003,m
 #Find dryline KDs. See drylines.py for a description of the inputs
 kd_q=find_edge(q,lon,lat,2,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=10,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 #Find drylines elsewhere. See drylines.py for a description of the inputs
-dryline_q=find_edge(q,lon,lat,2,theta_max=np.inf,theta_min=-np.inf,mag_min=0.003,minlen=15,spatial_mask=mask_africa,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
+dryline_q=find_edge(q,lon,lat,2,theta_max=np.pi,theta_min=-np.pi,mag_min=0.003,minlen=30,spatial_mask=mask_africa,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 
 # Create a DataArray from the cab_q array
 cab_q_da = xr.DataArray(cab_q.astype(int), dims=("time", "latitude", "longitude"), coords={"time": [0], "latitude": lat, "longitude": lon})
