@@ -4,7 +4,7 @@ title: Congo Air Boundary Tracker
 permalink: /cabtracker
 categories: projects
 ---
-Live Congo Air Boundary tracker.
+This is an experimental tracker for the Congo Air Boundary, tropical rainbelt and drylines.
 
 Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Congo Air Boundary points
   let cabLayer = null;
-  const cabUrl = '{{ "/tiles/cab.geojson" | relative_url }}';
+  const cabUrl = '{{ "/tiles/drylines.geojson" | relative_url }}';
   
   // Create a pane for CAB points to ensure proper layering
   map.createPane('cabPane');
@@ -215,8 +215,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         pointToLayer: function(feature, latlng) {
           // Create small green rectangles for each point
           return L.rectangle([
-            [latlng.lat - 0.05, latlng.lng - 0.08], // Southwest corner
-            [latlng.lat + 0.05, latlng.lng + 0.08]  // Northeast corner
+            [latlng.lat - 0.1, latlng.lng - 0.16], // Southwest corner
+            [latlng.lat + 0.1 latlng.lng + 0.16]  // Northeast corner
           ], {
             color: '#16a34a',        // Green border
             weight: 1,
