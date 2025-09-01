@@ -4,7 +4,7 @@ title: Congo Air Boundary Tracker
 permalink: /cabtracker
 categories: projects
 ---
-This is an experimental tracker for the Congo Air Boundary, tropical rainbelt and drylines.
+Live Congo Air Boundary tracker.
 
 Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
@@ -121,8 +121,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
       const headResp = await fetch(pmtilesUrl, { method: 'HEAD' });
       const lastMod = headResp.headers.get('Last-Modified');
-      const infoEl = document.getElementById('dateInfo');
       const pageTopEl = document.getElementById('pageTopDate');
+      
       if (lastMod) {
         const d = new Date(lastMod);
         const nice = d.toLocaleString('en-GB', {
@@ -131,17 +131,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           month: 'short',
           day: '2-digit',
         });
-        const txt = `Date (from .pmtiles): ${nice}`;
-        infoEl.textContent = txt;
-        pageTopEl.textContent = `${nice}`;
+        if (pageTopEl) pageTopEl.textContent = `${nice}`;
       } else {
-        infoEl.textContent = 'Date: Unavailable';
-        pageTopEl.textContent = 'Unavailable';
+        if (pageTopEl) pageTopEl.textContent = 'Unavailable';
       }
     } catch (e) {
       console.error('HEAD request failed:', e);
-      document.getElementById('dateInfo').textContent = 'Date: Error fetching';
-      document.getElementById('pageTopDate').textContent = 'Error fetching';
+      const pageTopEl = document.getElementById('pageTopDate');
+      if (pageTopEl) pageTopEl.textContent = 'Error fetching';
     }
   }
   setPmtilesLastModified();
@@ -201,53 +198,85 @@ document.addEventListener("DOMContentLoaded", async function () {
   const cabUrl = '{{ "/tiles/drylines.geojson" | relative_url }}';
   
   // Create a pane for CAB points to ensure proper layering
-  map.createPane('cabPane');
-  map.getPane('cabPane').style.zIndex = 430; // Above overlay but below info box
+ // Create panes for different sources
+map.createPane('cabPane');
+map.getPane('cabPane').style.zIndex = 435;
+
+map.createPane('kdPane');
+map.getPane('kdPane').style.zIndex = 430; // Below cab
+
+map.createPane('drylinePane');
+map.getPane('drylinePane').style.zIndex = 425; // below kd
+
+
+// Source configuration
+const sourceConfig = {
+  'cab': {
+    color: '#16a34a',      // Green
+    label: 'Congo Air Boundary',
+    pane: 'cabPane'
+  },
+  'kd': {
+    color: '#dc2626',      // Red
+    label: 'Kalahari Discontinuity',
+    pane: 'kdPane'
+  },
+    'dryline': {
+      color: '#ffffff',      // Gray
+      label: 'Dryline',
+      pane: 'drylinePane'
+    },
+};
     
-  async function addCABPoints() {
-    try {
-      const res = await fetch(cabUrl, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const geojson = await res.json();
-  
-      cabLayer = L.geoJSON(geojson, {
-        pane: 'cabPane',
-        pointToLayer: function(feature, latlng) {
-          // Create small green rectangles for each point
-          return L.rectangle([
-            [latlng.lat - 0.1, latlng.lng - 0.16], // Southwest corner
-            [latlng.lat + 0.1 latlng.lng + 0.16]  // Northeast corner
-          ], {
-            color: '#16a34a',        // Green border
-            weight: 1,
-            opacity: 1,
-            fillColor: '#16a34a',    // Green fill
-            fillOpacity: 0.8
-          });
-        },
-        onEachFeature: (feature, layer) => {
-          // Add popup with CAB information
-          const props = feature.properties || {};
-          let popupContent = "<strong>Congo Air Boundary Point</strong>";
-          
-          // Add any available properties to popup
-          if (Object.keys(props).length > 0) {
-            popupContent += "<br><br>";
-            for (const [key, value] of Object.entries(props)) {
-              if (value !== null && value !== undefined) {
-                popupContent += `<strong>${key}:</strong> ${value}<br>`;
-              }
+async function addCABPoints() {
+  try {
+    const res = await fetch(cabUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const geojson = await res.json();
+
+    cabLayer = L.geoJSON(geojson, {
+      pointToLayer: function(feature, latlng) {
+        const source = feature.properties?.source || 'default';
+        const config = sourceConfig[source] || sourceConfig['default'];
+        
+        // Create small rectangles with source-specific colors
+        return L.rectangle([
+          [latlng.lat - 0.13, latlng.lng - 0.13], // Southwest corner
+          [latlng.lat + 0.13, latlng.lng + 0.13]  // Northeast corner
+        ], {
+          color: config.color,        // Source-specific border color
+          weight: 1,
+          opacity: 1,
+          fillColor: config.color,    // Source-specific fill color
+          fillOpacity: 0.8,
+          pane: config.pane           // Use source-specific pane
+        });
+      },
+      onEachFeature: (feature, layer) => {
+        const props = feature.properties || {};
+        const source = props.source || 'default';
+        const config = sourceConfig[source] || sourceConfig['default'];
+        
+        let popupContent = `<strong>${config.label}</strong>`;
+        
+        // Add any available properties to popup
+        if (Object.keys(props).length > 0) {
+          popupContent += "<br><br>";
+          for (const [key, value] of Object.entries(props)) {
+            if (value !== null && value !== undefined) {
+              popupContent += `<strong>${key}:</strong> ${value}<br>`;
             }
           }
-          
-          layer.bindPopup(popupContent);
         }
-      }).addTo(map);
-      
-      console.log(`Loaded ${geojson.features?.length || 0} CAB points`);
-    } catch (err) {
-      console.error('Failed to load cab.geojson:', err);
-    }
+        
+        layer.bindPopup(popupContent);
+      }
+    }).addTo(map);
+    
+    console.log(`Loaded ${geojson.features?.length || 0} points`);
+  } catch (err) {
+    console.error('Failed to load geojson:', err);
+  }
   }
   addCABPoints();
 
