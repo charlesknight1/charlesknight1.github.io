@@ -18,10 +18,10 @@ History:
 <script>
 (async () => {
   const data = await d3.csv('database/rainbelthistory.csv', d3.autoType);
-  // data: [{date:"2025-09-09", total_features:131, avg_value:16.9, max_value:90}, ...]
+  // data: [{date:"2025-09-09", mean_latitude:-3.2}, ...]
 
   const labels = data.map(d => d.date);
-  const totals = data.map(d => d.total_features);
+  const values = data.map(d => d.mean_latitude);
 
   const ctx = document.getElementById('trend').getContext('2d');
   new Chart(ctx, {
@@ -29,15 +29,28 @@ History:
     data: {
       labels,
       datasets: [
-        { label: 'Total features', data: totals, tension: 0.2, pointRadius: 0 }
-        // add more datasets with data.map(d => d.avg_value) etc.
+        {
+          label: 'Tropical rainbelt latitude',
+          data: values,
+          tension: 0.2,
+          pointRadius: 0
+        }
       ]
     },
     options: {
       responsive: true,
       scales: {
-        x: { ticks: { autoSkip: true, maxRotation: 0 } },
-        y: { beginAtZero: true }
+        x: {
+          ticks: { autoSkip: true, maxRotation: 0 }
+        },
+        y: {
+          min: -20,
+          max: 20,
+          title: {
+            display: true,
+            text: 'Latitude (°)'
+          }
+        }
       }
     }
   });
