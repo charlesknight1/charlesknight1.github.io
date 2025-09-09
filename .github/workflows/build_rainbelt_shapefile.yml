@@ -33,9 +33,13 @@ jobs:
           python scripts/process_rainbelt.py
 
       - name: Touch files to ensure they appear changed
-        run: touch belt.geojson
-      
+        run: |
+          touch belt.geojson
+          database/rainbelthistory.csv
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: tiles/belt.geojson
-          commit_message: "Update tiles/belt.geojson (${{ github.run_id }})"
+          file_pattern: |
+            tiles/belt.geojson
+            database/rainbelthistory.csv
+          commit_message: "Update belt.geojson + rainbelthistory.csv (${{ github.run_id }})"
