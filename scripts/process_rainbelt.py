@@ -178,5 +178,5 @@ df.to_csv(history_path, index=False)
 
 print(f"Updated {history_path} with mean_latitude={row['mean_latitude']} for {row['date']}")
 
-printt(df)
+print(df)
 
