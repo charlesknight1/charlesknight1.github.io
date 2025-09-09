@@ -35,7 +35,7 @@ jobs:
       - name: Touch files to ensure they appear changed
         run: |
           touch belt.geojson
-          database/rainbelthistory.csv
+          touch database/rainbelthistory.csv
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
