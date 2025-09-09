@@ -32,14 +32,14 @@ jobs:
         run: |
           python scripts/process_rainbelt.py
 
-      - name: Touch files to ensure they appear changed
-        run: |
-          touch tiles/belt.geojson
-          touch database/rainbelthistory.csv
-
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: |
             tiles/belt.geojson
+          commit_message: "Update belt.geojson (${{ github.run_id }})"
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: |
             database/rainbelthistory.csv
-          commit_message: "Update belt.geojson + rainbelthistory.csv (${{ github.run_id }})"
+          commit_message: "Update rainbelthistory.csv (${{ github.run_id }})"
