@@ -8,6 +8,44 @@ Live Congo Air Boundary tracker.
 
 Data is up to date as of <span id="pageTopDate">Loading…</span>.
 
+History:
+
+<!-- Chart.js and D3 (for CSV parsing) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+
+<canvas id="trend" height="120"></canvas>
+<script>
+(async () => {
+  const data = await d3.csv('database/rainbelthistory.csv', d3.autoType);
+  // data: [{date:"2025-09-09", total_features:131, avg_value:16.9, max_value:90}, ...]
+
+  const labels = data.map(d => d.date);
+  const totals = data.map(d => d.total_features);
+
+  const ctx = document.getElementById('trend').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Total features', data: totals, tension: 0.2, pointRadius: 0 }
+        // add more datasets with data.map(d => d.avg_value) etc.
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { ticks: { autoSkip: true, maxRotation: 0 } },
+        y: { beginAtZero: true }
+      }
+    }
+  });
+})();
+</script>
+
+Live:
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <script src="https://unpkg.com/pmtiles@3.0.5/dist/pmtiles.js"></script>
