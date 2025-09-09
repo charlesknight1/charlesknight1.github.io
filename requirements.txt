@@ -7,3 +7,4 @@ shapely
 scikit-image
 matplotlib
 requests
+pandas
