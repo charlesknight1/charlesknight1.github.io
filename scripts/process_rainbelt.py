@@ -147,3 +147,34 @@ feature["properties"]["generated_at"] = dt.datetime.utcnow().isoformat(timespec=
 with open(out_path, "w") as f:
     json.dump({"type": "FeatureCollection", "features": [feature]}, f)
 print(f"Wrote {out_path}")
+
+# ------------------------
+# Append rainbelt mean latitude to data/history.csv (idempotent per date)
+# ------------------------
+from pathlib import Path
+import pandas as pd
+
+# Use centroid latitude of the polygon as "mean latitude"
+mean_lat = float(largest_polygon.centroid.y)
+
+history_path = Path("database") / "rainbelthistory.csv"
+history_path.parent.mkdir(parents=True, exist_ok=True)
+
+row = {
+    "date": today_str,                  # YYYYMMDD from earlier in your script
+    "mean_latitude": round(mean_lat, 4)
+}
+
+if history_path.exists():
+    df = pd.read_csv(history_path, dtype={"date": str})
+    # drop any existing record for this date
+    df = df[df["date"] != row["date"]]
+    df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+else:
+    df = pd.DataFrame([row])
+
+df = df.sort_values("date")
+df.to_csv(history_path, index=False)
+
+print(f"Updated {history_path} with mean_latitude={row['mean_latitude']} for {row['date']}")
+
