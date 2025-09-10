@@ -157,7 +157,7 @@ import pandas as pd
 # Use centroid latitude of the polygon as "mean latitude"
 mean_lat = float(largest_polygon.centroid.y)
 
-history_path = Path("database") / "rainbelthistory.csv"
+history_path = Path("database") / "rainbelt_history.csv"
 history_path.parent.mkdir(parents=True, exist_ok=True)
 
 row = {
