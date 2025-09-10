@@ -234,7 +234,7 @@ import pandas as pd
 
 # Use centroid latitude of the polygon as "mean latitude"
 north_mean_lat = float(north_largest_polygon.centroid.y)
-south_mean_lat = float(north_largest_polygon.centroid.y)
+south_mean_lat = float(south_largest_polygon.centroid.y)
 
 history_path = Path("database") / "heatlow_history.csv"
 history_path.parent.mkdir(parents=True, exist_ok=True)
