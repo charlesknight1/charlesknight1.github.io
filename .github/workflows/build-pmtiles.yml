@@ -1,4 +1,4 @@
-name: Build daily MLST-AS PMTiles
+name: Build daily LST PMTiles
 
 on:
   schedule:
