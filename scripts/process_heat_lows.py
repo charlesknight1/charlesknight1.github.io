@@ -241,10 +241,10 @@ history_path.parent.mkdir(parents=True, exist_ok=True)
 
 row = {
     "date": today_str,                  # YYYYMMDD from earlier in your script
-    "northheatlow_lat": round(north_mean_lat, 4)
-    "northheatlow_temp": round(north_mean_temp, 4)
-    "southheatlow_lat": round(south_mean_lat, 4)
-    "southheatlow_temp": round(south_mean_temp, 4)
+    "northheatlow_lat": round(north_mean_lat, 4),
+    "northheatlow_temp": round(north_mean_temp, 4),
+    "southheatlow_lat": round(south_mean_lat, 4),
+    "southheatlow_temp": round(south_mean_temp, 4),
 }
 
 if history_path.exists():
