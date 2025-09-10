@@ -1,4 +1,4 @@
-name: Build daily rainbelt shapefile
+name: Build daily heat low shapefile
 
 on:
   schedule:
