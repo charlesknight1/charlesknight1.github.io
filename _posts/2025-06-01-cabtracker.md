@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Congo Air Boundary Tracker
-permalink: /cabtracker
+permalink: /tracker
 categories: projects
 ---
 Live Congo Air Boundary tracker.
@@ -17,11 +17,28 @@ History:
 <canvas id="trend" height="120"></canvas>
 <script>
 (async () => {
-  const data = await d3.csv('database/rainbelthistory.csv', d3.autoType);
-  // data: [{date:"2025-09-09", mean_latitude:-3.2}, ...]
+  const rainbelt = await d3.csv('database/rainbelt_history.csv', d3.autoType);
+  const cab      = await d3.csv('database/cab_history.csv', d3.autoType);
+  const hl       = await d3.csv('database/heatlow_history.csv', d3.autoType);
 
-  const labels = data.map(d => d.date);
-  const values = data.map(d => d.mean_latitude);
+  // normalize YYYYMMDD -> YYYY-MM-DD
+  function normDate(d) {
+    return d.slice(0,4) + "-" + d.slice(4,6) + "-" + d.slice(6,8);
+  }
+
+  // labels from rainbelt
+  const labels = rainbelt.map(d => normDate(String(d.date)));
+  const rainbeltValues = rainbelt.map(d => d.mean_latitude);
+
+  // CAB
+  const cabMap = new Map(cab.map(d => [normDate(String(d.date)), d.cab_lat]));
+  const cabValues = labels.map(d => cabMap.get(d) ?? null);
+
+  // Heat lows
+  const hlMapN = new Map(hl.map(d => [normDate(String(d.date)), d.northheatlow_lat]));
+  const hlMapS = new Map(hl.map(d => [normDate(String(d.date)), d.southheatlow_lat]));
+  const hlValuesN = labels.map(d => hlMapN.get(d) ?? null);
+  const hlValuesS = labels.map(d => hlMapS.get(d) ?? null);
 
   const ctx = document.getElementById('trend').getContext('2d');
   new Chart(ctx, {
@@ -31,31 +48,69 @@ History:
       datasets: [
         {
           label: 'Tropical rainbelt latitude',
-          data: values,
+          data: rainbeltValues,
+          borderColor: '#1d4ed8',
+          backgroundColor: '#1d4ed8',
           tension: 0.2,
           pointRadius: 0
+        },
+        {
+          label: 'CAB latitude',
+          data: cabValues,
+          borderColor: '#16a34a',
+          backgroundColor: '#16a34a',
+          tension: 0.2,
+          pointRadius: 2,
+          spanGaps: true
+        },
+        {
+          label: '',
+          data: hlValuesN,
+          borderColor: '#ff0000',
+          backgroundColor: '#ff0000',
+          borderDash: [4,3],
+          tension: 0.2,
+          pointRadius: 2,
+          spanGaps: true
+        },
+        {
+          data: hlValuesS,
+          borderColor: '#ff0000',
+          backgroundColor: '#ff0000',
+          borderDash: [6,3],
+          tension: 0.2,
+          pointRadius: 2,
+          spanGaps: true,
+          // 👇 this is the important part
+          label: 'Heat Lows',
         }
+
       ]
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          labels: { usePointStyle: true, boxWidth: 10 }
+        }
+      },
       scales: {
         x: {
           ticks: { autoSkip: true, maxRotation: 0 }
         },
         y: {
-          min: -20,
-          max: 20,
-          title: {
-            display: true,
-            text: 'Latitude (°)'
-          }
+          min: -40,
+          max: 30,
+          title: { display: true, text: 'Latitude (°)' }
         }
       }
     }
   });
 })();
 </script>
+
+
+
 
 Live:
 
@@ -64,12 +119,96 @@ Live:
 <script src="https://unpkg.com/pmtiles@3.0.5/dist/pmtiles.js"></script>
 
 <style>
-.map-controls {
-  margin: 1em 0;
+
+.layer-control {
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  min-width: 200px;
+}
+
+.layer-control-content {
+  padding: 10px;
+}
+
+.layer-control-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.layer-checkbox-control {
   display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
   align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  cursor: pointer;
+  font-size: 11px;
+  color: #555;
+  user-select: none;
+}
+
+.layer-checkbox-control:hover {
+  color: #0066cc;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  padding-left: 4px;
+  margin-left: -4px;
+}
+
+.layer-checkbox-control input[type="checkbox"] {
+  cursor: pointer;
+  transform: scale(1.1);
+  margin: 0;
+}
+
+.layer-control-separator {
+  border-top: 1px solid #eee;
+  margin: 8px 0;
+}
+
+.layer-reset-button {
+  width: 100%;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #495057;
+  transition: all 0.2s;
+}
+
+.layer-reset-button:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.layer-reset-button:active {
+  background: #dee2e6;
+}
+
+/* Make sure the control doesn't interfere with map interactions */
+.layer-control * {
+  pointer-events: auto;
+}
+
+/* Optional: Collapsible control for mobile */
+@media (max-width: 768px) {
+  .layer-control {
+    min-width: 180px;
+  }
+  
+  .layer-control-content {
+    padding: 8px;
+  }
+  
+  .layer-checkbox-control {
+    font-size: 12px;
+  }
 }
 .legend {
   background: white;
@@ -125,36 +264,86 @@ Live:
 }
 </style>
 
-<div class="map-controls">
-  <button id="toggleLayer">Hide LST Layer</button>
-  <button id="toggleRainbelt">Hide Rainbelt</button>
-  <button id="toggleCAB">Hide CAB Points</button>
-  <button id="resetView">Reset View</button>
-</div>
 
 <div id="map" style="height: 500px; width: 100%; position: relative;">
 </div>
 
-<div class="legend">
-  <strong>Land Surface Temperature (°C)</strong>
-  <div class="legend-gradient"></div>
-  <div class="legend-labels">
-    <span>0°C</span>
-    <span>25°C</span>
-    <span>50°C</span>
+<style>
+.map-legend {
+  background:#fff; border:1px solid #ddd; border-radius:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,.1);
+  margin:12px 0 0; padding:10px 12px; font-size:12px; color:#333;
+  max-width:600px;
+}
+.map-legend h4 { margin:0 0 6px; font-size:13px; }
+.legend-row { display:flex; align-items:center; gap:8px; margin:4px 0; }
+.legend-key { flex:0 0 auto; width:16px; height:12px; border:1px solid #888; }
+.legend-key.square { width:12px; height:12px; }
+.legend-gradient { width:100%; height:12px; border:1px solid #ccc; border-radius:2px; background-size:cover; }
+.legend-ticks { display:flex; justify-content:space-between; font-size:11px; color:#444; margin-top:2px; }
+</style>
+
+<section class="map-legend">
+  <h4>Land Surface Temp (°C)</h4>
+  <div id="lstGradient" class="legend-gradient"></div>
+  <div class="legend-ticks">
+    <span id="lstMin">0°</span>
+    <span id="lstMid">25°</span>
+    <span id="lstMax">50°</span>
   </div>
-  <div style="margin-top: 10px; border-top: 1px solid #ccc; padding-top: 10px;">
-    <strong>Map Features</strong>
-    <div class="cab-legend-item">
-      <div class="cab-legend-symbol"></div>
-      <span>Congo Air Boundary Points</span>
-    </div>
-    <div class="cab-legend-item">
-      <div class="rainbelt-legend-symbol"></div>
-      <span>Tropical Rainbelt</span>
-    </div>
+
+  <h4 style="margin-top:8px;">Map Features</h4>
+  <div class="legend-row">
+    <span class="legend-key" style="background:rgba(29,78,216,.3); border-color:#1d4ed8;"></span>
+    <span>Tropical Rainbelt</span>
   </div>
-</div>
+  <div class="legend-row">
+    <span class="legend-key square" style="background:#16a34a; border-color:#15803d;"></span>
+    <span>Congo Air Boundary</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-key square" style="background:#dc2626; border-color:#b91c1c;"></span>
+    <span>Kalahari Discontinuity</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-key square" style="background:#ffffff; border-color:#999;"></span>
+    <span>Other Dryline</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
+    <span>Northern African Heat Low</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
+    <span>Northern African Heat Low</span>
+  </div>
+</section>
+
+<script>
+// Compact perceptual temp gradient (blue → red)
+(function(){
+  const min=0, max=50, mid=Math.round((min+max)/2);
+  function makeRamp(){
+    const c=document.createElement('canvas'); c.width=256; c.height=1;
+    const ctx=c.getContext('2d');
+    const g=ctx.createLinearGradient(0,0,c.width,0);
+    g.addColorStop(0,'#2b83ba');   // blue
+    g.addColorStop(0.25,'#abdda4');// green
+    g.addColorStop(0.5,'#ffffbf'); // yellow
+    g.addColorStop(0.75,'#fdae61');// orange
+    g.addColorStop(1,'#d7191c');   // red
+    ctx.fillStyle=g; ctx.fillRect(0,0,c.width,1);
+    return c.toDataURL();
+  }
+  const grad=document.getElementById('lstGradient');
+  if(grad) grad.style.backgroundImage=`url(${makeRamp()})`;
+  document.getElementById('lstMin').textContent=`${min}°`;
+  document.getElementById('lstMid').textContent=`${mid}°`;
+  document.getElementById('lstMax').textContent=`${max}°`;
+})();
+</script>
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
@@ -164,6 +353,56 @@ document.addEventListener("DOMContentLoaded", async function () {
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
+
+  // Create custom control for layer toggles AFTER map is created
+  const layerControl = L.control({ position: 'topright' });
+
+  layerControl.onAdd = function(map) {
+    const div = L.DomUtil.create('div', 'leaflet-control leaflet-bar layer-control');
+    
+    div.innerHTML = `
+      <div class="layer-control-content">
+        <div class="layer-control-title">Map Layers</div>
+        
+        <label class="layer-checkbox-control">
+          <input type="checkbox" id="toggleLayer" checked>
+          <span>Land Surface Temperature</span>
+        </label>
+        
+        <label class="layer-checkbox-control">
+          <input type="checkbox" id="toggleRainbelt" checked>
+          <span>Tropical Rainbelt</span>
+        </label>
+        
+        <label class="layer-checkbox-control">
+          <input type="checkbox" id="toggleCAB" checked>
+          <span>Drylines</span>
+        </label>
+        
+        <label class="layer-checkbox-control">
+          <input type="checkbox" id="toggleNorthHeatLow" checked>
+          <span>Northern African Heat Low</span>
+        </label>
+        
+        <label class="layer-checkbox-control">
+          <input type="checkbox" id="toggleSouthHeatLow" checked>
+          <span>Southern African Heat Low</span>
+        </label>
+        
+        <div class="layer-control-separator"></div>
+        
+        <button id="resetView" class="layer-reset-button">Reset View</button>
+      </div>
+    `;
+    
+    // Prevent map interaction when clicking on the control
+    L.DomEvent.disableClickPropagation(div);
+    L.DomEvent.disableScrollPropagation(div);
+    
+    return div;
+  };
+
+  layerControl.addTo(map);
 
   let temperatureLayer = null;
   const pmtilesUrl = '{{ "/tiles/raster.pmtiles" | relative_url }}';
@@ -211,30 +450,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Rainbelt overlay
-  let overlayLayer = null;
-  const overlayUrl = '{{ "/tiles/belt.geojson" | relative_url }}';
+  let rainbeltLayer = null;
+  const rainbeltUrl = '{{ "/tiles/belt.geojson" | relative_url }}';
   
-  // Put overlay above the base map but below the info box
-  map.createPane('overlayPane');
-  map.getPane('overlayPane').style.zIndex = 420; // OSM default tiles are ~200
+  map.createPane('rainbeltPane');
+  map.getPane('rainbeltPane').style.zIndex = 420;
     
-  async function addOverlay() {
+  async function addRainbelt() {
     try {
-      const res = await fetch(overlayUrl, { cache: 'no-store' });
+      const res = await fetch(rainbeltUrl, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const geojson = await res.json();
   
-      overlayLayer = L.geoJSON(geojson, {
-        pane: 'overlayPane',
+      rainbeltLayer = L.geoJSON(geojson, {
+        pane: 'rainbeltPane',
         style: feature => ({
-          color: '#1d4ed8',       // stroke
+          color: '#1d4ed8',
           weight: 1.5,
           opacity: 0.9,
-          fillColor: '#1d4ed8',   // fill = same blue
-          fillOpacity: 0.3        // semi-transparent
+          fillColor: '#1d4ed8',
+          fillOpacity: 0.3
         }),
         onEachFeature: (feature, layer) => {
-          // Show "tropical rainbelt" text on click
           layer.bindPopup("Tropical Rainbelt");
         }
       }).addTo(map);
@@ -242,143 +479,225 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.error('Failed to load belt.geojson:', err);
     }
   }
-  addOverlay();
+  addRainbelt();
+
+  // North heat low overlay
+  let northHeatLowLayer = null;
+  const northHeatLowUrl = '{{ "/tiles/north_heat_low.geojson" | relative_url }}';
+  
+  map.createPane('northHeatLowPane');
+  map.getPane('northHeatLowPane').style.zIndex = 421;
+    
+  async function addNorthHeatLow() {
+    try {
+      const res = await fetch(northHeatLowUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const geojson = await res.json();
+  
+      northHeatLowLayer = L.geoJSON(geojson, {
+        pane: 'northHeatLowPane',
+        style: feature => ({
+          color: '#FF0000',
+          weight: 1,
+          opacity: 0.9,
+          fillColor: '#FF0000',
+          fillOpacity: 0.2
+        }),
+        onEachFeature: (feature, layer) => {
+          layer.bindPopup("Northern African Heat Low");
+        }
+      }).addTo(map);
+    } catch (err) {
+      console.error('Failed to load north_heat_low.geojson:', err);
+    }
+  }
+  addNorthHeatLow();
+
+  // South heat low overlay
+  let southHeatLowLayer = null;
+  const southHeatLowUrl = '{{ "/tiles/south_heat_low.geojson" | relative_url }}';
+  
+  map.createPane('southHeatLowPane');
+  map.getPane('southHeatLowPane').style.zIndex = 422;
+    
+  async function addSouthHeatLow() {
+    try {
+      const res = await fetch(southHeatLowUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const geojson = await res.json();
+  
+      southHeatLowLayer = L.geoJSON(geojson, {
+        pane: 'southHeatLowPane',
+        style: feature => ({
+          color: '#FF0000',
+          weight: 1,
+          opacity: 0.9,
+          fillColor: '#FF0000',
+          fillOpacity: 0.2
+        }),
+        onEachFeature: (feature, layer) => {
+          layer.bindPopup("Southern African Heat Low");
+        }
+      }).addTo(map);
+    } catch (err) {
+      console.error('Failed to load south_heat_low.geojson:', err);
+    }
+  }
+  addSouthHeatLow();
 
   // Congo Air Boundary points
   let cabLayer = null;
   const cabUrl = '{{ "/tiles/drylines.geojson" | relative_url }}';
   
-  // Create a pane for CAB points to ensure proper layering
- // Create panes for different sources
-map.createPane('cabPane');
-map.getPane('cabPane').style.zIndex = 435;
+  // Create panes for different sources
+  map.createPane('cabPane');
+  map.getPane('cabPane').style.zIndex = 435;
 
-map.createPane('kdPane');
-map.getPane('kdPane').style.zIndex = 430; // Below cab
+  map.createPane('kdPane');
+  map.getPane('kdPane').style.zIndex = 430;
 
-map.createPane('drylinePane');
-map.getPane('drylinePane').style.zIndex = 425; // below kd
+  map.createPane('drylinePane');
+  map.getPane('drylinePane').style.zIndex = 425;
 
-
-// Source configuration
-const sourceConfig = {
-  'cab': {
-    color: '#16a34a',      // Green
-    label: 'Congo Air Boundary',
-    pane: 'cabPane'
-  },
-  'kd': {
-    color: '#dc2626',      // Red
-    label: 'Kalahari Discontinuity',
-    pane: 'kdPane'
-  },
+  // Source configuration
+  const sourceConfig = {
+    'cab': {
+      color: '#16a34a',
+      label: 'Congo Air Boundary',
+      pane: 'cabPane'
+    },
+    'kd': {
+      color: '#dc2626',
+      label: 'Kalahari Discontinuity',
+      pane: 'kdPane'
+    },
     'dryline': {
-      color: '#ffffff',      // Gray
+      color: '#ffffff',
       label: 'Dryline',
       pane: 'drylinePane'
     },
-};
+  };
     
-async function addCABPoints() {
-  try {
-    const res = await fetch(cabUrl, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const geojson = await res.json();
+  async function addCABPoints() {
+    try {
+      const res = await fetch(cabUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const geojson = await res.json();
 
-    cabLayer = L.geoJSON(geojson, {
-      pointToLayer: function(feature, latlng) {
-        const source = feature.properties?.source || 'default';
-        const config = sourceConfig[source] || sourceConfig['default'];
-        
-        // Create small rectangles with source-specific colors
-        return L.rectangle([
-          [latlng.lat - 0.13, latlng.lng - 0.13], // Southwest corner
-          [latlng.lat + 0.13, latlng.lng + 0.13]  // Northeast corner
-        ], {
-          color: config.color,        // Source-specific border color
-          weight: 1,
-          opacity: 1,
-          fillColor: config.color,    // Source-specific fill color
-          fillOpacity: 0.8,
-          pane: config.pane           // Use source-specific pane
-        });
-      },
-      onEachFeature: (feature, layer) => {
-        const props = feature.properties || {};
-        const source = props.source || 'default';
-        const config = sourceConfig[source] || sourceConfig['default'];
-        
-        let popupContent = `<strong>${config.label}</strong>`;
-        
-        // Add any available properties to popup
-        if (Object.keys(props).length > 0) {
-          popupContent += "<br><br>";
-          for (const [key, value] of Object.entries(props)) {
-            if (value !== null && value !== undefined) {
-              popupContent += `<strong>${key}:</strong> ${value}<br>`;
+      cabLayer = L.geoJSON(geojson, {
+        pointToLayer: function(feature, latlng) {
+          const source = feature.properties?.source || 'default';
+          const config = sourceConfig[source] || sourceConfig['cab'];
+          
+          return L.rectangle([
+            [latlng.lat - 0.13, latlng.lng - 0.13],
+            [latlng.lat + 0.13, latlng.lng + 0.13]
+          ], {
+            color: config.color,
+            weight: 1,
+            opacity: 1,
+            fillColor: config.color,
+            fillOpacity: 0.8,
+            pane: config.pane
+          });
+        },
+        onEachFeature: (feature, layer) => {
+          const props = feature.properties || {};
+          const source = props.source || 'default';
+          const config = sourceConfig[source] || sourceConfig['cab'];
+          
+          let popupContent = `<strong>${config.label}</strong>`;
+          
+          if (Object.keys(props).length > 0) {
+            popupContent += "<br><br>";
+            for (const [key, value] of Object.entries(props)) {
+              if (value !== null && value !== undefined) {
+                popupContent += `<strong>${key}:</strong> ${value}<br>`;
+              }
             }
           }
+          
+          layer.bindPopup(popupContent);
         }
-        
-        layer.bindPopup(popupContent);
-      }
-    }).addTo(map);
-    
-    console.log(`Loaded ${geojson.features?.length || 0} points`);
-  } catch (err) {
-    console.error('Failed to load geojson:', err);
-  }
+      }).addTo(map);
+      
+      console.log(`Loaded ${geojson.features?.length || 0} points`);
+    } catch (err) {
+      console.error('Failed to load geojson:', err);
+    }
   }
   addCABPoints();
 
-  // Controls
-  const toggleButton = document.getElementById('toggleLayer');
-  const toggleCABButton = document.getElementById('toggleCAB');
-  const toggleRainbeltButton = document.getElementById('toggleRainbelt');
-  const resetButton = document.getElementById('resetView');
+  // Controls - Wait for control to be added to DOM
+  setTimeout(() => {
+    const toggleLayerCheckbox = document.getElementById('toggleLayer');
+    const toggleCABCheckbox = document.getElementById('toggleCAB');
+    const toggleRainbeltCheckbox = document.getElementById('toggleRainbelt');
+    const toggleNorthHeatLowCheckbox = document.getElementById('toggleNorthHeatLow');
+    const toggleSouthHeatLowCheckbox = document.getElementById('toggleSouthHeatLow');
+    const resetButton = document.getElementById('resetView');
 
-  let layerVisible = true;
-  toggleButton.addEventListener('click', function() {
-    if (!temperatureLayer) return;
-    if (layerVisible) {
-      map.removeLayer(temperatureLayer);
-      this.textContent = 'Show LST Layer';
-    } else {
-      map.addLayer(temperatureLayer);
-      this.textContent = 'Hide LST Layer';
+    if (toggleLayerCheckbox) {
+      toggleLayerCheckbox.addEventListener('change', function() {
+        if (!temperatureLayer) return;
+        if (this.checked) {
+          map.addLayer(temperatureLayer);
+        } else {
+          map.removeLayer(temperatureLayer);
+        }
+      });
     }
-    layerVisible = !layerVisible;
-  });
 
-  let cabVisible = true;
-  toggleCABButton.addEventListener('click', function() {
-    if (!cabLayer) return;
-    if (cabVisible) {
-      map.removeLayer(cabLayer);
-      this.textContent = 'Show CAB Points';
-    } else {
-      map.addLayer(cabLayer);
-      this.textContent = 'Hide CAB Points';
+    if (toggleCABCheckbox) {
+      toggleCABCheckbox.addEventListener('change', function() {
+        if (!cabLayer) return;
+        if (this.checked) {
+          map.addLayer(cabLayer);
+        } else {
+          map.removeLayer(cabLayer);
+        }
+      });
     }
-    cabVisible = !cabVisible;
-  });
 
-  let rainbeltVisible = true;
-  toggleRainbeltButton.addEventListener('click', function() {
-    if (!overlayLayer) return;
-    if (rainbeltVisible) {
-      map.removeLayer(overlayLayer);
-      this.textContent = 'Show Rainbelt';
-    } else {
-      map.addLayer(overlayLayer);
-      this.textContent = 'Hide Rainbelt';
+    if (toggleRainbeltCheckbox) {
+      toggleRainbeltCheckbox.addEventListener('change', function() {
+        if (!rainbeltLayer) return;
+        if (this.checked) {
+          map.addLayer(rainbeltLayer);
+        } else {
+          map.removeLayer(rainbeltLayer);
+        }
+      });
     }
-    rainbeltVisible = !rainbeltVisible;
-  });
 
-  resetButton.addEventListener('click', function() {
-    map.setView([-23, 25], 4);
-  });
+    if (toggleNorthHeatLowCheckbox) {
+      toggleNorthHeatLowCheckbox.addEventListener('change', function() {
+        if (!northHeatLowLayer) return;
+        if (this.checked) {
+          map.addLayer(northHeatLowLayer);
+        } else {
+          map.removeLayer(northHeatLowLayer);
+        }
+      });
+    }
+
+    if (toggleSouthHeatLowCheckbox) {
+      toggleSouthHeatLowCheckbox.addEventListener('change', function() {
+        if (!southHeatLowLayer) return;
+        if (this.checked) {
+          map.addLayer(southHeatLowLayer);
+        } else {
+          map.removeLayer(southHeatLowLayer);
+        }
+      });
+    }
+
+    if (resetButton) {
+      resetButton.addEventListener('click', function() {
+        map.setView([-23, 25], 4);
+      });
+    }
+  }, 100);
 
   // Scale + coordinates
   L.control.scale({ position: 'bottomleft' }).addTo(map);
@@ -400,13 +719,13 @@ async function addCABPoints() {
 
 **Data Sources**
 
-1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday (<span id="pageTopDate">Loading…</span>). Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
-2. GSF atmospheric reanalysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
-3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) availible on [GitHub](https://github.com/EmmaHoward/drylines)
+1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday. Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
+2. GSF atmospheric analysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
+3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) availible on [GitHub].(https://github.com/EmmaHoward/drylines)
 
 **Feedback**
 
-This tracker is in development. Please get in touch with any suggestions.
+This page is experimental and in development. Please get in touch with any suggestions.
 
 **Supporting publications**
 
