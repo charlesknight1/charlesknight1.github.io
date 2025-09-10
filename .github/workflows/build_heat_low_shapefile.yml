@@ -48,4 +48,4 @@ jobs:
         with:
           file_pattern: |
             database/heatlow_history.csv
-          commit_message: "Update rainbelthistory.csv (${{ github.run_id }})"
+          commit_message: "Update heatlow_history.csv (${{ github.run_id }})"
