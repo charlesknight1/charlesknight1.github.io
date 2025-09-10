@@ -41,5 +41,5 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: |
-            database/rainbelthistory.csv
-          commit_message: "Update rainbelthistory.csv (${{ github.run_id }})"
+            database/rainbelt_history.csv
+          commit_message: "Update rainbelt_history.csv (${{ github.run_id }})"
