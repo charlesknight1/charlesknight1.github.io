@@ -197,7 +197,7 @@ feature = {
         "source": "NCEP GDAS 0.25°",
         "level_hPa": 850,
         "var": var_name,
-        "temp": f"{north_mean_temp:.2f}",
+        "temp": round(north_mean_temp, 3),
         "run_date": today_str,
         "run_cycle": CYCLE,
     },}
@@ -216,7 +216,7 @@ feature = {
         "source": "NCEP GDAS 0.25°",
         "level_hPa": 850,
         "var": var_name,
-        "temp": f"{south_mean_temp:.2f}",
+        "temp": round(south_mean_temp, 3),
         "run_date": today_str,
         "run_cycle": CYCLE,
     },}
@@ -225,3 +225,39 @@ feature["properties"]["generated_at"] = dt.datetime.utcnow().isoformat(timespec=
 with open(out_path, "w") as f:
     json.dump({"type": "FeatureCollection", "features": [feature]}, f)
 print(f"Wrote {out_path}")
+
+# ------------------------
+# Append heat low data to data/heatlow_history.csv (idempotent per date)
+# ------------------------
+from pathlib import Path
+import pandas as pd
+
+# Use centroid latitude of the polygon as "mean latitude"
+north_mean_lat = float(north_largest_polygon.centroid.y)
+south_mean_lat = float(north_largest_polygon.centroid.y)
+
+history_path = Path("database") / "heatlow_history.csv"
+history_path.parent.mkdir(parents=True, exist_ok=True)
+
+row = {
+    "date": today_str,                  # YYYYMMDD from earlier in your script
+    "northheatlow_lat": round(north_mean_lat, 4)
+    "northheatlow_temp": round(north_mean_temp, 4)
+    "southheatlow_lat": round(south_mean_lat, 4)
+    "southheatlow_temp": round(south_mean_temp, 4)
+}
+
+if history_path.exists():
+    df = pd.read_csv(history_path, dtype={"date": str})
+    # drop any existing record for this date
+    df = df[df["date"] != row["date"]]
+    df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+else:
+    df = pd.DataFrame([row])
+
+df = df.sort_values("date")
+df.to_csv(history_path, index=False)
+
+print(f"Updated {history_path} for {row['date']}")
+
+print(df)
