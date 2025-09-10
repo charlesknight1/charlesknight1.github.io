@@ -162,10 +162,10 @@ history_path.parent.mkdir(parents=True, exist_ok=True)
 
 row = {
     "date": today_str,                  # YYYYMMDD from earlier in your script
-    "cab_len": round(cab_len, 4)
-    "cab_lat": round(cab_lat, 4)
-    "kd_len": round(kd_len, 4)
-    "kd_lat": round(kd_lat, 4)
+    "cab_len": round(cab_len, 4),
+    "cab_lat": round(cab_lat, 4),
+    "kd_len": round(kd_len, 4),
+    "kd_lat": round(kd_lat, 4),
 }
 
 if history_path.exists():
