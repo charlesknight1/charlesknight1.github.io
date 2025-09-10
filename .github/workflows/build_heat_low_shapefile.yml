@@ -1,0 +1,51 @@
+name: Build daily rainbelt shapefile
+
+on:
+  schedule:
+    - cron: "30 16 * * *"   # daily at 18:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate GeoJSON
+        env:
+          # Change these if you want 06/12/18 instead of 00Z
+          GDAS_CYCLE: "00"
+          AFRICA_GEOJSON_URL: "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
+        run: |
+          python scripts/process_heat_lows.py
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: |
+            tiles/north_heat_low.geojson
+          commit_message: "Update north_heat_low.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: |
+            tiles/south_heat_low.geojson
+          commit_message: "Update south_heat_low.geojson (${{ github.run_id }})"
+          
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: |
+            database/heatlow_history.csv
+          commit_message: "Update rainbelthistory.csv (${{ github.run_id }})"
