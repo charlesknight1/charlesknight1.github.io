@@ -30,11 +30,14 @@ jobs:
           GDAS_CYCLE: "00"
         run: |
           python scripts/process_cab.py
-
-      - name: Touch files to ensure they appear changed
-        run: touch drylines.geojson
-      
+     
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: tiles/drylines.geojson
           commit_message: "Update tiles/drylines.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: |
+            database/cab_history.csv
+          commit_message: "Update cab_history.csv (${{ github.run_id }})"
