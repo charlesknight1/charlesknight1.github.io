@@ -53,7 +53,7 @@ History:
           label: 'Rainbelt lower limit',
           data: rainsouth,
           borderColor: 'rgba(0,0,0,0)',   // invisible line
-          backgroundColor: 'rgba(255, 215, 0, 0.18)', // band color (soft yellow)
+          backgroundColor: 'rgba(30, 144, 255, 0.15)' // DodgerBlue with 15% opacity
           pointRadius: 0,
           tension: 0.2,
           fill: false,         // do not fill from lower line
@@ -64,8 +64,7 @@ History:
           label: 'Rainbelt upper limit',
           data: rainnorth,
           borderColor: 'rgba(0,0,0,0)',   // invisible line
-          // This backgroundColor is used to shade the area between upper & lower:
-          backgroundColor: 'rgba(255, 215, 0, 0.18)',
+          backgroundColor: 'rgba(30, 144, 255, 0.15)' // DodgerBlue with 15% opacity
           pointRadius: 0,
           tension: 0.2,
           fill: '-1',          // fill to the previous dataset (the lower limit)
