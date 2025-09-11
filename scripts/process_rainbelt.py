@@ -168,8 +168,8 @@ history_path.parent.mkdir(parents=True, exist_ok=True)
 row = {
     "date": today_str,                  # YYYYMMDD from earlier in your script
     "mean_latitude": round(mean_lat, 4),
-    "north_lim": round(north_lim, 4)
-    "south_lim": round(south_lim, 4)
+    "north_lim": round(north_lim, 4),
+    "south_lim": round(south_lim, 4),
 }
 
 if history_path.exists():
