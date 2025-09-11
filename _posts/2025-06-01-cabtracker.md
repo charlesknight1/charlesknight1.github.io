@@ -81,7 +81,6 @@ History:
           tension: 0.2,
           pointRadius: 2,
           spanGaps: true,
-          // 👇 this is the important part
           label: 'Heat Lows',
         }
 
@@ -108,9 +107,6 @@ History:
   });
 })();
 </script>
-
-
-
 
 Live:
 
@@ -438,7 +434,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   layerControl.addTo(map);
 
   let temperatureLayer = null;
-  const pmtilesUrl = 'https://example.com/tiles/raster.pmtiles'; // Placeholder URL
+  const pmtilesUrl = '/tiles/raster.pmtiles';
 
   async function setPmtilesLastModified() {
     try {
@@ -486,7 +482,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Rainbelt overlay
   let rainbeltLayer = null;
-  const rainbeltUrl = 'https://example.com/tiles/belt.geojson'; // Placeholder URL
+  const rainbeltUrl = '/tiles/belt.geojson';
   
   map.createPane('rainbeltPane');
   map.getPane('rainbeltPane').style.zIndex = 420;
@@ -518,7 +514,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // North heat low overlay
   let northHeatLowLayer = null;
-  const northHeatLowUrl = 'https://example.com/tiles/north_heat_low.geojson'; // Placeholder URL
+  const northHeatLowUrl = '/tiles/north_heat_low.geojson';
   
   map.createPane('northHeatLowPane');
   map.getPane('northHeatLowPane').style.zIndex = 421;
@@ -550,7 +546,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // South heat low overlay
   let southHeatLowLayer = null;
-  const southHeatLowUrl = 'https://example.com/tiles/south_heat_low.geojson'; // Placeholder URL
+  const southHeatLowUrl = 'tiles/south_heat_low.geojson'; 
   
   map.createPane('southHeatLowPane');
   map.getPane('southHeatLowPane').style.zIndex = 422;
