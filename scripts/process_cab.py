@@ -152,7 +152,10 @@ lat = cab_q_da.latitude.values
 lon = cab_q_da.longitude.values
 cab_points = np.where(cab_q_da[0] == 1)
 cab_len = len(cab_points[0])
-cab_lat = np.nanmean(lat[cab_points[0]])
+if cab_len > 40:
+    cab_lat = np.nanmean(lat[cab_points[0]])
+else:
+    cab_lat = np.nan
 kd_points =  np.where(kd_q_da[0] == 1)
 kd_len = len(kd_points[0])
 kd_lat = np.nanmean(lat[kd_points[0]])
