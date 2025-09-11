@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         <div class="layer-control-title">Map Layers</div>
         <div class="layer-control-toggle collapsed" id="layerControlToggle">►</div>
       </div>
-      <div class="layer-control-content" id="layerControlContent">
+      <div class="layer-control-content collapsed" id="layerControlContent">
         <label class="layer-checkbox-control">
           <input type="checkbox" id="toggleLayer" checked>
           <span>Land Surface Temperature</span>
