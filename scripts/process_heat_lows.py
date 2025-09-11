@@ -101,9 +101,9 @@ da_clip = da_smooth.rio.clip([mapping(africa_union)], crs=afr.crs, drop=False)
 # Define thresholds 
 # ------------------------
 
-north_africa_threshold = da_clip.sel(latitude=slice(35, 0)).quantile(0.95).item()
+north_africa_threshold = da_clip.sel(latitude=slice(35, 0)).quantile(0.9).item()
 print(f"North Africa 90th percentile: {north_africa_threshold:.4f}")
-south_africa_threshold = da_clip.sel(latitude=slice(0, -35)).quantile(0.95).item()
+south_africa_threshold = da_clip.sel(latitude=slice(0, -35)).quantile(0.9).item()
 print(f"South Africa 90th percentile: {south_africa_threshold:.4f}")
 
 # ------------------------
