@@ -20,6 +20,8 @@ History:
   const rainbelt = await d3.csv('database/rainbelt_history.csv', d3.autoType);
   const cab      = await d3.csv('database/cab_history.csv', d3.autoType);
   const hl       = await d3.csv('database/heatlow_history.csv', d3.autoType);
+  const rainnorth = rainbelt.map(d => d.north_lim);
+  const rainsouth = rainbelt.map(d => d.south_lim);
 
   // normalize YYYYMMDD -> YYYY-MM-DD
   function normDate(d) {
@@ -46,6 +48,30 @@ History:
     data: {
       labels,
       datasets: [
+      // --- shaded band: south -> north ---
+        {
+          label: 'Rainbelt lower limit',
+          data: rainsouth,
+          borderColor: 'rgba(0,0,0,0)',   // invisible line
+          backgroundColor: 'rgba(255, 215, 0, 0.18)', // band color (soft yellow)
+          pointRadius: 0,
+          tension: 0.2,
+          fill: false,         // do not fill from lower line
+          spanGaps: true,
+          order: 1
+        },
+        {
+          label: 'Rainbelt upper limit',
+          data: rainnorth,
+          borderColor: 'rgba(0,0,0,0)',   // invisible line
+          // This backgroundColor is used to shade the area between upper & lower:
+          backgroundColor: 'rgba(255, 215, 0, 0.18)',
+          pointRadius: 0,
+          tension: 0.2,
+          fill: '-1',          // fill to the previous dataset (the lower limit)
+          spanGaps: true,
+          order: 1
+        },
         {
           label: 'Tropical rainbelt latitude',
           data: rainbeltValues,
