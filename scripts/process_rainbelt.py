@@ -156,13 +156,20 @@ import pandas as pd
 
 # Use centroid latitude of the polygon as "mean latitude"
 mean_lat = float(largest_polygon.centroid.y)
+coords = np.asarray(largest_polygon.exterior.coords)
+all_lat = coords[:, 1]  # take the latitude column
+north_lim = float(np.quantile(all_lat, 0.90))  # 90th
+south_lim = float(np.quantile(all_lat, 0.10))  # 10th
+
 
 history_path = Path("database") / "rainbelt_history.csv"
 history_path.parent.mkdir(parents=True, exist_ok=True)
 
 row = {
     "date": today_str,                  # YYYYMMDD from earlier in your script
-    "mean_latitude": round(mean_lat, 4)
+    "mean_latitude": round(mean_lat, 4),
+    "north_lim": round(north_lim, 4)
+    "south_lim": round(south_lim, 4)
 }
 
 if history_path.exists():
