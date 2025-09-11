@@ -125,19 +125,53 @@ Live:
   border-radius: 5px;
   box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   min-width: 200px;
+  overflow: hidden;
 }
 
-.layer-control-content {
-  padding: 10px;
+.layer-control-header {
+  padding: 8px 10px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.layer-control-header:hover {
+  background: #e9ecef;
 }
 
 .layer-control-title {
   font-weight: bold;
   font-size: 14px;
-  margin-bottom: 8px;
   color: #333;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
+  margin: 0;
+}
+
+.layer-control-toggle {
+  font-size: 16px;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.layer-control-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+
+.layer-control-content {
+  padding: 10px;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  overflow: hidden;
+}
+
+.layer-control-content.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .layer-checkbox-control {
@@ -315,7 +349,7 @@ Live:
   </div>
   <div class="legend-row">
     <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
-    <span>Northern African Heat Low</span>
+    <span>Southern African Heat Low</span>
   </div>
 </section>
 
@@ -354,16 +388,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
-  // Create custom control for layer toggles AFTER map is created
+  // Create custom collapsible control for layer toggles
   const layerControl = L.control({ position: 'topright' });
 
   layerControl.onAdd = function(map) {
     const div = L.DomUtil.create('div', 'leaflet-control leaflet-bar layer-control');
     
     div.innerHTML = `
-      <div class="layer-control-content">
+      <div class="layer-control-header" id="layerControlHeader">
         <div class="layer-control-title">Map Layers</div>
-        
+        <div class="layer-control-toggle collapsed" id="layerControlToggle">►</div>
+      </div>
+      <div class="layer-control-content" id="layerControlContent">
         <label class="layer-checkbox-control">
           <input type="checkbox" id="toggleLayer" checked>
           <span>Land Surface Temperature</span>
@@ -405,7 +441,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   layerControl.addTo(map);
 
   let temperatureLayer = null;
-  const pmtilesUrl = '{{ "/tiles/raster.pmtiles" | relative_url }}';
+  const pmtilesUrl = 'https://example.com/tiles/raster.pmtiles'; // Placeholder URL
 
   async function setPmtilesLastModified() {
     try {
@@ -445,13 +481,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       .addTo(map);
   } catch (err) {
     console.error('PMTiles init error:', err);
-    document.getElementById('dateInfo').textContent = 'Date: Error loading data';
-    document.getElementById('pageTopDate').textContent = 'Error loading data';
+    const dateInfo = document.getElementById('dateInfo');
+    const pageTopDate = document.getElementById('pageTopDate');
+    if (dateInfo) dateInfo.textContent = 'Date: Error loading data';
+    if (pageTopDate) pageTopDate.textContent = 'Error loading data';
   }
 
   // Rainbelt overlay
   let rainbeltLayer = null;
-  const rainbeltUrl = '{{ "/tiles/belt.geojson" | relative_url }}';
+  const rainbeltUrl = 'https://example.com/tiles/belt.geojson'; // Placeholder URL
   
   map.createPane('rainbeltPane');
   map.getPane('rainbeltPane').style.zIndex = 420;
@@ -483,7 +521,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // North heat low overlay
   let northHeatLowLayer = null;
-  const northHeatLowUrl = '{{ "/tiles/north_heat_low.geojson" | relative_url }}';
+  const northHeatLowUrl = 'https://example.com/tiles/north_heat_low.geojson'; // Placeholder URL
   
   map.createPane('northHeatLowPane');
   map.getPane('northHeatLowPane').style.zIndex = 421;
@@ -515,7 +553,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // South heat low overlay
   let southHeatLowLayer = null;
-  const southHeatLowUrl = '{{ "/tiles/south_heat_low.geojson" | relative_url }}';
+  const southHeatLowUrl = 'https://example.com/tiles/south_heat_low.geojson'; // Placeholder URL
   
   map.createPane('southHeatLowPane');
   map.getPane('southHeatLowPane').style.zIndex = 422;
@@ -547,7 +585,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Congo Air Boundary points
   let cabLayer = null;
-  const cabUrl = '{{ "/tiles/drylines.geojson" | relative_url }}';
+  const cabUrl = 'https://example.com/tiles/drylines.geojson'; // Placeholder URL
   
   // Create panes for different sources
   map.createPane('cabPane');
@@ -628,14 +666,52 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   addCABPoints();
 
+  // Collapsible control functionality
+  let isCollapsed = false;
+  
+  function toggleLayerControl() {
+    const content = document.getElementById('layerControlContent');
+    const toggle = document.getElementById('layerControlToggle');
+    
+    if (!content || !toggle) return;
+    
+    isCollapsed = !isCollapsed;
+    
+    if (isCollapsed) {
+      content.style.maxHeight = '0px';
+      content.classList.add('collapsed');
+      toggle.classList.add('collapsed');
+      toggle.textContent = '►';
+    } else {
+      // Calculate natural height
+      content.style.maxHeight = 'none';
+      const naturalHeight = content.scrollHeight;
+      content.style.maxHeight = '0px';
+      
+      // Force reflow then animate to natural height
+      requestAnimationFrame(() => {
+        content.style.maxHeight = naturalHeight + 'px';
+        content.classList.remove('collapsed');
+        toggle.classList.remove('collapsed');
+        toggle.textContent = '▼';
+      });
+    }
+  }
+
   // Controls - Wait for control to be added to DOM
   setTimeout(() => {
+    const header = document.getElementById('layerControlHeader');
     const toggleLayerCheckbox = document.getElementById('toggleLayer');
     const toggleCABCheckbox = document.getElementById('toggleCAB');
     const toggleRainbeltCheckbox = document.getElementById('toggleRainbelt');
     const toggleNorthHeatLowCheckbox = document.getElementById('toggleNorthHeatLow');
     const toggleSouthHeatLowCheckbox = document.getElementById('toggleSouthHeatLow');
     const resetButton = document.getElementById('resetView');
+
+    // Add collapse/expand functionality
+    if (header) {
+      header.addEventListener('click', toggleLayerControl);
+    }
 
     if (toggleLayerCheckbox) {
       toggleLayerCheckbox.addEventListener('change', function() {
@@ -721,7 +797,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday. Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
 2. GSF atmospheric analysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
-3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) availible on [GitHub].(https://github.com/EmmaHoward/drylines)
+3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) available on [GitHub](https://github.com/EmmaHoward/drylines).
 
 **Feedback**
 
@@ -729,8 +805,12 @@ This page is experimental and in development. Please get in touch with any sugge
 
 **Supporting publications**
 
+Attwood, K., Washington, R. and Munday, C. (2024) ‘The Southern African Heat Low: Structure, Seasonal and Diurnal Variability, and Climatological Trends’, Journal of Climate, 37(10), pp. 3037–3053. Available at: https://doi.org/10.1175/JCLI-D-23-0522.1.
+
 Howard, E. and Washington, R. (2019) 'Drylines in Southern Africa: Rediscovering the Congo Air Boundary', _Journal of Climate_, 32(23), pp. 8223–8242. Available at: [https://doi.org/10.1175/JCLI-D-19-0437.1.](https://doi.org/10.1175/JCLI-D-19-0437.1.)
 
 Howard, E. and Washington, R. (2020) 'Tracing Future Spring and Summer Drying in Southern Africa to Tropical Lows and the Congo Air Boundary', _Journal of Climate_, 33(14), pp. 6205–6228. Available at: [https://doi.org/10.1175/JCLI-D-19-0755.1.](https://doi.org/10.1175/JCLI-D-19-0755.1.)
 
 Knight, C., & Washington, R. (2024). 'Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge'. _Journal of Climate_, 37(8), 2519-2539. Available at: [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1)
+
+
