@@ -98,8 +98,8 @@ History:
           ticks: { autoSkip: true, maxRotation: 0 }
         },
         y: {
-          min: -40,
-          max: 30,
+          min: -28,
+          max: 28,
           title: { display: true, text: 'Latitude (°)' }
         }
       }
@@ -309,7 +309,7 @@ Live:
 .legend-row { display:flex; align-items:center; gap:8px; margin:4px 0; }
 .legend-key { flex:0 0 auto; width:16px; height:12px; border:1px solid #888; }
 .legend-key.square { width:12px; height:12px; }
-.legend-gradient { width:100%; height:12px; border:1px solid #ccc; border-radius:2px; background-size:cover; }
+.legend-gradient {width: 100%; height: 12px; background: linear-gradient(to right, #ffffff 0%, #000000 100%); border: 1px solid #ccc; border-radius: 2px; }
 .legend-ticks { display:flex; justify-content:space-between; font-size:11px; color:#444; margin-top:2px; }
 </style>
 
@@ -348,29 +348,6 @@ Live:
     <span>Southern African Heat Low</span>
   </div>
 </section>
-
-<script>
-// Compact perceptual temp gradient (blue → red)
-(function(){
-  const min=0, max=50, mid=Math.round((min+max)/2);
-  function makeRamp(){
-    const c=document.createElement('canvas'); c.width=256; c.height=1;
-    const ctx=c.getContext('2d');
-    const g=ctx.createLinearGradient(0,0,c.width,0);
-    g.addColorStop(0,'#ffffff');   // white
-    g.addColorStop(1,'#000000');   // black
-    ctx.fillStyle=g; ctx.fillRect(0,0,c.width,1);
-    return c.toDataURL();
-  }
-  const grad=document.getElementById('lstGradient');
-  if(grad) grad.style.backgroundImage=`url(${makeRamp()})`;
-  document.getElementById('lstMin').textContent=`${min}°`;
-  document.getElementById('lstMid').textContent=`${mid}°`;
-  document.getElementById('lstMax').textContent=`${max}°`;
-})();
-</script>
-
-
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
@@ -660,7 +637,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   addCABPoints();
 
   // Collapsible control functionality
-  let isCollapsed = false;
+  let isCollapsed = true;
   
   function toggleLayerControl() {
     const content = document.getElementById('layerControlContent');
@@ -763,7 +740,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (resetButton) {
       resetButton.addEventListener('click', function() {
-        map.setView([-23, 25], 4);
+        map.setView([0, 20], 3);
       });
     }
   }, 100);
