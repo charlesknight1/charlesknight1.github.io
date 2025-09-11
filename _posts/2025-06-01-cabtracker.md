@@ -361,11 +361,8 @@ Live:
     const c=document.createElement('canvas'); c.width=256; c.height=1;
     const ctx=c.getContext('2d');
     const g=ctx.createLinearGradient(0,0,c.width,0);
-    g.addColorStop(0,'#2b83ba');   // blue
-    g.addColorStop(0.25,'#abdda4');// green
-    g.addColorStop(0.5,'#ffffbf'); // yellow
-    g.addColorStop(0.75,'#fdae61');// orange
-    g.addColorStop(1,'#d7191c');   // red
+    g.addColorStop(0,'#ffffff');   // white
+    g.addColorStop(1,'#000000');   // black
     ctx.fillStyle=g; ctx.fillRect(0,0,c.width,1);
     return c.toDataURL();
   }
@@ -585,7 +582,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Congo Air Boundary points
   let cabLayer = null;
-  const cabUrl = 'https://example.com/tiles/drylines.geojson'; // Placeholder URL
+  const cabUrl = '{{ "/tiles/drylines.geojson" | relative_url }}';
   
   // Create panes for different sources
   map.createPane('cabPane');
