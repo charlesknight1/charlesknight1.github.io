@@ -5,7 +5,7 @@ permalink: /tracker
 categories: projects
 ---
 
-This page documents the location of the tropical rainbelt over Africa and its seasonal migration relative to other large-scale climate features, including drylines and heat lows. Drylines such as the Congo Air Boundary and Intertropical Discontinuity latitudinally bound the rainbelt, while heat lows are argued to help "pull" the rainbelt north and south. 
+This page documents the location of the tropical rainbelt over Africa and its seasonal migration relative to other large-scale climate features, including drylines and heat lows. Drylines such as the Congo Air Boundary (southern Africa) and Intertropical Discontinuity (northern Africa) "sandwich" the rainbelt from the north and south, while heat lows help "pull" the rainbelt into the hemisphere that receives the stronger heating. 
 
 Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
 
@@ -794,6 +794,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 **Feedback**
 
 This page is experimental and in development. Please get in touch with any suggestions.
+
+The following features are known to interact with the location of the rainbelt and will soon be added to the tracker:
+- Cloud bands
+- Tropical cyclones
+- Upper-level wave breaking
 
 **Supporting publications**
 
