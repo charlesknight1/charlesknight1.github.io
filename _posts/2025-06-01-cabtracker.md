@@ -49,7 +49,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
       datasets: [
       // --- shaded band: south -> north ---
         {
-          label: 'Rainbelt lower limit',
+          label: '',
           data: rainsouth,
           borderColor: 'rgba(0,0,0,0)',   // invisible line
           backgroundColor: 'rgba(30, 144, 255, 0.15)', // DodgerBlue with 15% opacity
@@ -60,7 +60,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
           order: 1
         },
         {
-          label: 'Rainbelt upper limit',
+          label: 'Rainbelt range',
           data: rainnorth,
           borderColor: 'rgba(0,0,0,0)',   // invisible line
           backgroundColor: 'rgba(30, 144, 255, 0.15)', // DodgerBlue with 15% opacity
