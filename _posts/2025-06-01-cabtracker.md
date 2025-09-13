@@ -1,14 +1,13 @@
 ---
 layout: post
-title: Congo Air Boundary Tracker
+title: Rainbelt Tracker
 permalink: /tracker
 categories: projects
 ---
-Live Congo Air Boundary tracker.
 
-Data is up to date as of <span id="pageTopDate">Loading…</span>.
+This page documents the location of the tropical rainbelt over Africa and its seasonal migration relative to other large-scale climate features, including drylines and heat lows. Drylines such as the Congo Air Boundary and Intertropical Discontinuity latitudinally bound the rainbelt, while heat lows are argued to help "pull" the rainbelt north and south. 
 
-History:
+Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
 
 <!-- Chart.js and D3 (for CSV parsing) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -132,8 +131,6 @@ History:
   });
 })();
 </script>
-
-Live:
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
