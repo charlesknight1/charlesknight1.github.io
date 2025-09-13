@@ -73,7 +73,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
           order: 1
         },
         {
-          label: 'Tropical rainbelt latitude',
+          label: 'Tropical rainbelt',
           data: rainbeltValues,
           borderColor: '#1d4ed8',
           backgroundColor: '#1d4ed8',
@@ -81,7 +81,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
           pointRadius: 0
         },
         {
-          label: 'CAB latitude',
+          label: 'Congo Air Boundary',
           data: cabValues,
           borderColor: '#16a34a',
           backgroundColor: '#16a34a',
