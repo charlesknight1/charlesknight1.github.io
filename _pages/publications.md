@@ -26,8 +26,10 @@ permalink: /publications/
 
 <br>
 
-- **Knight, C.** Midlatitude control of Congo Air Boundary breakdown and early-summer rainfall over southern Africa. *Africa Meteorology and Climate Conference 2023, University of Oxford.* <span style="font-size:0.9em; color:gray;">28th March 2023.</span>
+- **Knight, C.** Observations of the atmosphere across the Congo Air Boundary. *14th International Conference on Southern Hemisphere Meteorology and Oceanography, Cape Town, South Africa.* <span style="font-size:0.9em; color:gray;">31st March 2025.</span>
 
 - **Knight, C.** First detailed observations of the African tropical edge dryline. *Africa Meteorology and Climate Conference 2024, UKCEH.* <span style="font-size:0.9em; color:gray;">3rd December 2024.</span>
 
-- **Knight, C.** Observations of the atmosphere across the Congo Air Boundary. *14th International Conference on Southern Hemisphere Meteorology and Oceanography, Cape Town, South Africa.* <span style="font-size:0.9em; color:gray;">31st March 2025.</span>
+- **Knight, C.** Midlatitude control of Congo Air Boundary breakdown and early-summer rainfall over southern Africa. *Africa Meteorology and Climate Conference 2023, University of Oxford.* <span style="font-size:0.9em; color:gray;">28th March 2023.</span>
+
+
