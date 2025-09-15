@@ -6,7 +6,7 @@ permalink: /publications/
 
 **2025**
 
-Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *In preparation*.
+Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). How well do atmospheric reanalyses represent the Congo Air Boundary? *In preparation*.
 
 *- This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and that they consequently struggle to resolve convective regime shifts around rainfall onset.*
 
