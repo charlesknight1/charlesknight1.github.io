@@ -145,7 +145,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
   border-radius: 5px;
   box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   min-width: 200px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .layer-control-header {
@@ -184,7 +184,7 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
 .layer-control-content {
   padding: 10px;
   transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .layer-control-content.collapsed {
@@ -326,8 +326,9 @@ Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
 .map-legend {
   background:#fff; border:1px solid #ddd; border-radius:6px;
   box-shadow:0 1px 4px rgba(0,0,0,.1);
-  margin:12px 0 0; padding:10px 12px; font-size:12px; color:#333;
+  margin:12px auto 0; padding:10px 12px; font-size:12px; color:#333;
   max-width:600px;
+  width:100%;
 }
 .map-legend h4 { margin:0 0 6px; font-size:13px; }
 .legend-row { display:flex; align-items:center; gap:8px; margin:4px 0; }
