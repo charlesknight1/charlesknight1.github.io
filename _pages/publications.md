@@ -5,20 +5,21 @@ permalink: /publications/
 ---
 
 **2025**
-Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *In preparation*.
-
-*This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and that they consequently struggle to resolve convective regime shifts around rainfall onset.*
-
 
 Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *In preparation*.
 
-*This work reveals the intricate mesoscale workings of the atmosphere at the southern Africa tropical edge for the first time, using field observations from the DRY-CAB project.*
+*- This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and that they consequently struggle to resolve convective regime shifts around rainfall onset.*
+
+
+Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *In preparation*.
+
+*- This work reveals the intricate mesoscale workings of the atmosphere at the southern Africa tropical edge for the first time, using field observations from the DRY-CAB project.*
 
 **2024**
 
 Knight, C., & Washington, R. (2024). Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge. *Journal of Climate*, 37(8), 2519-2539. [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1) (Open access)
 
-*This work shows a connection between rainfall onset timing over subtropical southern Africa and remote midlatitude processes (specifically Rossby Wave Breaking) in the South Atlantic.*
+*- This work shows a connection between rainfall onset timing over subtropical southern Africa and remote midlatitude processes (specifically Rossby Wave Breaking) in the South Atlantic.*
 
 # Conference papers
 
