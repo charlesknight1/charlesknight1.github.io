@@ -1,6 +1,5 @@
 ---
 layout: page
-title: Publications
 permalink: /publications/
 ---
 
@@ -8,25 +7,18 @@ permalink: /publications/
 
 ---
 
-## <span style="font-size:1.4em;">2025</span>
+<span style="font-size:1.6em;">**2025**</span>
 
-**Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W.** (2025).  
-*How well do atmospheric reanalyses represent the Congo Air Boundary?* <br>
-<span style="font-size:0.9em; color:gray;"><em>In preparation</em></span>
+**Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W.** (2025). *How well do atmospheric reanalyses represent the Congo Air Boundary?* <span style="font-size:0.9em; color:gray;"><em>In preparation</em></span>
 
 - <span style="font-size:0.95em;">This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and consequently struggle to resolve convective regime shifts around rainfall onset.</span>
 
-<br>
 
-**Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W.** (2025).  
-*Observations of the atmosphere across the Congo Air Boundary.* <br>
-<span style="font-size:0.9em; color:gray;"><em>In preparation</em></span>
+**Knight, C., Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W.** (2025). *Observations of the atmosphere across the Congo Air Boundary.* <span style="font-size:0.9em; color:gray;"><em>In preparation</em></span>
 
 - <span style="font-size:0.95em;">This work reveals the intricate mesoscale workings of the atmosphere at the southern Africa tropical edge for the first time, using field observations from the DRY-CAB project.</span>
 
----
-
-## <span style="font-size:1.4em;">2024</span>
+### <span style="font-size:1.4em;">2024</span>
 
 **Knight, C., & Washington, R.** (2024).  
 *Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge.*  
