@@ -20,12 +20,13 @@ permalink: /publications/
 
 - <span style="font-size:0.9em;">This work shows a connection between rainfall onset timing over subtropical southern Africa and remote midlatitude processes (specifically Rossby Wave Breaking) in the South Atlantic.</span>
 
-
-
+<br>
+<br>
 
 # 🎤 Conference Papers
 
-
+<br>
+<br>
 
 - **Knight, C.** Midlatitude control of Congo Air Boundary breakdown and early-summer rainfall over southern Africa. *Africa Meteorology and Climate Conference 2023, University of Oxford.* <span style="font-size:0.9em; color:gray;">28th March 2023.</span>
 
