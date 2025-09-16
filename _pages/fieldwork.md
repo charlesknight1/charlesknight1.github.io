@@ -6,6 +6,8 @@ permalink: /fieldwork/
 
 Recent projects:
 
+<span style="font-size:0.9em; color:gray;">Interactive map with clickable markers</span>  
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
@@ -87,12 +89,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
 });
-</script>
+</script>## 📅 Field Campaigns by Year  
 
-2025: [Kalahari Drylines](https://charlesknight1.github.io/drylines)
+- **2025**  
+  🌵 **[Kalahari Drylines](https://charlesknight1.github.io/drylines)** – investigating dryline dynamics in South Africa 
 
-2024: [Masika: East African Long Rains](https://charlesknight1.github.io/masika)
+- **2024**  
+  🌧️ **[Masika: East African Long Rains](https://charlesknight1.github.io/masika)** – studying rainfall onset and variability in East Africa  
 
-2023: [KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex) and [WesCON-WOEST: Atmospheric observations with UAS](https://charlesknight1.github.io/wescon)
+- **2023**  
+  🔥 **[KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)** – boundary layer and convection processes
+  
+  ✈️ **[WesCON-WOEST: UAS Atmospheric Observations](https://charlesknight1.github.io/wescon)** – using drones to monitor the weather  
 
-2022: [DRYCAB: Decreasing Rainfall to Year 2100 Role of the Congo Air Boundary](https://charlesknight1.github.io/drycab)
+- **2022**  
+  🌳 **[DRYCAB: Congo Air Boundary](https://charlesknight1.github.io/drycab)** – first observations of drylines on the edge of the Congo
