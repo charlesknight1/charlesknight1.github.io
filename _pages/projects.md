@@ -4,8 +4,6 @@ title: 🚀 Projects
 permalink: /projects/
 ---
 
-# 🌍 Projects  
-
 - 🌧️ **[Tropical Rainbelt Tracker](https://charlesknight1.github.io/tracker)**  
   <span style="color: gray; font-size: 0.9em;">Interactive tool for monitoring shifts in the location of the tropical rainbelt over Africa.</span>
 
