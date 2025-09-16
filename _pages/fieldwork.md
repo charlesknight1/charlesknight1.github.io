@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
   🌧️ **[Masika: East African Long Rains](https://charlesknight1.github.io/masika)** – studying rainfall onset and variability in East Africa  
 
 - **2023**  
-  🔥 **[KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)** – boundary layer and convection processes
+  🔥 **[KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)** – investigating the atmosphere inside a heat low 
   
   ✈️ **[WesCON-WOEST: UAS Atmospheric Observations](https://charlesknight1.github.io/wescon)** – using drones to monitor the weather  
 
