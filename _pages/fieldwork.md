@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 🌍 Fieldwork
+title: Fieldwork
 permalink: /fieldwork/
 ---
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-## 📅 Field Campaigns by Year  
+## Field Campaigns by Year  
 
 **2025**  
   🌵 **[Kalahari Drylines](https://charlesknight1.github.io/drylines)** – investigating dryline dynamics in South Africa 
