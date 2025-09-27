@@ -94,15 +94,15 @@ document.addEventListener("DOMContentLoaded", function () {
 ## Field Campaigns by Year  
 
 **2025**  
-  🌵 **[Kalahari Drylines](https://charlesknight1.github.io/drylines)** – investigating dryline dynamics in South Africa 
+  **[Kalahari Drylines](https://charlesknight1.github.io/drylines)** – investigating dryline dynamics in South Africa 
 
 **2024**  
-  🌧️ **[Masika: East African Long Rains](https://charlesknight1.github.io/masika)** – studying rainfall onset and variability in East Africa  
+  **[Masika: East African Long Rains](https://charlesknight1.github.io/masika)** – studying rainfall onset and variability in East Africa  
 
 **2023**  
-  🔥 **[KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)** – investigating the atmosphere inside a heat low 
+  **[KAPEX: Kalahari Atmospheric Processes Experiment](https://charlesknight1.github.io/kapex)** – investigating the atmosphere inside a heat low 
   
-  ✈️ **[WesCON-WOEST: UAS Atmospheric Observations](https://charlesknight1.github.io/wescon)** – using drones to monitor the weather  
+  **[WesCON-WOEST: UAS Atmospheric Observations](https://charlesknight1.github.io/wescon)** – using drones to monitor the weather  
 
 **2022**  
-  🌳 **[DRYCAB: Congo Air Boundary](https://charlesknight1.github.io/drycab)** – first observations of drylines on the edge of the Congo
+  **[DRYCAB: Congo Air Boundary](https://charlesknight1.github.io/drycab)** – first observations of drylines on the edge of the Congo
