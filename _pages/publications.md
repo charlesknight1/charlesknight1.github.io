@@ -6,21 +6,21 @@ permalink: /publications/
 
 <span style="font-size:1.4em;">**2025**</span>
 
-Munday, C., Washington, R., Engelstaedter, E., Zilli, M., Harbord, S., **Knight, C.,** Attwood, K., Hart, N. (2025). *Southern African Climate Change: Processes, Models, and Projections.* WIREs Climate Change. <span style="font-size:0.9em; color:gray;"><em>Accepted 27 September 2025.</em></span>
+Munday, C., Washington, R., Engelstaedter, E., Zilli, M., Harbord, S., **Knight, C.,** Attwood, K., Hart, N. (2025). Southern African Climate Change: Processes, Models, and Projections. *WIREs Climate Change.* <span style="font-size:0.9em; color:gray;"><em>Accepted 27 September 2025.</em></span>
 
 - <span style="font-size:0.9em;">This paper reviews our understanding of southern African climate and evaluates the performance of successive climate model generations. It documents improving confidence in projections of early summer drying, supported by emerging observed trends. However, it underscores the uncertainty in climate changes in the core rainy season (December-February) in part due to systematic climate model biases that have worsened through model generations.
 
-**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). *How well do atmospheric reanalyses represent the Congo Air Boundary?* <span style="font-size:0.9em; color:gray;"><em>In preparation.</em></span>
+**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). How well do atmospheric reanalyses represent the Congo Air Boundary? <span style="font-size:0.9em; color:gray;"><em>In preparation.</em></span>
 
 - <span style="font-size:0.9em;">This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and consequently struggle to resolve changes in convective regimes around rainfall onset.</span>
 
-**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). *Observations of the atmosphere across the Congo Air Boundary.* <span style="font-size:0.9em; color:gray;"><em>In preparation.</em></span>
+**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. <span style="font-size:0.9em; color:gray;"><em>In preparation.</em></span>
 
 - <span style="font-size:0.9em;">This work reveals the intricate mesoscale workings of the atmosphere at the southern Africa tropical edge for the first time, using field observations from the DRY-CAB project.</span>
 
 <span style="font-size:1.4em;">**2024**</span>
 
-**Knight, C.,** & Washington, R. (2024). *Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge.* <em>Journal of Climate</em>, 37(8), 2519-2539. [🔗 DOI: 10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1) <span style="font-size:1em; color:green;">(Open access)</span>
+**Knight, C.,** & Washington, R. (2024). Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge. *Journal of Climate*, 37(8), 2519-2539. [🔗 DOI: 10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1) <span style="font-size:1em; color:green;">(Open access)</span>
 
 - <span style="font-size:0.9em;">This work shows a connection between rainfall onset timing over subtropical southern Africa and remote midlatitude processes (specifically Rossby Wave Breaking) in the South Atlantic.</span>
 
