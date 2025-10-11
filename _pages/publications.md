@@ -6,7 +6,7 @@ permalink: /publications/
 
 <span style="font-size:1.4em;">**2025**</span>
 
-Munday, C., Washington, R., Engelstaedter, S., Zilli, M., Harbord, S., **Knight, C.,** Attwood, K. and Hart, N. (2025). Southern African Climate Change: Processes, Models, and Projections. *WIREs Climate Change*, 16(5).[🔗 DOI: 10.1002/wcc.70025](https://doi.org/10.1002/wcc.70025) <span style="font-size:1em; color:green;">(Open access)</span>
+Munday, C., Washington, R., Engelstaedter, S., Zilli, M., Harbord, S., **Knight, C.,** Attwood, K. and Hart, N. (2025). Southern African Climate Change: Processes, Models, and Projections. *WIREs Climate Change*, 16(5). [🔗 DOI: 10.1002/wcc.70025](https://doi.org/10.1002/wcc.70025) <span style="font-size:1em; color:green;">(Open access)</span>
 
 - <span style="font-size:0.9em;">This paper reviews our understanding of southern African climate change, documenting improving confidence in projections of early summer drying supported by emerging observed trends. However, it underscores the uncertainty in changes in the core rainy season (December-February) in part due to systematic climate model biases that have worsened through model generations.
 
