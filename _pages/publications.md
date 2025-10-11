@@ -10,7 +10,7 @@ Munday, C., Washington, R., Engelstaedter, S., Zilli, M., Harbord, S., **Knight,
 
 - <span style="font-size:0.9em;">This paper reviews our understanding of southern African climate change, documenting improving confidence in projections of early summer drying supported by emerging observed trends. However, it underscores the uncertainty in changes in the core rainy season (December-February) in part due to systematic climate model biases that have worsened through model generations.
 
-**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). How well do atmospheric reanalyses represent the Congo Air Boundary? <span style="font-size:0.9em; color:gray;"><em>Prepared for submission.</em></span>
+**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025).The Congo Air Boundary in atmospheric reanalyses: a process-based evaluation. <span style="font-size:0.9em; color:gray;"><em>Prepared for submission.</em></span>
 
 - <span style="font-size:0.9em;">This work shows that atmospheric reanalyses fail to simulate fundamental processes at the southern African tropical edge, and consequently struggle to resolve changes in convective regimes around rainfall onset.</span>
 
