@@ -9,7 +9,7 @@ This page documents the location of the tropical rainbelt over Africa and its se
 
 Across Africa, drylines such as the Congo Air Boundary (southern Africa) and Intertropical Discontinuity (northern Africa) "sandwich" the rainbelt from the north and south, while heat lows help "pull" the rainbelt into the hemisphere that receives the stronger heating. 
 
-The graph below shows the rainbelt currently migrating southward into southern Africa. The onset of the southern African summer monsoon typically occurs from November, after which the Congo Air Boundary does not form. Onset date is highly variable and generally poorly predicted as it is controlled by weather processes with fundamental predictability limits (e.g Rossby waves - (Knight and Washington 2023)[https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml]).
+The graph below shows the rainbelt currently migrating southward into southern Africa. The onset of the southern African summer monsoon typically occurs from November, after which the Congo Air Boundary does not form. Onset date is highly variable and generally poorly predicted as it is controlled by weather processes with fundamental predictability limits (e.g Rossby waves - [Knight and Washington 2023](https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml)).
 
 Data on this page is up to date as of <span id="pageTopDate">Loading…</span>.
 
