@@ -61,11 +61,11 @@ baseurl:
 
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
-header_pages:
-  - /_pages/fieldwork.md
-  - /_pages/projects.md
-  - /_pages/publications.md
-  - /_pages/tracker.md
+#header_pages:
+#  - /_pages/fieldwork.md
+#  - /_pages/projects.md
+#  - /_pages/publications.md
+#  - /_pages/tracker.md
 
 
 #
