@@ -1,0 +1,197 @@
+import xarray as xr
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import datetime as dt
+
+import numpy as np
+from matplotlib.ticker import FuncFormatter
+
+cab_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/cab_history.csv', parse_dates=['date'], index_col='date')
+heatlow_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/heatlow_history.csv', parse_dates=['date'], index_col='date')
+rainbelt_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/rainbelt_history.csv', parse_dates=['date'], index_col='date')
+
+most_recent_date = rainbelt_history.index.max()
+
+# Find the oldest date across all datasets
+oldest_date = min(cab_history.index.min(), heatlow_history.index.min(), rainbelt_history.index.min())
+days_of_history = (most_recent_date - oldest_date).days
+
+# Define transformation function with linear compression
+def date_to_compressed(date, most_recent, transition_days=20, compression_factor=0.3, forecast_days=10):
+    """Linear scale for recent data, compressed linear scale for historic data, extended for forecast"""
+    days_from_recent = (most_recent - date).days
+    if days_from_recent < 0:
+        # Forecast data: extend linearly into the future
+        return -days_from_recent
+    elif days_from_recent <= transition_days:
+        # Recent data: 1 day = 1 unit
+        return -days_from_recent
+    else:
+        # Historic data: 1 day = compression_factor units
+        historic_days = days_from_recent - transition_days
+        return -transition_days - (historic_days * compression_factor)
+
+def compressed_to_date(x_val, most_recent, transition_days=20, compression_factor=0.3):
+    """Inverse transformation for axis labels"""
+    if x_val >= 0:
+        # Future dates
+        days_forward = x_val
+        return most_recent + dt.timedelta(days=days_forward)
+    elif x_val >= -transition_days:
+        # Recent past
+        days_back = -x_val
+        return most_recent - dt.timedelta(days=days_back)
+    else:
+        # Compressed historic
+        compressed_part = (-x_val - transition_days)
+        days_back = transition_days + (compressed_part / compression_factor)
+        return most_recent - dt.timedelta(days=days_back)
+
+# Transform all dates
+transition_days = 5
+compression_factor = 0.3
+forecast_days = 10  # Space for 10 days of projections
+
+rainbelt_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in rainbelt_history.index]
+heatlow_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in heatlow_history.index]
+cab_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in cab_history.index]
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+# Use oldest_date instead of hardcoded 50 days
+ax.set_xlim(date_to_compressed(oldest_date, most_recent_date, transition_days, compression_factor), forecast_days)
+ax.set_ylim(-28, 28)
+ax.grid(which='both', linestyle='--', alpha=0.5)
+ax.set_ylabel('Latitude (°)', fontsize=12)
+
+# Add title
+ax.set_title(f"Tropical Rainbelt History and Forecast (valid: {most_recent_date.strftime('%d-%m-%Y')})",
+             fontsize=13, pad=10)
+
+# Remove top and right spines
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+# Custom x-axis formatter with better tick placement
+def format_date_axis(x, pos):
+    date = compressed_to_date(x, most_recent_date, transition_days, compression_factor)
+    return date.strftime('%d %b')
+
+# Set up x-axis ticks more explicitly
+tick_positions = []
+tick_dates = []
+
+# Add ticks every 7 days in the compressed historic region
+for days_back in range(days_of_history, transition_days, -7):
+    date = most_recent_date - dt.timedelta(days=days_back)
+    x_pos = date_to_compressed(date, most_recent_date, transition_days, compression_factor)
+    tick_positions.append(x_pos)
+    tick_dates.append(date.strftime('%d %b'))
+
+# Add ticks every 3-4 days in the recent region
+for days_back in range(transition_days, -1, -4):
+    date = most_recent_date - dt.timedelta(days=days_back)
+    x_pos = date_to_compressed(date, most_recent_date, transition_days, compression_factor)
+    tick_positions.append(x_pos)
+    tick_dates.append(date.strftime('%d %b'))
+
+# Add ticks in forecast region
+for days_forward in range(3, forecast_days+1, 3):
+    date = most_recent_date + dt.timedelta(days=days_forward)
+    x_pos = date_to_compressed(date, most_recent_date, transition_days, compression_factor)
+    tick_positions.append(x_pos)
+    tick_dates.append(date.strftime('%d %b'))
+
+ax.set_xticks(tick_positions)
+ax.set_xticklabels(tick_dates, rotation=45, ha='right')
+
+# plot rainbelt history
+ax.plot(rainbelt_x, rainbelt_history['mean_latitude'], label='Rainbelt Latitude', color='blue')
+ax.fill_between(rainbelt_x, rainbelt_history['south_lim'], rainbelt_history['north_lim'], color='blue', alpha=0.15, hatch='///')
+
+# plot heatlow history
+cmap = plt.get_cmap('YlOrRd')
+norm = plt.Normalize(vmin=297, vmax=301)
+
+# Background patch
+bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_recent_date, transition_days, compression_factor)
+ax.add_patch(plt.Rectangle((bg_x, -28), abs(bg_x), 56, color='lightgrey', alpha=0.5, zorder=0))
+
+for idx, (x_pos, row) in enumerate(zip(heatlow_x, heatlow_history.itertuples())):
+    if idx < len(heatlow_x) - 1:
+        width = heatlow_x[idx + 1] - x_pos
+    else:
+        width = 0 - x_pos
+    ax.add_patch(plt.Rectangle((x_pos, row.northheatlow_lat-1.5), width, 3, color=cmap(norm(row.northheatlow_temp))))
+    ax.add_patch(plt.Rectangle((x_pos, row.southheatlow_lat-1.5), width, 3, color=cmap(norm(row.southheatlow_temp))))
+
+# plot cab history
+ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
+
+# Add colorbar
+from matplotlib.cm import ScalarMappable
+sm = ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cbar = plt.colorbar(sm, ax=ax, label='Heat Low Temp (K)', extend='both', shrink=0.8, pad=0.02)
+cbar.set_label('Heat Low Strength', labelpad=-1)
+cbar.set_ticks([297, 301])
+cbar.set_ticklabels(['-', '+'], fontsize=12)
+
+# Add vertical line to show transition point (historic/recent)
+transition_x = date_to_compressed(most_recent_date - dt.timedelta(days=transition_days), most_recent_date, transition_days, compression_factor)
+ax.axvline(x=transition_x, color='gray', linestyle=':', alpha=0.5, linewidth=1.5)
+
+# Add vertical line to show present day
+present_x = date_to_compressed(most_recent_date, most_recent_date, transition_days, compression_factor)
+ax.axvline(x=present_x, color='red', linestyle='-', alpha=0.6, linewidth=2, label='Today', zorder=1)
+
+# plot forecast data
+
+import datetime as dt
+import numpy as np
+
+# --- Forecast plotting (robust) ---
+rainbelt_future = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/scripts/tmp/rainbelt_lat.csv').T
+
+for i, col in enumerate(rainbelt_future.columns):
+    future_lats_series = pd.to_numeric(rainbelt_future[col], errors='coerce')
+    n_periods = len(future_lats_series)
+    future_dates = pd.date_range(start=most_recent_date - dt.timedelta(days=1), periods=n_periods)
+    # compute compressed x positions as plain floats
+    future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days)
+                         for d in future_dates], dtype=float)
+
+    future_lats = future_lats_series.values.astype(float)
+    if i == 0:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
+    else:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
+
+cab_future = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/scripts/tmp/cab_gridcells.csv').T
+print(cab_future)
+cab_future_mean = cab_future[1:].mean(axis=1)
+future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
+n_periods = len(future_lats_series)
+future_dates = pd.date_range(start=most_recent_date, periods=n_periods)
+future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
+cmap = plt.get_cmap('Greens')
+norm = plt.Normalize(vmin=0, vmax=10)
+
+for i in range(10):
+    ax.add_patch(plt.Rectangle((future_x[i], -15-1.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+
+# add a colorbar for CAB forecast sizes
+sm_cab = ScalarMappable(cmap=cmap, norm=norm)
+sm_cab.set_array([])
+cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
+cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
+cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
+cbar_cab.set_ticks([0, 10])
+cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
+
+
+# Add legend
+ax.legend(loc='upper right', fontsize=10, frameon=False, bbox_to_anchor=(0.94, 1))
+
+plt.tight_layout()
+plt.show()
