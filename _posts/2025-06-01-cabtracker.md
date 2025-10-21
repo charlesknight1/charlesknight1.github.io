@@ -4,137 +4,20 @@ title: Tropical Rainbelt Tracker
 permalink: /tracker
 categories: projects
 ---
+**Overview.** This page documents the location of the tropical rainbelt over Africa and its seasonal migration. It also highlights how this movement relates to other large-scale climate features, including drylines and heat lows. Data is up to date as of *<span id="pageTopDate">Loading…</span>*.
 
-This page documents the location of the tropical rainbelt over Africa and its seasonal migration. It also highlights how this movement relates to other large-scale climate features, including drylines and heat lows.
+Across Africa, drylines such as the Congo Air Boundary (southern Africa) and Intertropical Discontinuity (northern Africa) "sandwich" the rainbelt from the north and south. Heat lows on either side of the equator act to draw the rainbelt toward the hemisphere experiencing stronger surface heating.
 
-Across Africa, drylines such as the Congo Air Boundary (southern Africa) and Intertropical Discontinuity (northern Africa) "sandwich" the rainbelt from the north and south, while heat lows help draw the rainbelt toward the hemisphere experiencing stronger surface heating.
+![img1](/assets/tracker/history_and_forecast.png)  
 
-The graph below shows the rainbelt currently migrating southward into southern Africa. The onset of the southern African summer monsoon typically occurs from November, after which the Congo Air Boundary does not form. Onset date is highly variable and generally poorly predicted as it is controlled by weather processes with fundamental predictability limits (e.g Rossby waves - [Knight and Washington 2023](https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml)).
+**History and forecast.** The figure above shows the recent evolution and short-term forecast of the African tropical rainbelt, together with associated surface features such as heat lows and the Congo Air Boundary (CAB).
 
-Data on this page are up to date as of <span id="pageTopDate">Loading…</span>.
+The blue band represents the observed position and north–south extent of the rainbelt, while green circles indicate the latitude and extent of the CAB.Colored bars show the latitude and thermal strength of northern and southern African heat lows, which influence the rainbelt’s migration through differential surface heating. To the right of the red line marking today, the ensemble forecast (black lines) shows the projected movement of the rainbelt over the next ten days. The shaded bar at the bottom depicts the probability of CAB occurrence through time.
 
-<!-- Chart.js and D3 (for CSV parsing) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+The onset of the southern African summer monsoon typically occurs from November onwards, after which the Congo Air Boundary does not form. The date of this onset varies greatly between years and is often difficult to predict, as it depends on weather-scale processes with limited inherent predictability (e.g., Rossby wave interactions; [Knight and Washington, 2023](https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml)).
 
-<canvas id="trend" height="120"></canvas>
-<script>
-(async () => {
-  const rainbelt = await d3.csv('database/rainbelt_history.csv', d3.autoType);
-  const cab      = await d3.csv('database/cab_history.csv', d3.autoType);
-  const hl       = await d3.csv('database/heatlow_history.csv', d3.autoType);
-  const rainnorth = rainbelt.map(d => d.north_lim);
-  const rainsouth = rainbelt.map(d => d.south_lim);
-
-  // normalize YYYYMMDD -> YYYY-MM-DD
-  function normDate(d) {
-    return d.slice(0,4) + "-" + d.slice(4,6) + "-" + d.slice(6,8);
-  }
-
-  // labels from rainbelt
-  const labels = rainbelt.map(d => normDate(String(d.date)));
-  const rainbeltValues = rainbelt.map(d => d.mean_latitude);
-
-  // CAB
-  const cabMap = new Map(cab.map(d => [normDate(String(d.date)), d.cab_lat]));
-  const cabValues = labels.map(d => cabMap.get(d) ?? null);
-
-  // Heat lows
-  const hlMapN = new Map(hl.map(d => [normDate(String(d.date)), d.northheatlow_lat]));
-  const hlMapS = new Map(hl.map(d => [normDate(String(d.date)), d.southheatlow_lat]));
-  const hlValuesN = labels.map(d => hlMapN.get(d) ?? null);
-  const hlValuesS = labels.map(d => hlMapS.get(d) ?? null);
-
-  const ctx = document.getElementById('trend').getContext('2d');
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-      // --- shaded band: south -> north ---
-        {
-          label: '',
-          data: rainsouth,
-          borderColor: 'rgba(0,0,0,0)',   // invisible line
-          backgroundColor: 'rgba(30, 144, 255, 0.15)', // DodgerBlue with 15% opacity
-          pointRadius: 0,
-          tension: 0.2,
-          fill: false,         // do not fill from lower line
-          spanGaps: true,
-          order: 1
-        },
-        {
-          label: 'Rainbelt range',
-          data: rainnorth,
-          borderColor: 'rgba(0,0,0,0)',   // invisible line
-          backgroundColor: 'rgba(30, 144, 255, 0.15)', // DodgerBlue with 15% opacity
-          pointRadius: 0,
-          tension: 0.2,
-          fill: '-1',          // fill to the previous dataset (the lower limit)
-          spanGaps: true,
-          order: 1
-        },
-        {
-          label: 'Tropical rainbelt',
-          data: rainbeltValues,
-          borderColor: '#1d4ed8',
-          backgroundColor: '#1d4ed8',
-          tension: 0.2,
-          pointRadius: 0
-        },
-        {
-          label: 'Congo Air Boundary',
-          data: cabValues,
-          borderColor: '#16a34a',
-          backgroundColor: '#16a34a',
-          tension: 0.2,
-          pointRadius: 2,
-          spanGaps: true
-        },
-        {
-          label: '',
-          data: hlValuesN,
-          borderColor: '#ff0000',
-          backgroundColor: '#ff0000',
-          borderDash: [4,3],
-          tension: 0.2,
-          pointRadius: 2,
-          spanGaps: true
-        },
-        {
-          data: hlValuesS,
-          borderColor: '#ff0000',
-          backgroundColor: '#ff0000',
-          borderDash: [6,3],
-          tension: 0.2,
-          pointRadius: 2,
-          spanGaps: true,
-          label: 'Heat Lows',
-        }
-
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          labels: { usePointStyle: true, boxWidth: 10 }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { autoSkip: true, maxRotation: 0 }
-        },
-        y: {
-          min: -28,
-          max: 28,
-          title: { display: true, text: 'Latitude (°)' }
-        }
-      }
-    }
-  });
-})();
-</script>
+**Current Conditions.** Below is a near–real-time map of African land surface temperatures, an accessible proxy for soil moisture.
+Overlaid are the current positions of the tropical rainbelt, heat lows, and drylines.
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
@@ -815,4 +698,4 @@ Howard, E. and Washington, R. (2020) 'Tracing Future Spring and Summer Drying in
 
 Knight, C., & Washington, R. (2024). 'Remote Midlatitude Control of Rainfall Onset at the Southern African Tropical Edge'. _Journal of Climate_, 37(8), 2519-2539. Available at: [https://doi.org/10.1175/JCLI-D-23-0446.1](https://doi.org/10.1175/JCLI-D-23-0446.1)
 
-
+Munday, C., Washington, R., Engelstaedter, S., Zilli, M., Harbord, S., Knight, C., Attwood, K. and Hart, N. (2025). Southern African Climate Change: Processes, Models, and Projections. WIREs Climate Change, 16(5). Available at: [https://doi.org/10.1002/wcc.70025](https://doi.org/10.1002/wcc.70025)
