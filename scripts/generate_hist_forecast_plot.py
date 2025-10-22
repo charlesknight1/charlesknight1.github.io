@@ -3,13 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import datetime as dt
-
 import numpy as np
 from matplotlib.ticker import FuncFormatter
+from pathlib import Path
 
-cab_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/cab_history.csv', parse_dates=['date'], index_col='date')
-heatlow_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/heatlow_history.csv', parse_dates=['date'], index_col='date')
-rainbelt_history = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/database/rainbelt_history.csv', parse_dates=['date'], index_col='date')
+TILES_DIR = Path("assets/tracker")
+TILES_DIR.mkdir(parents=True, exist_ok=True)
+
+cab_history = pd.read_csv('database/cab_history.csv', parse_dates=['date'], index_col='date')
+heatlow_history = pd.read_csv('database/heatlow_history.csv', parse_dates=['date'], index_col='date')
+rainbelt_history = pd.read_csv('database/rainbelt_history.csv', parse_dates=['date'], index_col='date')
 
 most_recent_date = rainbelt_history.index.max()
 
@@ -151,7 +154,7 @@ import datetime as dt
 import numpy as np
 
 # --- Forecast plotting (robust) ---
-rainbelt_future = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/scripts/tmp/rainbelt_lat.csv').T
+rainbelt_future = pd.read_csv('database/rainbelt_lat.csv').T
 
 for i, col in enumerate(rainbelt_future.columns):
     future_lats_series = pd.to_numeric(rainbelt_future[col], errors='coerce')
@@ -167,7 +170,7 @@ for i, col in enumerate(rainbelt_future.columns):
     else:
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
 
-cab_future = pd.read_csv('/soge-home/users/kebl6418/charlesknight1.github.io/scripts/tmp/cab_gridcells.csv').T
+cab_future = pd.read_csv('database/cab_gridcells.csv').T
 print(cab_future)
 cab_future_mean = cab_future[1:].mean(axis=1)
 future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
@@ -194,4 +197,4 @@ cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 ax.legend(loc='upper right', fontsize=10, frameon=False, bbox_to_anchor=(0.94, 1))
 
 plt.tight_layout()
-plt.show()
+plt.savefig('assets/tracker/history_and_forecast.png', dpi=300)

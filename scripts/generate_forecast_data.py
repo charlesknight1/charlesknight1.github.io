@@ -26,8 +26,8 @@ AFRICA_GEOJSON_URL = os.getenv(
     "AFRICA_GEOJSON_URL",
     "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json",
 )
-# TILES_DIR = Path("tiles")
-# TILES_DIR.mkdir(parents=True, exist_ok=True)
+TILES_DIR = Path("database")
+TILES_DIR.mkdir(parents=True, exist_ok=True)
 
 def specific_humidity_simple(ds):
     """
@@ -58,18 +58,34 @@ def specific_humidity_simple(ds):
 
 
 table_rain = []
+table_rain_north = []
+table_rain_south = []
 table_cab = []
+table_kd = []
 
-for ensemble_n in ['geavg', 'gec00', 'gep01', 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15']:
+for ensemble_n in ['geavg', 'gec00', 'gep01']:#, 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15']:
     row_rain = {'ensemble': ensemble_n}
+    row_rain_north = {'ensemble': ensemble_n}
+    row_rain_south = {'ensemble': ensemble_n}
     row_cab = {'ensemble': ensemble_n}
-    for lead in [0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240]:
+    row_kd = {'ensemble': ensemble_n}
+    for lead in [0, 24, 48]:#, 72, 96, 120, 144, 168, 192, 216, 240]:
         print(f"Downloading ensemble {ensemble_n} lead {lead}")
-        url = f"https://nomads.ncep.noaa.gov/cgi-bin/filter_gefs_atmos_0p50a.pl?dir=%2Fgefs.20251021%2F00%2Fatmos%2Fpgrb2ap5&file={ensemble_n}.t00z.pgrb2a.0p50.f{lead:03d}&var_RH=on&var_TMP=on&lev_850_mb=on&subregion=&toplat=90&leftlon=-180&rightlon=180&bottomlat=-90"
+        # ------------------------
+        # Build today's URL & download (no fallback)
+        # ------------------------
+        today_str = dt.datetime.utcnow().strftime("%Y%m%d")
+
+        url = (
+            "https://nomads.ncep.noaa.gov/cgi-bin/filter_gefs_atmos_0p50a.pl"
+            f"?dir=%2Fgefs.{today_str}%2F{CYCLE}%2Fatmos%2Fpgrb2ap5"
+            f"&file={ensemble_n}.t00z.pgrb2a.0p50.f{lead:03d}"
+            "&var_RH=on&var_TMP=on&lev_850_mb=on&"
+            "subregion=&toplat=90&leftlon=-180&rightlon=180&bottomlat=-90"
+        )
         
         grib_path = Path(f"gdas.t{CYCLE}z.{ensemble_n}.f{lead:03d}")
 
-        print(f"Downloading: {url}")
         r = requests.get(url, stream=True, timeout=120)
         if r.status_code != 200:
             print(f"ERROR: fetch failed with HTTP {r.status_code}", file=sys.stderr)
@@ -175,10 +191,15 @@ for ensemble_n in ['geavg', 'gec00', 'gep01', 'gep02', 'gep03', 'gep04', 'gep05'
         if largest_polygon is None:
             raise SystemExit("No valid polygon found — aborting job.")
 
-        print(f"Mean lat: {largest_polygon.centroid.y}")
-        row_rain[f"lead_{lead:03d}_mean_lat"] = largest_polygon.centroid.y
-        print(f"CAB gridcells: {np.nansum(cab_q)}")
+        # add data to databases
+        row_rain[f"lead_{lead:03d}"] = largest_polygon.centroid.y
+        coords = np.asarray(largest_polygon.exterior.coords)
+        all_lat = coords[:, 1]  # take the latitude column
+        row_rain_north[f"lead_{lead:03d}"] = float(np.quantile(all_lat, 0.90))  # 90th
+        row_rain_south[f"lead_{lead:03d}"] = float(np.quantile(all_lat, 0.10))
+
         row_cab[f"lead_{lead:03d}_cab_gridcells"] = np.nansum(cab_q)
+        row_kd[f"lead_{lead:03d}_kd_gridcells"] = np.nansum(kd_q)
 
         # delete downloaded file
         try:
@@ -189,10 +210,19 @@ for ensemble_n in ['geavg', 'gec00', 'gep01', 'gep02', 'gep03', 'gep04', 'gep05'
             continue
     
     table_rain.append(row_rain)
+    table_rain_north.append(row_rain_north)
+    table_rain_south.append(row_rain_south)
     table_cab.append(row_cab)
+    table_kd.append(row_kd)
 
 table_rain = pd.DataFrame(table_rain)
+table_rain_north = pd.DataFrame(table_rain_north)
+table_rain_south = pd.DataFrame(table_rain_south)
 table_cab = pd.DataFrame(table_cab)
+table_kd = pd.DataFrame(table_kd)
 
-table_rain.to_csv("rainbelt_lat.csv", index=False)
-table_cab.to_csv("cab_gridcells.csv", index=False)
+table_rain.to_csv("database/rainbelt_lat.csv", index=False)
+table_rain_north.to_csv("database/rainbelt_lat_north.csv", index=False)
+table_rain_south.to_csv("database/rainbelt_lat_south.csv", index=False)
+table_cab.to_csv("database/cab_gridcells.csv", index=False)
+table_kd.to_csv("database/kd_gridcells.csv", index=False)
