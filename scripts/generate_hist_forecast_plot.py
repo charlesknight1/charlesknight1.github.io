@@ -60,7 +60,7 @@ rainbelt_x = [date_to_compressed(d, most_recent_date, transition_days, compressi
 heatlow_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in heatlow_history.index]
 cab_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in cab_history.index]
 
-fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+fig, ax = plt.subplots(1, 1, figsize=(9, 6))
 # Use oldest_date instead of hardcoded 50 days
 ax.set_xlim(date_to_compressed(oldest_date, most_recent_date, transition_days, compression_factor), forecast_days)
 ax.set_ylim(-28, 28)
@@ -227,7 +227,7 @@ cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 
 
 # Add legend
-ax.legend(loc='upper right', fontsize=10, frameon=False, bbox_to_anchor=(0.94, 1))
+ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1, 1))
 
 plt.tight_layout()
 plt.savefig('assets/tracker/history_and_forecast.png', dpi=300)
