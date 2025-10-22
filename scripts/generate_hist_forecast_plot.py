@@ -60,7 +60,7 @@ rainbelt_x = [date_to_compressed(d, most_recent_date, transition_days, compressi
 heatlow_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in heatlow_history.index]
 cab_x = [date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in cab_history.index]
 
-fig, ax = plt.subplots(1, 1, figsize=(9, 6))
+fig, ax = plt.subplots(1, 1, figsize=(10, 5))
 # Use oldest_date instead of hardcoded 50 days
 ax.set_xlim(date_to_compressed(oldest_date, most_recent_date, transition_days, compression_factor), forecast_days)
 ax.set_ylim(-28, 28)
