@@ -209,21 +209,33 @@ cab_future = pd.read_csv('database/cab_gridcells.csv').T
 cab_future_mean = cab_future[1:].mean(axis=1)
 future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
 n_periods = len(future_CAB_series)
-future_dates = pd.date_range(start=forecast_start, periods=n_periods)
+future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
 future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
 cmap = plt.get_cmap('Greens')
 norm = plt.Normalize(vmin=0, vmax=20)
 for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -15-1.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+    ax.add_patch(plt.Rectangle((future_x[i], -26.5-4.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
+# --- Forecast plotting: KD ---
+cab_future = pd.read_csv('database/kd_gridcells.csv').T
+cab_future_mean = cab_future[1:].mean(axis=1)
+future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
+n_periods = len(future_CAB_series)
+future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
+future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
+cmap = plt.get_cmap('Reds')
+norm = plt.Normalize(vmin=0, vmax=20)
+for i in range(10):
+    ax.add_patch(plt.Rectangle((future_x[i], -26.5-1.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+    
 # add a colorbar for CAB forecast sizes
-sm_cab = ScalarMappable(cmap=cmap, norm=norm)
-sm_cab.set_array([])
-cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
-cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
-cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
-cbar_cab.set_ticks([0, 20])
-cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
+#sm_cab = ScalarMappable(cmap=cmap, norm=norm)
+#sm_cab.set_array([])
+#cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
+#cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
+#cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
+#cbar_cab.set_ticks([0, 20])
+#cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 
 
 # Add legend
