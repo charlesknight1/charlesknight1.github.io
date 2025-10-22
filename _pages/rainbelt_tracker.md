@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Rainbelt Tracker
-permalink: /tracker1/
+title: Tropical Rainbelt Tracker
+permalink: /tracker/
 ---
 
 **Overview.** This page documents the location of the tropical rainbelt over Africa and its seasonal migration. It also highlights how this movement relates to other large-scale climate features, including drylines and heat lows. Data is up to date as of *<span id="pageTopDate">Loading…</span>*.
