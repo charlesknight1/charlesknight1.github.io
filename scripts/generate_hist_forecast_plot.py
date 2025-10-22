@@ -63,7 +63,7 @@ cab_x = [date_to_compressed(d, most_recent_date, transition_days, compression_fa
 fig, ax = plt.subplots(1, 1, figsize=(10, 5))
 # Use oldest_date instead of hardcoded 50 days
 ax.set_xlim(date_to_compressed(oldest_date, most_recent_date, transition_days, compression_factor), forecast_days)
-ax.set_ylim(-28, 28)
+ax.set_ylim(-32, 32)
 ax.grid(which='both', linestyle='--', alpha=0.5)
 ax.set_ylabel('Latitude (°)', fontsize=12)
 
@@ -214,7 +214,7 @@ future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, co
 cmap = plt.get_cmap('Greens')
 norm = plt.Normalize(vmin=0, vmax=20)
 for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -26.5-4.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+    ax.add_patch(plt.Rectangle((future_x[i], -29), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
 # --- Forecast plotting: KD ---
 cab_future = pd.read_csv('database/kd_gridcells.csv').T
@@ -226,7 +226,7 @@ future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, co
 cmap = plt.get_cmap('Reds')
 norm = plt.Normalize(vmin=0, vmax=20)
 for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -26.5-1.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+    ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
     
 # add a colorbar for CAB forecast sizes
 #sm_cab = ScalarMappable(cmap=cmap, norm=norm)
@@ -239,7 +239,7 @@ for i in range(10):
 
 
 # Add legend
-ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1, 1))
+ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1, 0.95))
 
 plt.tight_layout()
 plt.savefig('assets/tracker/history_and_forecast.png', dpi=300)
