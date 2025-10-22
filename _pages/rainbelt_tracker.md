@@ -433,7 +433,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // South heat low overlay
   let southHeatLowLayer = null;
-  const southHeatLowUrl = 'tiles/south_heat_low.geojson'; 
+  const southHeatLowUrl = '/tiles/south_heat_low.geojson'; 
   
   map.createPane('southHeatLowPane');
   map.getPane('southHeatLowPane').style.zIndex = 422;
