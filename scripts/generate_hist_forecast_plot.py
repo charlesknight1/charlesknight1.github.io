@@ -154,7 +154,7 @@ ax.axvline(x=present_x, color='red', linestyle='-', alpha=0.6, linewidth=2, labe
 
 today = dt.datetime.now().date()
 days_lag = (today - most_recent_date.date()).days
-forecast_start = most_recent_date + dt.timedelta(days=days_lag)
+forecast_start = most_recent_date + dt.timedelta(days=days_lag-1)
 
 import datetime as dt
 import numpy as np
@@ -185,7 +185,7 @@ for i, col in enumerate(rainbelt_future.columns):
                          for d in future_dates], dtype=float)
     future_lats = future_lats_series.values.astype(float)
     if i == 0:
-        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5)
     else:
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
 
@@ -200,7 +200,7 @@ for i, col in enumerate(rainbelt_future.columns):
                          for d in future_dates], dtype=float)
     future_lats = future_lats_series.values.astype(float)
     if i == 0:
-        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5)
     else:
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
         
