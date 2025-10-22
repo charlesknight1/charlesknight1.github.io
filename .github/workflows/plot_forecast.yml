@@ -1,8 +1,8 @@
-name: plot forecast data
+name: Plot forecast
 
 on:
   schedule:
-    - cron: "0 17 * * *"   # daily at 17:00 UTC
+    - cron: "30 12 * * *"   # daily at 12:30 UTC
   workflow_dispatch: {}
 
 permissions:
