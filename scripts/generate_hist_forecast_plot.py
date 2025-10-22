@@ -148,38 +148,71 @@ ax.axvline(x=transition_x, color='gray', linestyle=':', alpha=0.5, linewidth=1.5
 present_x = date_to_compressed(most_recent_date, most_recent_date, transition_days, compression_factor)
 ax.axvline(x=present_x, color='red', linestyle='-', alpha=0.6, linewidth=2, label='Today', zorder=1)
 
+####################
 # plot forecast data
+####################
+
+today = dt.datetime.now().date()
+days_lag = (today - most_recent_date.date()).days
+forecast_start = most_recent_date + dt.timedelta(days=days_lag)
 
 import datetime as dt
 import numpy as np
 
-# --- Forecast plotting (robust) ---
+# --- Forecast plotting: Rainbelt mean lat ---
 rainbelt_future = pd.read_csv('database/rainbelt_lat.csv').T
-
 for i, col in enumerate(rainbelt_future.columns):
     future_lats_series = pd.to_numeric(rainbelt_future[col], errors='coerce')
     n_periods = len(future_lats_series)
-    future_dates = pd.date_range(start=most_recent_date - dt.timedelta(days=1), periods=n_periods)
+    future_dates = pd.date_range(start=forecast_start, periods=n_periods)
     # compute compressed x positions as plain floats
     future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days)
                          for d in future_dates], dtype=float)
-
     future_lats = future_lats_series.values.astype(float)
     if i == 0:
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
     else:
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
 
+# --- Forecast plotting: Rainbelt south ---
+rainbelt_future = pd.read_csv('database/rainbelt_lat_south.csv').T
+for i, col in enumerate(rainbelt_future.columns):
+    future_lats_series = pd.to_numeric(rainbelt_future[col], errors='coerce')
+    n_periods = len(future_lats_series)
+    future_dates = pd.date_range(start=forecast_start, periods=n_periods)
+    # compute compressed x positions as plain floats
+    future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days)
+                         for d in future_dates], dtype=float)
+    future_lats = future_lats_series.values.astype(float)
+    if i == 0:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
+    else:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
+
+# --- Forecast plotting: Rainbelt north ---
+rainbelt_future = pd.read_csv('database/rainbelt_lat_north.csv').T
+for i, col in enumerate(rainbelt_future.columns):
+    future_lats_series = pd.to_numeric(rainbelt_future[col], errors='coerce')
+    n_periods = len(future_lats_series)
+    future_dates = pd.date_range(start=forecast_start, periods=n_periods)
+    # compute compressed x positions as plain floats
+    future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days)
+                         for d in future_dates], dtype=float)
+    future_lats = future_lats_series.values.astype(float)
+    if i == 0:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, label='Rainbelt Forecast')
+    else:
+        ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
+        
+# --- Forecast plotting: CAB ---
 cab_future = pd.read_csv('database/cab_gridcells.csv').T
-print(cab_future)
 cab_future_mean = cab_future[1:].mean(axis=1)
 future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
-n_periods = len(future_lats_series)
-future_dates = pd.date_range(start=most_recent_date, periods=n_periods)
+n_periods = len(future_CAB_series)
+future_dates = pd.date_range(start=forecast_start, periods=n_periods)
 future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
 cmap = plt.get_cmap('Greens')
-norm = plt.Normalize(vmin=0, vmax=10)
-
+norm = plt.Normalize(vmin=0, vmax=20)
 for i in range(10):
     ax.add_patch(plt.Rectangle((future_x[i], -15-1.5), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
@@ -189,7 +222,7 @@ sm_cab.set_array([])
 cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
 cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
 cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
-cbar_cab.set_ticks([0, 10])
+cbar_cab.set_ticks([0, 20])
 cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 
 
