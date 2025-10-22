@@ -106,7 +106,7 @@ for days_forward in range(3, forecast_days+1, 3):
     tick_dates.append(date.strftime('%d %b'))
 
 ax.set_xticks(tick_positions)
-ax.set_xticklabels(tick_dates, rotation=90, ha='right')
+ax.set_xticklabels(tick_dates, rotation=90])
 
 # plot rainbelt history
 ax.plot(rainbelt_x, rainbelt_history['mean_latitude'], label='Rainbelt Latitude', color='blue')
