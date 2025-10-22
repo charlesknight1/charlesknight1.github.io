@@ -1,8 +1,8 @@
-name: Build daily LST PMTiles
+name: LST PMTiles
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # daily at 18:00 UTC
+    - cron: "0 12 * * *"   # daily at 12:00 UTC
   workflow_dispatch: {}
 
 permissions:
