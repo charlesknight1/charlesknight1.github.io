@@ -2,7 +2,7 @@ name: LST PMTiles
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # daily at 12:00 UTC
+    - cron: "45 11 * * *"   # daily at 12:00 UTC
   workflow_dispatch: {}
 
 permissions:
