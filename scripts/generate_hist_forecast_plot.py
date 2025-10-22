@@ -118,7 +118,7 @@ norm = plt.Normalize(vmin=297, vmax=301)
 
 # Background patch
 bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_recent_date, transition_days, compression_factor)
-ax.add_patch(plt.Rectangle((bg_x, -28), abs(bg_x), 56, color='lightgrey', alpha=0.5, zorder=0))
+ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha=0.5, zorder=0))
 
 for idx, (x_pos, row) in enumerate(zip(heatlow_x, heatlow_history.itertuples())):
     if idx < len(heatlow_x) - 1:
@@ -239,7 +239,7 @@ for i in range(10):
 
 
 # Add legend
-ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1, 0.95))
+ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1.05, 0.9))
 
 plt.tight_layout()
 plt.savefig('assets/tracker/history_and_forecast.png', dpi=300)
