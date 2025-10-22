@@ -1,8 +1,8 @@
-name: Build forecast data
+name: Get forecast
 
 on:
    schedule:
-     - cron: "0 17 * * *"   # daily at 17:00 UTC
+     - cron: "20 12 * * *"   # daily at 12:20 UTC
    workflow_dispatch: {}
 
 permissions:
