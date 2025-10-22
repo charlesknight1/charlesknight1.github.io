@@ -106,7 +106,7 @@ for days_forward in range(3, forecast_days+1, 3):
     tick_dates.append(date.strftime('%d %b'))
 
 ax.set_xticks(tick_positions)
-ax.set_xticklabels(tick_dates, rotation=45, ha='right')
+ax.set_xticklabels(tick_dates, rotation=90, ha='right')
 
 # plot rainbelt history
 ax.plot(rainbelt_x, rainbelt_history['mean_latitude'], label='Rainbelt Latitude', color='blue')
@@ -239,7 +239,7 @@ for i in range(10):
 
 
 # Add legend
-ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(1.05, 0.9))
+ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(0.95, 1))
 
 plt.tight_layout()
 plt.savefig('assets/tracker/history_and_forecast.png', dpi=300)
