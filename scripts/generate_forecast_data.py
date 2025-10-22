@@ -63,13 +63,13 @@ table_rain_south = []
 table_cab = []
 table_kd = []
 
-for ensemble_n in ['geavg', 'gec00', 'gep01']:#, 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15']:
+for ensemble_n in ['geavg', 'gec00', 'gep01', 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15']:
     row_rain = {'ensemble': ensemble_n}
     row_rain_north = {'ensemble': ensemble_n}
     row_rain_south = {'ensemble': ensemble_n}
     row_cab = {'ensemble': ensemble_n}
     row_kd = {'ensemble': ensemble_n}
-    for lead in [0, 24, 48]:#, 72, 96, 120, 144, 168, 192, 216, 240]:
+    for lead in [0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240]:
         print(f"Downloading ensemble {ensemble_n} lead {lead}")
         # ------------------------
         # Build today's URL & download (no fallback)
