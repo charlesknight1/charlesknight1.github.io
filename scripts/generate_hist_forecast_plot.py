@@ -115,18 +115,22 @@ ax.fill_between(rainbelt_x, rainbelt_history['south_lim'], rainbelt_history['nor
 # plot heatlow history
 cmap = plt.get_cmap('YlOrRd')
 norm = plt.Normalize(vmin=297, vmax=301)
-
-# Background patch
-bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_recent_date, transition_days, compression_factor)
-ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha=0.5, zorder=0))
-
+shift = 0.5
+last_width = 1.0
 for idx, (x_pos, row) in enumerate(zip(heatlow_x, heatlow_history.itertuples())):
     if idx < len(heatlow_x) - 1:
         width = heatlow_x[idx + 1] - x_pos
     else:
-        width = 0 - x_pos
-    ax.add_patch(plt.Rectangle((x_pos, row.northheatlow_lat-1.5), width, 3, color=cmap(norm(row.northheatlow_temp))))
-    ax.add_patch(plt.Rectangle((x_pos, row.southheatlow_lat-1.5), width, 3, color=cmap(norm(row.southheatlow_temp))))
+        width = last_width  # fixed width for last item
+    x_pos -= shift  # shift everything left by 0.5
+    ax.add_patch(plt.Rectangle((x_pos, row.northheatlow_lat - 1.5), width, 3,
+                               color=cmap(norm(row.northheatlow_temp))))
+    ax.add_patch(plt.Rectangle((x_pos, row.southheatlow_lat - 1.5), width, 3,
+                               color=cmap(norm(row.southheatlow_temp))))
+
+# Background patch
+bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_recent_date, transition_days, compression_factor)
+ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha=0.5, zorder=0))
 
 # plot cab history
 ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
@@ -229,13 +233,13 @@ for i in range(10):
     ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
     
 # add a colorbar for CAB forecast sizes
-#sm_cab = ScalarMappable(cmap=cmap, norm=norm)
-#sm_cab.set_array([])
-#cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
-#cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
-#cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
-#cbar_cab.set_ticks([0, 20])
-#cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
+sm_cab = ScalarMappable(cmap=cmap, norm=norm)
+sm_cab.set_array([])
+cbax = fig.add_axes([0.61, 0.25, 0.1, 0.03])  # [left, bottom, width, height]
+cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
+cbar_cab.set_label('p(CAB)', labelpad=-10)  # Adjust label padding (e.g., 10)
+cbar_cab.set_ticks([0, 20])
+cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 
 
 # Add legend
