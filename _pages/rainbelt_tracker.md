@@ -207,7 +207,7 @@ Overlaid are the current positions of the tropical rainbelt, heat lows, and dryl
 <div id="map" style="height: 500px; width: 100%; position: relative;">
 </div>
 
-<style>
+<!-- <style>
 .map-legend {
   background:#fff; border:1px solid #ddd; border-radius:6px;
   box-shadow:0 1px 4px rgba(0,0,0,.1);
@@ -221,9 +221,9 @@ Overlaid are the current positions of the tropical rainbelt, heat lows, and dryl
 .legend-key.square { width:12px; height:12px; }
 .legend-gradient {width: 100%; height: 12px; background: linear-gradient(to right, #ffffff 0%, #000000 100%); border: 1px solid #ccc; border-radius: 2px; }
 .legend-ticks { display:flex; justify-content:space-between; font-size:11px; color:#444; margin-top:2px; }
-</style>
+</style> -->
 
-<section class="map-legend">
+<!-- <section class="map-legend">
   <h4>Land Surface Temp (°C)</h4>
   <div id="lstGradient" class="legend-gradient"></div>
   <div class="legend-ticks">
@@ -256,6 +256,91 @@ Overlaid are the current positions of the tropical rainbelt, heat lows, and dryl
   <div class="legend-row">
     <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
     <span>Southern African Heat Low</span>
+  </div>
+</section> -->
+<style>
+.map-legend {
+  background:#fff; border:1px solid #ddd; border-radius:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,.1);
+  margin:12px auto 0; padding:10px 12px; font-size:12px; color:#333;
+  max-width:600px;
+  width:100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.legend-column {
+  display: flex;
+  flex-direction: column;
+}
+.map-legend h4 { margin:0 0 6px; font-size:13px; }
+.legend-row { display:flex; align-items:center; gap:8px; margin:4px 0; }
+.legend-key { flex:0 0 auto; width:16px; height:12px; border:1px solid #888; }
+.legend-key.square { width:12px; height:12px; }
+.legend-gradient {width: 100%; height: 12px; background: linear-gradient(to right, #ffffff 0%, #000000 100%); border: 1px solid #ccc; border-radius: 2px; }
+.legend-ticks { display:flex; justify-content:space-between; font-size:11px; color:#444; margin-top:2px; }
+
+@media (max-width: 500px) {
+  .map-legend {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<section class="map-legend">
+  <!-- Left Column: Land Surface Temp -->
+  <div class="legend-column">
+    <h4>Land Surface Temp (°C)</h4>
+    <div id="lstGradient" class="legend-gradient"></div>
+    <div class="legend-ticks">
+      <span id="lstMin">0°</span>
+      <span id="lstMid">25°</span>
+      <span id="lstMax">50°</span>
+    </div>
+  </div>
+
+  <!-- Right Column: Heat Low Strength -->
+  <div class="legend-column">
+    <h4>Heat Low Strength (K)</h4>
+    <div class="legend-gradient" style="background: linear-gradient(to right, rgb(253,141,60), rgb(189,0,38));"></div>
+    <div class="legend-ticks">
+      <span>297</span>
+      <span>299</span>
+      <span>301</span>
+    </div>
+  </div>
+
+  <!-- Map Features - Left Column -->
+  <div class="legend-column">
+    <h4 style="margin-top:8px;">Map Features</h4>
+    <div class="legend-row">
+      <span class="legend-key" style="background:rgba(29,78,216,.3); border-color:#1d4ed8;"></span>
+      <span>Tropical Rainbelt</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-key square" style="background:#16a34a; border-color:#15803d;"></span>
+      <span>Congo Air Boundary</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-key square" style="background:#dc2626; border-color:#b91c1c;"></span>
+      <span>Kalahari Discontinuity</span>
+    </div>
+  </div>
+
+  <!-- Map Features - Right Column -->
+  <div class="legend-column" style="margin-top:28px;">
+    <div class="legend-row">
+      <span class="legend-key square" style="background:#ffffff; border-color:#999;"></span>
+      <span>Other Dryline</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-key" style="background:rgba(253,141,60,.5); border-color:rgb(253,141,60);"></span>
+      <span>Northern African Heat Low</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-key" style="background:rgba(253,141,60,.5); border-color:rgb(253,141,60);"></span>
+      <span>Southern African Heat Low</span>
+    </div>
   </div>
 </section>
 
@@ -399,10 +484,45 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   addRainbelt();
 
+  // YlOrRd colormap function (Yellow-Orange-Red) - defined once for both heat lows
+  function getYlOrRdColor(temp) {
+    // Normalize temperature between 297-301K to 0-1 range
+    const normalized = Math.max(0, Math.min(1, (temp - 297) / (301 - 297)));
+    
+    // YlOrRd color interpolation (4 key colors, starting from yellow)
+    const colors = [
+      { pos: 0.0, r: 255, g: 237, b: 160 },  // Yellow
+      { pos: 0.33, r: 254, g: 178, b: 76 },  // Orange
+      { pos: 0.67, r: 253, g: 141, b: 60 },  // Dark orange
+      { pos: 1.0, r: 189, g: 0, b: 38 }      // Dark red
+    ];
+    // Find the two colors to interpolate between
+    let lower = colors[0];
+    let upper = colors[colors.length - 1];
+    
+    for (let i = 0; i < colors.length - 1; i++) {
+      if (normalized >= colors[i].pos && normalized <= colors[i + 1].pos) {
+        lower = colors[i];
+        upper = colors[i + 1];
+        break;
+      }
+    }
+    
+    // Interpolate between the two colors
+    const range = upper.pos - lower.pos;
+    const rangePct = range === 0 ? 0 : (normalized - lower.pos) / range;
+    
+    const r = Math.round(lower.r + (upper.r - lower.r) * rangePct);
+    const g = Math.round(lower.g + (upper.g - lower.g) * rangePct);
+    const b = Math.round(lower.b + (upper.b - lower.b) * rangePct);
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
   // North heat low overlay
   let northHeatLowLayer = null;
   const northHeatLowUrl = '/tiles/north_heat_low.geojson';
-  
+
   map.createPane('northHeatLowPane');
   map.getPane('northHeatLowPane').style.zIndex = 421;
     
@@ -411,18 +531,29 @@ document.addEventListener("DOMContentLoaded", async function () {
       const res = await fetch(northHeatLowUrl, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const geojson = await res.json();
-  
+
       northHeatLowLayer = L.geoJSON(geojson, {
         pane: 'northHeatLowPane',
-        style: feature => ({
-          color: '#FF0000',
-          weight: 1,
-          opacity: 0.9,
-          fillColor: '#FF0000',
-          fillOpacity: 0.2
-        }),
+        style: feature => {
+          const temp = feature.properties.temp;
+          const color = getYlOrRdColor(temp);
+          
+          return {
+            color: color,
+            weight: 1,
+            opacity: 0.9,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        },
         onEachFeature: (feature, layer) => {
-          layer.bindPopup("Northern African Heat Low");
+          const props = feature.properties;
+          layer.bindPopup(`
+            <strong>Northern African Heat Low</strong><br>
+            Temperature: ${props.temp.toFixed(2)}K<br>
+            Level: ${props.level_hPa} hPa<br>
+            Run: ${props.run_date} ${props.run_cycle}Z
+          `);
         }
       }).addTo(map);
     } catch (err) {
@@ -434,7 +565,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // South heat low overlay
   let southHeatLowLayer = null;
   const southHeatLowUrl = '/tiles/south_heat_low.geojson'; 
-  
+
   map.createPane('southHeatLowPane');
   map.getPane('southHeatLowPane').style.zIndex = 422;
     
@@ -443,18 +574,29 @@ document.addEventListener("DOMContentLoaded", async function () {
       const res = await fetch(southHeatLowUrl, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const geojson = await res.json();
-  
+
       southHeatLowLayer = L.geoJSON(geojson, {
         pane: 'southHeatLowPane',
-        style: feature => ({
-          color: '#FF0000',
-          weight: 1,
-          opacity: 0.9,
-          fillColor: '#FF0000',
-          fillOpacity: 0.2
-        }),
+        style: feature => {
+          const temp = feature.properties.temp;
+          const color = getYlOrRdColor(temp);
+          
+          return {
+            color: color,
+            weight: 1,
+            opacity: 0.9,
+            fillColor: color,
+            fillOpacity: 0.5
+          };
+        },
         onEachFeature: (feature, layer) => {
-          layer.bindPopup("Southern African Heat Low");
+          const props = feature.properties;
+          layer.bindPopup(`
+            <strong>Southern African Heat Low</strong><br>
+            Temperature: ${props.temp.toFixed(2)}K<br>
+            Level: ${props.level_hPa} hPa<br>
+            Run: ${props.run_date} ${props.run_cycle}Z
+          `);
         }
       }).addTo(map);
     } catch (err) {
@@ -675,9 +817,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 **Data Sources**
 
-1. MSG-3 SEVIRI Land Surface Temperature retrieved for 11:00UTC yesterday. Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
-2. GSF atmospheric analysis valid 00:00 UTC today. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
-3. Congo Air Boundary gridcells detected with the canny edge method of Howard and Washington (2019) available on [GitHub](https://github.com/EmmaHoward/drylines).
+1. MSG-3 SEVIRI 11:00UTC Land Surface Temperature. Data available at [https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/](https://datalsasaf.lsasvcs.ipma.pt/PRODUCTS/MSG/MLST/).
+2. GSF 00:00 UTC atmospheric analysis. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
+2. GSF 00:00 UTC ensemble forecast. Data available at [https://nomads.ncep.noaa.gov/](https://nomads.ncep.noaa.gov/)
+3. Dryline gridcells detected with the canny edge method of Howard and Washington (2019) available on [GitHub](https://github.com/EmmaHoward/drylines).
 
 **Feedback**
 
