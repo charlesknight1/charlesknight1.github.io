@@ -250,7 +250,14 @@ Overlaid are the current positions of the tropical rainbelt, heat lows, and dryl
   <!-- Right Column: Heat Low Strength -->
   <div class="legend-column">
     <h4>Heat Low Strength (K)</h4>
-    <div class="legend-gradient" style="background: linear-gradient(to right, rgb(253,141,60), rgb(189,0,38));"></div>
+    <div class="legend-gradient" style="
+      background: linear-gradient(to right,
+        rgb(255,255,204) 0%,
+        rgb(255,237,160) 25%,
+        rgb(254,178,76) 50%,
+        rgb(253,141,60) 75%,
+        rgb(189,0,38) 100%);
+    "></div>
     <div class="legend-ticks">
       <span>297</span>
       <span>299</span>
