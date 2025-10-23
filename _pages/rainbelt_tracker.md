@@ -203,61 +203,9 @@ Overlaid are the current positions of the tropical rainbelt, heat lows, and dryl
 }
 </style>
 
-
 <div id="map" style="height: 500px; width: 100%; position: relative;">
 </div>
 
-<!-- <style>
-.map-legend {
-  background:#fff; border:1px solid #ddd; border-radius:6px;
-  box-shadow:0 1px 4px rgba(0,0,0,.1);
-  margin:12px auto 0; padding:10px 12px; font-size:12px; color:#333;
-  max-width:600px;
-  width:100%;
-}
-.map-legend h4 { margin:0 0 6px; font-size:13px; }
-.legend-row { display:flex; align-items:center; gap:8px; margin:4px 0; }
-.legend-key { flex:0 0 auto; width:16px; height:12px; border:1px solid #888; }
-.legend-key.square { width:12px; height:12px; }
-.legend-gradient {width: 100%; height: 12px; background: linear-gradient(to right, #ffffff 0%, #000000 100%); border: 1px solid #ccc; border-radius: 2px; }
-.legend-ticks { display:flex; justify-content:space-between; font-size:11px; color:#444; margin-top:2px; }
-</style> -->
-
-<!-- <section class="map-legend">
-  <h4>Land Surface Temp (°C)</h4>
-  <div id="lstGradient" class="legend-gradient"></div>
-  <div class="legend-ticks">
-    <span id="lstMin">0°</span>
-    <span id="lstMid">25°</span>
-    <span id="lstMax">50°</span>
-  </div>
-
-  <h4 style="margin-top:8px;">Map Features</h4>
-  <div class="legend-row">
-    <span class="legend-key" style="background:rgba(29,78,216,.3); border-color:#1d4ed8;"></span>
-    <span>Tropical Rainbelt</span>
-  </div>
-  <div class="legend-row">
-    <span class="legend-key square" style="background:#16a34a; border-color:#15803d;"></span>
-    <span>Congo Air Boundary</span>
-  </div>
-  <div class="legend-row">
-    <span class="legend-key square" style="background:#dc2626; border-color:#b91c1c;"></span>
-    <span>Kalahari Discontinuity</span>
-  </div>
-  <div class="legend-row">
-    <span class="legend-key square" style="background:#ffffff; border-color:#999;"></span>
-    <span>Other Dryline</span>
-  </div>
-  <div class="legend-row">
-    <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
-    <span>Northern African Heat Low</span>
-  </div>
-  <div class="legend-row">
-    <span class="legend-key" style="background:rgba(255,0,0,.2); border-color:#ff0000;"></span>
-    <span>Southern African Heat Low</span>
-  </div>
-</section> -->
 <style>
 .map-legend {
   background:#fff; border:1px solid #ddd; border-radius:6px;
@@ -475,7 +423,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           fillOpacity: 0.3
         }),
         onEachFeature: (feature, layer) => {
-          layer.bindPopup("Tropical Rainbelt");
+          const props = feature.properties;
+          layer.bindPopup(`
+            <strong>Tropical Rainbelt</strong><br>
+            Variable: ${props.var}<br>
+            Threshold: ${props.threshold}<br>
+            Level: ${props.level_hPa} hPa<br>
+            Run: ${props.run_date} ${props.run_cycle}Z
+          `);
         }
       }).addTo(map);
     } catch (err) {
@@ -491,10 +446,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     // YlOrRd color interpolation (4 key colors, starting from yellow)
     const colors = [
-      { pos: 0.0, r: 255, g: 237, b: 160 },  // Yellow
-      { pos: 0.33, r: 254, g: 178, b: 76 },  // Orange
-      { pos: 0.67, r: 253, g: 141, b: 60 },  // Dark orange
-      { pos: 1.0, r: 189, g: 0, b: 38 }      // Dark red
+      { pos: 0.0, r: 255, g: 255, b: 204 },
+      { pos: 0.25, r: 255, g: 237, b: 160 },
+      { pos: 0.5, r: 254, g: 178, b: 76 },
+      { pos: 0.75, r: 253, g: 141, b: 60 },
+      { pos: 1.0, r: 189, g: 0, b: 38 }
     ];
     // Find the two colors to interpolate between
     let lower = colors[0];
