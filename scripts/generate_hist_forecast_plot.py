@@ -51,54 +51,6 @@ def compressed_to_date(x_val, most_recent, transition_days=20, compression_facto
         days_back = transition_days + (compressed_part / compression_factor)
         return most_recent - dt.timedelta(days=days_back)
 
-def date_to_compressed(date, most_recent, transition_days=20,
-                       compression_factor=0.3, forecast_days=10, anchor_offset=0):
-    """
-    Map a date-like to compressed x-units.
-    - Normalizes both inputs to dates (drops time-of-day).
-    - anchor_offset: integer days added to result (useful for ±1 adjustments).
-      If you want most_recent -> 0, use anchor_offset=0 (default).
-      If you want most_recent -> -1 (i.e. shift everything left by 1), use anchor_offset=-1.
-    """
-    # normalize to dates
-    d = pd.to_datetime(date).date()
-    mr = pd.to_datetime(most_recent).date()
-
-    days_from_recent = (mr - d).days  # integer days
-
-    if days_from_recent < 0:
-        # future: map forward positively (1 day forward -> x = 1)
-        x = -days_from_recent
-    elif days_from_recent <= transition_days:
-        # recent: 1 day = 1 unit
-        x = -days_from_recent
-    else:
-        historic_days = days_from_recent - transition_days
-        x = -transition_days - (historic_days * compression_factor)
-
-    return x + anchor_offset
-def compressed_to_date(x_val, most_recent, transition_days=20,
-                       compression_factor=0.3, anchor_offset=0):
-    """
-    Inverse of date_to_compressed when using the same anchor_offset.
-    """
-    # remove anchor first
-    x = x_val - anchor_offset
-    mr = pd.to_datetime(most_recent).date()
-
-    if x >= 0:
-        days_forward = int(round(x))
-        return mr + dt.timedelta(days=days_forward)
-    elif x >= -transition_days:
-        days_back = int(round(-x))
-        return mr - dt.timedelta(days=days_back)
-    else:
-        compressed_part = (-x - transition_days)
-        days_back = transition_days + (compressed_part / compression_factor)
-        # If you want integer days, round or floor as appropriate
-        return mr - dt.timedelta(days=days_back)
-
-
 # Transform all dates
 transition_days = 5
 compression_factor = 0.3
@@ -163,14 +115,18 @@ ax.fill_between(rainbelt_x, rainbelt_history['south_lim'], rainbelt_history['nor
 # plot heatlow history
 cmap = plt.get_cmap('YlOrRd')
 norm = plt.Normalize(vmin=297, vmax=301)
-
+shift = 0.5
+last_width = 1.0
 for idx, (x_pos, row) in enumerate(zip(heatlow_x, heatlow_history.itertuples())):
     if idx < len(heatlow_x) - 1:
         width = heatlow_x[idx + 1] - x_pos
     else:
-        width = 0 - x_pos
-    ax.add_patch(plt.Rectangle((x_pos, row.northheatlow_lat-1.5), width, 3, color=cmap(norm(row.northheatlow_temp))))
-    ax.add_patch(plt.Rectangle((x_pos, row.southheatlow_lat-1.5), width, 3, color=cmap(norm(row.southheatlow_temp))))
+        width = last_width  # fixed width for last item
+    x_pos -= shift  # shift everything left by 0.5
+    ax.add_patch(plt.Rectangle((x_pos, row.northheatlow_lat - 1.5), width, 3,
+                               color=cmap(norm(row.northheatlow_temp))))
+    ax.add_patch(plt.Rectangle((x_pos, row.southheatlow_lat - 1.5), width, 3,
+                               color=cmap(norm(row.southheatlow_temp))))
 
 # Background patch
 bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_recent_date, transition_days, compression_factor)
