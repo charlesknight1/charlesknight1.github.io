@@ -233,13 +233,13 @@ for i in range(10):
     ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap(norm(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
     
 # add a colorbar for CAB forecast sizes
-#sm_cab = ScalarMappable(cmap=cmap, norm=norm)
-#sm_cab.set_array([])
-#cbax = fig.add_axes([0.61, 0.25, 0.15, 0.03])  # [left, bottom, width, height]
-#cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
-#cbar_cab.set_label('p(CAB)', labelpad=-5)  # Adjust label padding (e.g., 10)
-#cbar_cab.set_ticks([0, 20])
-#cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
+sm_cab = ScalarMappable(cmap=cmap, norm=norm)
+sm_cab.set_array([])
+cbax = fig.add_axes([0.61, 0.25, 0.1, 0.03])  # [left, bottom, width, height]
+cbar_cab = plt.colorbar(sm_cab, cax=cbax, label='p(CAB)', orientation='horizontal', extend='both')
+cbar_cab.set_label('p(CAB)', labelpad=-10)  # Adjust label padding (e.g., 10)
+cbar_cab.set_ticks([0, 20])
+cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 
 
 # Add legend
