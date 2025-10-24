@@ -158,7 +158,7 @@ ax.axvline(x=present_x, color='red', linestyle='-', alpha=0.6, linewidth=2, labe
 
 today = dt.datetime.now().date()
 days_lag = (today - most_recent_date.date()).days
-forecast_start = most_recent_date + dt.timedelta(days=days_lag-2)
+forecast_start = most_recent_date + dt.timedelta(days=days_lag-1)
 
 import datetime as dt
 import numpy as np
