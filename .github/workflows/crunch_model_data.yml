@@ -1,1 +1,107 @@
-
+name: Daily Data Processing
+on:
+  schedule:
+    - cron: "0 12 * * *"   # daily at 12:00 UTC
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  process-all-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # Rainbelt shapefile (was 12:00 UTC)
+      - name: Generate Rainbelt GeoJSON
+        env:
+          GDAS_CYCLE: "00"
+          AFRICA_GEOJSON_URL: "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
+        run: |
+          python scripts/process_rainbelt.py
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: tiles/belt.geojson
+          commit_message: "Update belt.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: database/rainbelt_history.csv
+          commit_message: "Update rainbelt_history.csv (${{ github.run_id }})"
+      
+      # CAB pixel shapefile (was 12:10 UTC)
+      - name: Generate CAB GeoJSON
+        env:
+          GDAS_CYCLE: "00"
+        run: |
+          python scripts/process_cab.py
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: tiles/drylines.geojson
+          commit_message: "Update tiles/drylines.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: database/cab_history.csv
+          commit_message: "Update cab_history.csv (${{ github.run_id }})"
+      
+      # Heat low shapefile (was 12:15 UTC)
+      - name: Generate Heat Low GeoJSON
+        env:
+          GDAS_CYCLE: "00"
+          AFRICA_GEOJSON_URL: "https://gist.githubusercontent.com/1310aditya/35b939f63d9bf7fbafb0ab28eb878388/raw/africa.json"
+        run: |
+          python scripts/process_heat_lows.py
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: tiles/north_heat_low.geojson
+          commit_message: "Update north_heat_low.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: tiles/south_heat_low.geojson
+          commit_message: "Update south_heat_low.geojson (${{ github.run_id }})"
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: database/heatlow_history.csv
+          commit_message: "Update heatlow_history.csv (${{ github.run_id }})"
+      
+      # Get forecast (was 12:20 UTC)
+      - name: Generate forecast data
+        env:
+          GDAS_CYCLE: "00"
+        run: |
+          python scripts/generate_forecast_data.py
+      
+      - name: Touch files to ensure they appear changed
+        run: touch database/rainbelt_lat.csv database/rainbelt_lat_north.csv database/rainbelt_lat_south.csv database/cab_gridcells.csv database/kd_gridcells.csv
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Process forecast data (${{ github.run_id }})"
+          file_pattern: "database/*.csv"
+      
+      # Plot forecast (was 12:30 UTC)
+      - name: Generate forecast plot
+        env:
+          GDAS_CYCLE: "00"
+        run: |
+          python scripts/generate_hist_forecast_plot.py
+      
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: assets/tracker/history_and_forecast.png
+          commit_message: "Update history_and_forecast.png (${{ github.run_id }})"
