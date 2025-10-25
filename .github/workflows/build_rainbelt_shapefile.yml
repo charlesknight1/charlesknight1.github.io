@@ -1,8 +1,6 @@
 name: Rainbelt shapefile
 
 on:
-  schedule:
-    - cron: "0 12 * * *"   # daily at 12:05 UTC
   workflow_dispatch: {}
 
 permissions:
