@@ -218,7 +218,7 @@ future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, co
 cmap_cab = plt.get_cmap('Greens')
 norm_cab = plt.Normalize(vmin=0, vmax=20)
 for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -22), 1, 3, color=cmap_cab(norm_cab(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+    ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap_cab(norm_cab(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
 # --- Forecast plotting: KD ---
 cab_future = pd.read_csv('database/kd_gridcells.csv').T
@@ -242,7 +242,7 @@ cbar_cab.set_ticks([0, 20])
 cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 sm_kd = ScalarMappable(cmap=cmap_kd, norm=norm_kd)
 sm_kd.set_array([])
-cbax = fig.add_axes([0.46, 0.18, 0.08, 0.02])  # [left, bottom, width, height]
+cbax = fig.add_axes([0.46, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
 cbar_kd = plt.colorbar(sm_kd, cax=cbax, orientation='horizontal', extend='both')
 cbar_kd.set_label('p(KD)', labelpad=-10)  # Adjust label padding (e.g., 10)
 cbar_kd.set_ticks([0, 20])
