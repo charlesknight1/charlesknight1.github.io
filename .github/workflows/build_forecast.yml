@@ -1,8 +1,6 @@
 name: Get forecast
 
 on:
-   schedule:
-     - cron: "20 12 * * *"   # daily at 12:20 UTC
    workflow_dispatch: {}
 
 permissions:
