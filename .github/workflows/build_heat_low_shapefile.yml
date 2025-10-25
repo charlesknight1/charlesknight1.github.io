@@ -1,8 +1,6 @@
 name: Heat low shapefile
 
 on:
-  schedule:
-    - cron: "15 12 * * *"   # daily at 12:15 UTC
   workflow_dispatch: {}
 
 permissions:
