@@ -8,14 +8,6 @@ permalink: /tracker/
 
 Across Africa, drylines such as the Congo Air Boundary (southern Africa) and Intertropical Discontinuity (northern Africa) "sandwich" the rainbelt from the north and south. Heat lows on either side of the equator act to draw the rainbelt toward the hemisphere experiencing stronger surface heating.
 
-![img1](/assets/tracker/history_and_forecast.png)  
-
-**History and forecast.** The figure above shows the recent evolution and short-term forecast of the African tropical rainbelt, together with associated surface features such as heat lows and the Congo Air Boundary (CAB).
-
-The blue band represents the observed position and north–south extent of the rainbelt, while green circles indicate the latitude and extent of the CAB. Colored bars show the latitude and thermal strength of northern and southern African heat lows, which influence the rainbelt’s migration through differential surface heating. To the right of the red line marking today, the ensemble forecast (black lines) shows the projected movement of the rainbelt over the next ten days. The shaded bar at the bottom depicts the probability of CAB occurrence through time.
-
-The onset of the southern African summer monsoon typically occurs from November onwards, after which the Congo Air Boundary does not form. The date of this onset varies greatly between years and is often difficult to predict, as it depends on weather-scale processes with limited inherent predictability (e.g., Rossby wave interactions; [Knight and Washington, 2023](https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml)).
-
 **Current Conditions.** Below is a near–real-time map of African land surface temperatures, an accessible proxy for soil moisture.
 Overlaid are the current positions of the tropical rainbelt, heat lows, and drylines.
 
@@ -777,6 +769,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 });
 </script>
+
+**History and forecast.** The figure below shows the recent evolution and short-term forecast of the African tropical rainbelt, together with associated surface features such as heat lows and the Congo Air Boundary (CAB).
+
+![img1](/assets/tracker/history_and_forecast.png)  
+
+The blue band represents the observed position and north–south extent of the rainbelt, while green circles indicate the latitude and extent of the CAB. Colored bars show the latitude and thermal strength of northern and southern African heat lows, which influence the rainbelt’s migration through differential surface heating. To the right of the red line marking today, the ensemble forecast (black lines) shows the projected movement of the rainbelt over the next ten days. The shaded bars at the bottom indicate the probability of Congo Air Boundary (CAB) and Kalahari Discontinuity (KD) occurrence through time.
+
+The onset of the southern African summer monsoon typically occurs from November onwards, after which the Congo Air Boundary does not form. The date of this onset varies greatly between years and is often difficult to predict, as it depends on weather-scale processes with limited inherent predictability (e.g., Rossby wave interactions; [Knight and Washington, 2023](https://journals.ametsoc.org/view/journals/clim/37/8/JCLI-D-23-0446.1.xml)).
 
 **Data Sources**
 
