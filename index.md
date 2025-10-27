@@ -2,9 +2,9 @@
 layout: page
 ---
 
-I'm a DPhil candidate in the University of Oxford's School of Geography and the Environment. y research explores the dynamics of the Southern African summer monsoon onset, with a focus on a particular feature called the Congo Air Boundary.
+I'm a DPhil candidate in the University of Oxford's School of Geography and the Environment. My research explores the dynamics of the Southern African summer monsoon onset, with a focus on a particular feature called the Congo Air Boundary.
 
-Here you can find my [publications](https://charlesknight1.github.io/publications/), [projects](https://charlesknight1.github.io/projects/) and [fieldwork](https://charlesknight1.github.io/fieldwork/) blogs.
+Here you can find my [publications](https://charlesknight1.github.io/publications/), [projects](https://charlesknight1.github.io/projects/) and [fieldwork](https://charlesknight1.github.io/fieldwork/) reports.
 
 ___
 
