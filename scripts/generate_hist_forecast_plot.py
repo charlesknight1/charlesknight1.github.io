@@ -210,25 +210,27 @@ for i, col in enumerate(rainbelt_future.columns):
         
 # --- Forecast plotting: CAB ---
 cab_future = pd.read_csv('database/cab_gridcells.csv').T
-cab_future_mean = cab_future[1:].mean(axis=1)
-future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
+cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
+cab_future_prob = (cab_future_numeric > 30).sum(axis=1)
+future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
 n_periods = len(future_CAB_series)
 future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
 future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
 cmap_cab = plt.get_cmap('Greens')
-norm_cab = plt.Normalize(vmin=0, vmax=20)
+norm_cab = plt.Normalize(vmin=0, vmax=len(cab_future_numeric))
 for i in range(10):
     ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap_cab(norm_cab(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
 # --- Forecast plotting: KD ---
 cab_future = pd.read_csv('database/kd_gridcells.csv').T
-cab_future_mean = cab_future[1:].mean(axis=1)
-future_CAB_series = pd.to_numeric(cab_future_mean, errors='coerce')
+cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
+cab_future_prob = (cab_future_numeric > 30).sum(axis=1)
+future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
 n_periods = len(future_CAB_series)
 future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
 future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
 cmap_kd = plt.get_cmap('Reds')
-norm_kd = plt.Normalize(vmin=0, vmax=20)
+norm_kd = plt.Normalize(vmin=0, vmax=len(cab_future_numeric))
 for i in range(10):
     ax.add_patch(plt.Rectangle((future_x[i], -35), 1, 3, color=cmap_kd(norm_kd(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
     
