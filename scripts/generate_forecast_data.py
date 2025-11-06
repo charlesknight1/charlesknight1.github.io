@@ -63,7 +63,7 @@ table_rain_south = []
 table_cab = []
 table_kd = []
 
-for ensemble_n in ['geavg', 'gec00', 'gep01', 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15']:
+for ensemble_n in ['gep01', 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07', 'gep08', 'gep09', 'gep10', 'gep11', 'gep12', 'gep13', 'gep14', 'gep15', 'gep16', 'gep17', 'gep18', 'gep19', 'gep20']:
     row_rain = {'ensemble': ensemble_n}
     row_rain_north = {'ensemble': ensemble_n}
     row_rain_south = {'ensemble': ensemble_n}
