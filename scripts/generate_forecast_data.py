@@ -137,9 +137,9 @@ for ensemble_n in ['gep01', 'gep02', 'gep03', 'gep04', 'gep05', 'gep06', 'gep07'
         q = q[np.newaxis,:,:]
 
         #Find dryline CABs. See drylines.py for a description of the inputs
-        cab_q=find_edge(q,lon,lat,0,theta_min=-np.pi/4,theta_max=np.pi/6,mag_min=0.003,minlen=7,spatial_mask=mask_cab,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
+        cab_q=find_edge(q,lon,lat,1,theta_min=-np.pi/4,theta_max=np.pi/6,mag_min=0.003,minlen=7,spatial_mask=mask_cab,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
         #Find dryline KDs. See drylines.py for a description of the inputs
-        kd_q=find_edge(q,lon,lat,0,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=5,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
+        kd_q=find_edge(q,lon,lat,1,theta_max=np.pi/2,theta_min=np.pi/6,mag_min=0.003,minlen=5,spatial_mask=mask_tkd,relative="Grid Cell",output='sparse',plotfreq=0,times=None)
 
 
         # smooth data
