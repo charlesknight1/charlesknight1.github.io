@@ -237,14 +237,14 @@ for i in range(10):
 # add a colorbar for CAB forecast sizes
 sm_cab = ScalarMappable(cmap=cmap_cab, norm=norm_cab)
 sm_cab.set_array([])
-cbax = fig.add_axes([0.46, 0.26, 0.08, 0.02])  # [left, bottom, width, height]
+cbax = fig.add_axes([0.4, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
 cbar_cab = plt.colorbar(sm_cab, cax=cbax, orientation='horizontal', extend='both')
 cbar_cab.set_label('p(CAB)', labelpad=-10)  # Adjust label padding (e.g., 10)
 cbar_cab.set_ticks([0, 20])
 cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
 sm_kd = ScalarMappable(cmap=cmap_kd, norm=norm_kd)
 sm_kd.set_array([])
-cbax = fig.add_axes([0.46, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
+cbax = fig.add_axes([0.5, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
 cbar_kd = plt.colorbar(sm_kd, cax=cbax, orientation='horizontal', extend='both')
 cbar_kd.set_label('p(KD)', labelpad=-10)  # Adjust label padding (e.g., 10)
 cbar_kd.set_ticks([0, 20])
