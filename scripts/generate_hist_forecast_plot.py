@@ -211,7 +211,7 @@ for i, col in enumerate(rainbelt_future.columns):
 # --- Forecast plotting: CAB ---
 cab_future = pd.read_csv('database/cab_gridcells.csv').T
 cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
-cab_future_prob = (cab_future_numeric > 30).sum(axis=1)
+cab_future_prob = (cab_future_numeric > 15).sum(axis=1)
 future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
 n_periods = len(future_CAB_series)
 future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
@@ -224,7 +224,7 @@ for i in range(10):
 # --- Forecast plotting: KD ---
 cab_future = pd.read_csv('database/kd_gridcells.csv').T
 cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
-cab_future_prob = (cab_future_numeric > 20).sum(axis=1)
+cab_future_prob = (cab_future_numeric > 10).sum(axis=1)
 future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
 n_periods = len(future_CAB_series)
 future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=1), periods=n_periods)
