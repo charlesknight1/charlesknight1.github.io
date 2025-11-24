@@ -135,7 +135,15 @@ ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha
 # plot cab history
 ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
 # plot kd history
-ax.scatter(cab_x, cab_history['kd_lat'], label='KD Latitude', color='red', s=cab_history['kd_len'], alpha=0.7, edgecolors='k')
+mask = cab_history['kd_len'] > 30
+ax.scatter(
+    cab_x[mask],
+    cab_history['kd_lat'][mask],
+    label='KD Latitude',
+    color='red',
+    s=cab_history['kd_len'][mask],
+    alpha=0.7,
+    edgecolors='k')
 
 # Add colorbar
 from matplotlib.cm import ScalarMappable
