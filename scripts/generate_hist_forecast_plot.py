@@ -133,7 +133,7 @@ bg_x = date_to_compressed(cab_history.index.min()-dt.timedelta(days=90), most_re
 ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha=0.5, zorder=0))
 
 # plot cab history
-ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
+ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.4, edgecolors='k')
 # plot kd history
 cab_x = np.array(cab_x)   # <-- add this
 mask = cab_history['kd_len'] > 30
@@ -143,7 +143,7 @@ ax.scatter(
     label='KD Latitude',
     color='red',
     s=cab_history['kd_len'][mask],
-    alpha=0.7,
+    alpha=0.4,
     edgecolors='k')
 
 # Add colorbar
