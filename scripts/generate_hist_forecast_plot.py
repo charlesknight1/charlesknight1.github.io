@@ -135,6 +135,7 @@ ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha
 # plot cab history
 ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
 # plot kd history
+cab_x = np.array(cab_x)   # <-- add this
 mask = cab_history['kd_len'] > 30
 ax.scatter(
     cab_x[mask],
