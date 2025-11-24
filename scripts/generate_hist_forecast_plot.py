@@ -134,6 +134,8 @@ ax.add_patch(plt.Rectangle((bg_x, -50), abs(bg_x), 100, color='lightgrey', alpha
 
 # plot cab history
 ax.scatter(cab_x, cab_history['cab_lat'], label='CAB Latitude', color='green', s=cab_history['cab_len'], alpha=0.7, edgecolors='k')
+# plot kd history
+ax.scatter(cab_x, cab_history['kd_lat'], label='KD Latitude', color='red', s=cab_history['kd_len'], alpha=0.7, edgecolors='k')
 
 # Add colorbar
 from matplotlib.cm import ScalarMappable
@@ -209,46 +211,46 @@ for i, col in enumerate(rainbelt_future.columns):
         ax.plot(future_x, future_lats, color='black', linestyle='-', lw=1.5, alpha=0.2)# label='Rainbelt Forecast')
         
 # --- Forecast plotting: CAB ---
-cab_future = pd.read_csv('database/cab_gridcells.csv').T
-cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
-cab_future_prob = (cab_future_numeric > 15).sum(axis=1)
-future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
-n_periods = len(future_CAB_series)
-future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=0.5), periods=n_periods)
-future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
-cmap_cab = plt.get_cmap('Greens')
-norm_cab = plt.Normalize(vmin=0, vmax=20)
-for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap_cab(norm_cab(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+#cab_future = pd.read_csv('database/cab_gridcells.csv').T
+#cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
+#cab_future_prob = (cab_future_numeric > 15).sum(axis=1)
+#future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
+#n_periods = len(future_CAB_series)
+#future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=0.5), periods=n_periods)
+#future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
+#cmap_cab = plt.get_cmap('Greens')
+#norm_cab = plt.Normalize(vmin=0, vmax=20)
+#for i in range(10):
+#    ax.add_patch(plt.Rectangle((future_x[i], -32), 1, 3, color=cmap_cab(norm_cab(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
 
-# --- Forecast plotting: KD ---
-cab_future = pd.read_csv('database/kd_gridcells.csv').T
-cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
-cab_future_prob = (cab_future_numeric > 10).sum(axis=1)
-future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
-n_periods = len(future_CAB_series)
-future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=0.5), periods=n_periods)
-future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
-cmap_kd = plt.get_cmap('Reds')
-norm_kd = plt.Normalize(vmin=0, vmax=20)
-for i in range(10):
-    ax.add_patch(plt.Rectangle((future_x[i], -35), 1, 3, color=cmap_kd(norm_kd(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
+## --- Forecast plotting: KD ---
+#cab_future = pd.read_csv('database/kd_gridcells.csv').T
+#cab_future_numeric = cab_future.apply(pd.to_numeric, errors='coerce')
+#cab_future_prob = (cab_future_numeric > 10).sum(axis=1)
+#future_CAB_series = pd.to_numeric(cab_future_prob, errors='coerce')
+#n_periods = len(future_CAB_series)
+#future_dates = pd.date_range(start=forecast_start+dt.timedelta(days=0.5), periods=n_periods)
+#future_x = np.array([date_to_compressed(d, most_recent_date, transition_days, compression_factor, forecast_days) for d in future_dates], dtype=float)
+#cmap_kd = plt.get_cmap('Reds')
+#norm_kd = plt.Normalize(vmin=0, vmax=20)
+#for i in range(10):
+    #ax.add_patch(plt.Rectangle((future_x[i], -35), 1, 3, color=cmap_kd(norm_kd(future_CAB_series[i])), alpha=1, edgecolor='black', zorder=0))
     
-# add a colorbar for CAB forecast sizes
-sm_cab = ScalarMappable(cmap=cmap_cab, norm=norm_cab)
-sm_cab.set_array([])
-cbax = fig.add_axes([0.4, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
-cbar_cab = plt.colorbar(sm_cab, cax=cbax, orientation='horizontal', extend='both')
-cbar_cab.set_label('p(CAB)', labelpad=-10)  # Adjust label padding (e.g., 10)
-cbar_cab.set_ticks([0, 20])
-cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
-sm_kd = ScalarMappable(cmap=cmap_kd, norm=norm_kd)
-sm_kd.set_array([])
-cbax = fig.add_axes([0.5, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
-cbar_kd = plt.colorbar(sm_kd, cax=cbax, orientation='horizontal', extend='both')
-cbar_kd.set_label('p(KD)', labelpad=-10)  # Adjust label padding (e.g., 10)
-cbar_kd.set_ticks([0, 20])
-cbar_kd.set_ticklabels(['0', '1'], fontsize=8)
+## add a colorbar for CAB forecast sizes
+#sm_cab = ScalarMappable(cmap=cmap_cab, norm=norm_cab)
+#sm_cab.set_array([])
+#cbax = fig.add_axes([0.4, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
+#cbar_cab = plt.colorbar(sm_cab, cax=cbax, orientation='horizontal', extend='both')
+#cbar_cab.set_label('p(CAB)', labelpad=-10)  # Adjust label padding (e.g., 10)
+#cbar_cab.set_ticks([0, 20])
+#cbar_cab.set_ticklabels(['0', '1'], fontsize=8)
+#sm_kd = ScalarMappable(cmap=cmap_kd, norm=norm_kd)
+#sm_kd.set_array([])
+#cbax = fig.add_axes([0.5, 0.19, 0.08, 0.02])  # [left, bottom, width, height]
+#cbar_kd = plt.colorbar(sm_kd, cax=cbax, orientation='horizontal', extend='both')
+#cbar_kd.set_label('p(KD)', labelpad=-10)  # Adjust label padding (e.g., 10)
+#cbar_kd.set_ticks([0, 20])
+#cbar_kd.set_ticklabels(['0', '1'], fontsize=8)
 
 # Add legend
 ax.legend(loc='upper right', fontsize=9.5, frameon=False, bbox_to_anchor=(0.95, 1))
