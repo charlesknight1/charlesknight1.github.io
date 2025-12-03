@@ -29,6 +29,7 @@ Munday, C., Washington, R., Engelstaedter, S., Zilli, M., Harbord, S., **Knight,
 # 🎤 Conference Papers
 
 <br>
+- **Knight, C.** The Congo Air Boundary in atmospheric reanalyses. *Africa Meteorology and Climate Conference 2025, University of Reading* <span style="font-size:0.9em; color:gray;">18th November 2025.</span>
 
 - **Knight, C.** Observations of the atmosphere across the Congo Air Boundary. *14th International Conference on Southern Hemisphere Meteorology and Oceanography, Cape Town, South Africa.* <span style="font-size:0.9em; color:gray;">31st March 2025.</span>
 
