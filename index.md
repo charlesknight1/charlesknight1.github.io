@@ -4,7 +4,7 @@ layout: page
 
 I'm a Postdoctoral Researcher at the Max Planck Institute for Meteorology, where I investigate the role of the land surface in shaping the distribution of tropical precipitation. I recently completed my PhD at the University of Oxford's School of Geography and the Environment, where my research explored the dynamics of the Southern African summer monsoon onset.
 
-Here you can find my [publications](https://charlesknight1.github.io/publications/), [projects](https://charlesknight1.github.io/projects/) and [fieldwork](https://charlesknight1.github.io/fieldwork/) reports.
+Here you can find my [publications](https://charlesknight1.github.io/publications/), [fieldwork reports](https://charlesknight1.github.io/fieldwork/), and a (fun) [African rainbelt](https://charlesknight1.github.io/tracker/) visualisation. 
 
 ___
 
