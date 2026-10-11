@@ -5,11 +5,11 @@ permalink: /publications/
 ---
 <span style="font-size:1.4em;">**2026**</span>
 
-**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). The Congo Air Boundary in atmospheric reanalyses: a process-based evaluation.  <span style="font-size:0.9em; color:gray;"><em>Under review, Journal of Climate.</em></span>
+**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2026). The Congo Air Boundary in atmospheric reanalyses: a process-based evaluation.  <span style="font-size:0.9em; color:gray;"><em>Under review, Journal of Climate.</em></span>
 
 - <span style="font-size:0.9em;">Our paper uses novel field observations from the [DRY-CAB field campaign](https://charlesknight1.github.io/drycab) to evaluate three atmospheric reanalyses. It shows that reanalyses misrepresent fundamental processes maintaining the Congo Air Boundary at the southern African tropical edge, which means they do not capture observed transitions in convective regimes across rainfall onset.</span>
 
-**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2025). Observations of the atmosphere across the Congo Air Boundary. *Journal of Climate*, XX(X). [🔗 DOI: 10.1175/JCLI-D-26-0056.1](https://doi.org/10.1175/JCLI-D-26-0056.1) <span style="font-size:1em; color:green;">(Open access)</span>
+**Knight, C.,** Washington, R., Munday, C., Nkonde, E., Imbwae, F., Kasongo, W. (2026). Observations of the atmosphere across the Congo Air Boundary. *Journal of Climate*, XX(X). [🔗 DOI: 10.1175/JCLI-D-26-0056.1](https://doi.org/10.1175/JCLI-D-26-0056.1) <span style="font-size:1em; color:green;">(Open access)</span>
 
 - <span style="font-size:0.9em;">This paper uses novel field observations from the [DRY-CAB field campaign](https://charlesknight1.github.io/drycab) to reveal the intricate mesoscale workings of the atmosphere at the southern Africa tropical edge, and in particular the processes that maintain the Congo Air Boundary.
 
