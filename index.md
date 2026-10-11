@@ -2,7 +2,7 @@
 layout: page
 ---
 
-I'm a DPhil candidate in the University of Oxford's School of Geography and the Environment. My research explores the dynamics of the Southern African summer monsoon onset, with a focus on a particular feature called the Congo Air Boundary.
+I'm a Postdoctoral Researcher at the Max Planck Institute for Meteorology, where I investigate the role of the land surface in shaping the distribution of tropical precipitation. I recently completed my PhD at the University of Oxford's School of Geography and the Environment, where my research explored the dynamics of the Southern African summer monsoon onset.
 
 Here you can find my [publications](https://charlesknight1.github.io/publications/), [projects](https://charlesknight1.github.io/projects/) and [fieldwork](https://charlesknight1.github.io/fieldwork/) reports.
 
